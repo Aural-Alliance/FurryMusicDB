@@ -2,4 +2,29 @@
 
 ## Local Development Instructions
 
-TODO!
+* Install Docker for your host operating system (or Docker Desktop)
+
+### First Time Launch
+
+```bash
+make build
+make up
+```
+
+### To Shutdown
+
+```bash
+make down
+```
+
+### To access container BASH
+
+```bash
+make bash
+```
+
+Or as root:
+
+```bash
+make bash-root
+```

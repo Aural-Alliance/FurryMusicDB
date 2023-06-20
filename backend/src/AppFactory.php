@@ -130,11 +130,7 @@ class AppFactory
             throw new \LogicException('No base directory specified!');
         }
 
-        $environment[Environment::IS_DOCKER] = file_exists(
-            dirname($environment[Environment::BASE_DIR]) . '/.docker'
-        );
-
-        $environment[Environment::TEMP_DIR] ??= dirname($environment[Environment::BASE_DIR]) . '/www_tmp';
+        $environment[Environment::TEMP_DIR] ??= dirname($environment[Environment::BASE_DIR], 2) . '/www_tmp';
         $environment[Environment::CONFIG_DIR] ??= $environment[Environment::BASE_DIR] . '/config';
 
         $_ENV = getenv();
@@ -154,12 +150,7 @@ class AppFactory
         ini_set('display_errors', $displayStartupErrors);
 
         ini_set('log_errors', '1');
-        ini_set(
-            'error_log',
-            $environment->isDocker()
-                ? '/dev/stderr'
-                : $environment->getTempDirectory() . '/php_errors.log'
-        );
+        ini_set('error_log','/dev/stderr');
         ini_set('session.use_only_cookies', '1');
         ini_set('session.cookie_httponly', '1');
         ini_set('session.cookie_lifetime', '86400');

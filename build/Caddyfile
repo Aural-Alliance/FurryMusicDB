@@ -1,9 +1,0 @@
-:8000 {
-    root * /var/app/www/public
-    rewrite * /index.php?{query}
-    php_fastcgi 127.0.0.1:9000
-
-    log {
-        output stdout
-    }
-}

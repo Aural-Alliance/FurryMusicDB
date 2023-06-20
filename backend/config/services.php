@@ -11,7 +11,7 @@ return [
         Psr\Log\LoggerInterface $logger
     ) {
         $app = new Slim\App(
-            responseFactory: new \App\Http\Factory\ResponseFactory(),
+            responseFactory: new App\Http\Factory\ResponseFactory(),
             container:       $di,
         );
 
@@ -29,9 +29,8 @@ return [
         $app->addRoutingMiddleware();
 
         // Redirects and updates that should happen before system middleware.
-        $app->add(new \App\Middleware\RemoveSlashes());
-        $app->add(new \App\Middleware\ApplyXForwardedProto());
-        $app->add(new \App\Middleware\ApplyResponseDefaults());
+        $app->add(new App\Middleware\ApplyXForwardedProto());
+        $app->add(new App\Middleware\ApplyResponseDefaults());
 
         $app->add(new RKA\Middleware\IpAddress(
             true,
@@ -170,13 +169,11 @@ return [
 
     // Monolog Logger
     Monolog\Logger::class => function (Environment $environment) {
-        $logger = new Monolog\Logger($environment->getAppName());
+        $logger = new Monolog\Logger('App');
         $loggingLevel = $environment->getLogLevel();
 
-        if ($environment->isDocker() || $environment->isCli()) {
-            $log_stderr = new Monolog\Handler\StreamHandler('php://stderr', $loggingLevel, true);
-            $logger->pushHandler($log_stderr);
-        }
+        $log_stderr = new Monolog\Handler\StreamHandler('php://stderr', $loggingLevel, true);
+        $logger->pushHandler($log_stderr);
 
         $log_file = new Monolog\Handler\RotatingFileHandler(
             $environment->getTempDirectory() . '/app.log',

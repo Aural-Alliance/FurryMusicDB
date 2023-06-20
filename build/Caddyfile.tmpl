@@ -1,0 +1,20 @@
+:8000 {
+    root * /var/app/www/frontend/dist
+
+    redir /api /api/
+    route /api/* {
+    	rewrite * /index.php?{query}
+        php_fastcgi 127.0.0.1:9000 {
+            root /var/app/www/backend/public
+            try_files /index.php
+        }
+    }
+
+{{if eq .Env.APPLICATION_ENV "development"}}
+    reverse_proxy * 127.0.0.1:5173
+{{end}}
+
+    log {
+        output stdout
+    }
+}
