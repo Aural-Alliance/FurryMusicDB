@@ -23,12 +23,13 @@ jobs:
 
       - name : Run Composer install
         run : |
+          cd backend
           composer install --no-interaction
 
       - name : Run PHP Linter
         run : |
-          vendor/bin/parallel-lint . --exclude vendor --checkstyle | cs2pr
+          backend/vendor/bin/parallel-lint . --exclude vendor --checkstyle | cs2pr
 
       - name : Run PHPStan
         run : |
-          vendor/bin/phpstan analyze --error-format=checkstyle | cs2pr
+          backend/vendor/bin/phpstan analyze --error-format=checkstyle | cs2pr
