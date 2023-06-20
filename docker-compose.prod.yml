@@ -1,0 +1,25 @@
+services:
+  web:
+    image: traaaashpanda/furrymusicdb:latest
+    depends_on:
+      - db
+    env_file: env.prod
+    restart: always
+    ports:
+      - "127.0.0.1:80:8000"
+    logging: &default-logging
+      options:
+        max-size: "1m"
+        max-file: "5"
+
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data
+    env_file: env.prod
+    ports:
+      - "127.0.0.1:5432:5432"
+    logging: *default-logging
+
+volumes:
+  pgsql_data: {}

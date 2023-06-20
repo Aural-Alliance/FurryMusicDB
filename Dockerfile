@@ -12,7 +12,8 @@ RUN apk add --update --no-cache \
     caddy \
     su-exec \
     postgresql-client \
-    supercronic
+    supercronic \
+    npm
 
 # Copy build config files
 COPY ./build/Caddyfile /etc/Caddyfile
