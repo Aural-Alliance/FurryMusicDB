@@ -28,8 +28,10 @@ jobs:
 
       - name : Run PHP Linter
         run : |
-          backend/vendor/bin/parallel-lint . --exclude vendor --checkstyle | cs2pr
+          cd backend
+          vendor/bin/parallel-lint . --exclude vendor --checkstyle | cs2pr
 
       - name : Run PHPStan
         run : |
-          backend/vendor/bin/phpstan analyze --error-format=checkstyle | cs2pr
+          cd backend
+          vendor/bin/phpstan analyze --error-format=checkstyle | cs2pr
