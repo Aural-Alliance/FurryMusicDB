@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Factory;
 
-use App\Http\ServerRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\ServerRequest as GuzzleServerRequest;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\ServerRequestCreatorInterface;
+use App\Http\ServerRequest;
 
 final class ServerRequestFactory implements ServerRequestFactoryInterface, ServerRequestCreatorInterface
 {

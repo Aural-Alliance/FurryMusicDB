@@ -40,7 +40,7 @@
       "@phpstan",
       "@phpcs"
     ],
-    "phplint": "parallel-lint . --exclude vendor",
+    "phplint": "parallel-lint .. --exclude vendor",
     "phpstan": "phpstan analyze --memory-limit=1G",
     "phpcs": "phpcs",
     "phpcbf": "phpcbf"

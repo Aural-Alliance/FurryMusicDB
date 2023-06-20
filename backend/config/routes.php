@@ -1,6 +1,4 @@
 <?php
-use App\Controller;
-use Slim\Routing\RouteCollectorProxy;
 
 return function(Slim\App $app)
 {
@@ -11,6 +9,6 @@ return function(Slim\App $app)
             ->withHeader('Access-Control-Allow-Origin', '*');
     });
 
-    $app->get('/', Controller\IndexController::class)
+    $app->get('/', \App\Controller\IndexController::class)
         ->setName('home');
 };

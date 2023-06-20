@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Http\Factory\ServerRequestFactory;
 use DI;
 use Monolog\Registry;
 use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
+use App\Http\Factory\ServerRequestFactory;
 use Symfony\Component\Console\Application;
 
 use const E_COMPILE_ERROR;

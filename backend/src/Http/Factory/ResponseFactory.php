@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Factory;
 
-use App\Http\Response;
 use GuzzleHttp\Psr7\HttpFactory;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Factory\DecoratedResponseFactory;
+use App\Http\Response;
 
 final class ResponseFactory extends DecoratedResponseFactory
 {

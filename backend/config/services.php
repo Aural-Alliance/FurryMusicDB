@@ -1,7 +1,7 @@
 <?php
 
-use App\Environment;
 use Doctrine\ORM\EntityManager;
+use App\Environment;
 
 return [
     // Slim app
@@ -11,7 +11,7 @@ return [
         Psr\Log\LoggerInterface $logger
     ) {
         $app = new Slim\App(
-            responseFactory: new App\Http\Factory\ResponseFactory(),
+            responseFactory: new \App\Http\Factory\ResponseFactory(),
             container:       $di,
         );
 
@@ -29,9 +29,9 @@ return [
         $app->addRoutingMiddleware();
 
         // Redirects and updates that should happen before system middleware.
-        $app->add(new App\Middleware\RemoveSlashes());
-        $app->add(new App\Middleware\ApplyXForwardedProto());
-        $app->add(new App\Middleware\ApplyResponseDefaults());
+        $app->add(new \App\Middleware\RemoveSlashes());
+        $app->add(new \App\Middleware\ApplyXForwardedProto());
+        $app->add(new \App\Middleware\ApplyResponseDefaults());
 
         $app->add(new RKA\Middleware\IpAddress(
             true,
