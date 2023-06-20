@@ -1,0 +1,34 @@
+name: Test and Deploy
+
+on:
+  push :
+  pull_request :
+  workflow_dispatch :
+
+jobs:
+  test_suite:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: [ '8.2' ]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v2, cs2pr
+
+      - name : Run Composer install
+        run : |
+          composer install --no-interaction
+
+      - name : Run PHP Linter
+        run : |
+          vendor/bin/parallel-lint . --exclude vendor --checkstyle | cs2pr
+
+      - name : Run PHPStan
+        run : |
+          vendor/bin/phpstan analyze --error-format=checkstyle | cs2pr

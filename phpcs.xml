@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset>
+    <file>src</file>
+
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+
+    <!-- relative path from PHPCS source location -->
+    <config name="installed_paths" value="../../slevomat/coding-standard"/>
+
+    <rule ref="PSR12"/>
+
+    <!--
+        even though PSR12 defines the soft limit for line length at 120
+        we have a lot of line that barely exceed that, thus causing warnings
+    -->
+    <rule ref="Generic.Files.LineLength">
+        <exclude-pattern>src/Entity/Migration/*$</exclude-pattern>
+    </rule>
+</ruleset>
