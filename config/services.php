@@ -2,22 +2,105 @@
 
 use App\Environment;
 use Doctrine\ORM\EntityManager;
-use Psr\Container\ContainerInterface;
 
 return [
-    // Slim interface
-    Slim\Interfaces\RouteCollectorInterface::class => static function (Slim\App $app) {
-        return $app->getRouteCollector();
-    },
-
-    Slim\Interfaces\RouteParserInterface::class => static function (
-        Slim\Interfaces\RouteCollectorInterface $routeCollector
+    // Slim app
+    Slim\App::class => static function (
+        Psr\Container\ContainerInterface $di,
+        Environment $environment,
+        Psr\Log\LoggerInterface $logger
     ) {
-        return $routeCollector->getRouteParser();
+        $app = new Slim\App(
+            responseFactory: new App\Http\Factory\ResponseFactory(),
+            container:       $di,
+        );
+
+        $routeCollector = $app->getRouteCollector();
+        $routeCollector->setDefaultInvocationStrategy(new Slim\Handlers\Strategies\RequestResponse());
+
+        if ($environment->isProduction()) {
+            $routeCollector->setCacheFile($environment->getTempDirectory() . '/app_routes.cache.php');
+        }
+
+        call_user_func(include(__DIR__ . '/routes.php'), $app);
+
+        // System middleware for routing and body parsing.
+        $app->addBodyParsingMiddleware();
+        $app->addRoutingMiddleware();
+
+        // Redirects and updates that should happen before system middleware.
+        $app->add(new App\Middleware\RemoveSlashes());
+        $app->add(new App\Middleware\ApplyXForwardedProto());
+        $app->add(new App\Middleware\ApplyResponseDefaults());
+
+        $app->add(new RKA\Middleware\IpAddress(
+            true,
+            ['172.*.*.*'],
+            'ip',
+            [
+                'CF-Connecting-IP',
+                'True-Client-IP',
+                'Forwarded',
+                'X-Forwarded-For',
+                'X-Forwarded',
+                'X-Cluster-Client-Ip',
+                'Client-Ip',
+            ]
+        ));
+
+        // Add an error handler for most in-controller/task situations.
+        $app->addErrorMiddleware(
+            !$environment->isProduction(),
+            true,
+            true,
+            $logger
+        );
+
+        return $app;
     },
 
-    // URL Router helper
-    App\Http\RouterInterface::class => DI\Get(App\Http\Router::class),
+    // Console
+    Symfony\Component\Console\Application::class => function (
+        DI\Container $di,
+        Doctrine\ORM\EntityManagerInterface $em
+    ) {
+        $console = new Symfony\Component\Console\Application(
+            'Command Line Interface',
+            '1.0.0'
+        );
+
+        // Doctrine ORM/DBAL
+        Doctrine\ORM\Tools\Console\ConsoleRunner::addCommands(
+            $console,
+            new Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider($em)
+        );
+
+        // Add Doctrine Migrations
+        $migrateConfig = new Doctrine\Migrations\Configuration\Migration\ConfigurationArray([
+            'migrations_paths' => [
+                'App\Entity\Migration' => dirname(__DIR__) . '/src/Entity/Migration',
+            ],
+            'table_storage' => [
+                'table_name' => 'app_migrations',
+            ],
+        ]);
+
+        $migrateFactory = Doctrine\Migrations\DependencyFactory::fromEntityManager(
+            $migrateConfig,
+            new Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager($em)
+        );
+        Doctrine\Migrations\Tools\Console\ConsoleRunner::addCommands($console, $migrateFactory);
+
+        $commandLoader = new Symfony\Component\Console\CommandLoader\ContainerCommandLoader(
+            $di,
+            [
+                // TODO Cli Commands
+            ]
+        );
+        $console->setCommandLoader($commandLoader);
+
+        return $console;
+    },
 
     // HTTP client
     GuzzleHttp\Client::class => function (Psr\Log\LoggerInterface $logger) {
@@ -51,34 +134,6 @@ return [
         );
     },
 
-    // DBAL
-    Doctrine\DBAL\Connection::class => function (Doctrine\ORM\EntityManager $em) {
-        return $em->getConnection();
-    },
-
-    // Console
-    Symfony\Component\Console\Application::class => function (
-        DI\Container $di,
-        Psr\EventDispatcher\EventDispatcherInterface $dispatcher
-    ) {
-        $console = new Symfony\Component\Console\Application(
-            'Command Line Interface',
-            '1.0.0'
-        );
-
-        // Trigger an event for the core app and all plugins to build their CLI commands.
-        $event = new App\Event\BuildConsoleCommands($console, $di);
-        $dispatcher->dispatch($event);
-
-        $commandLoader = new Symfony\Component\Console\CommandLoader\ContainerCommandLoader(
-            $di,
-            $event->getAliases()
-        );
-        $console->setCommandLoader($commandLoader);
-
-        return $console;
-    },
-
     // Doctrine Entity Manager
     Doctrine\ORM\EntityManager::class => function (
         Psr\Cache\CacheItemPoolInterface $psr6Cache,
@@ -102,9 +157,6 @@ return [
         );
 
         $eventManager = new Doctrine\Common\EventManager();
-        $eventManager->addEventSubscriber(
-            new App\Doctrine\Event\SqlitePragmaSetup()
-        );
 
         $connection = Doctrine\DBAL\DriverManager::getConnection(
             $connectionOptions,
@@ -115,17 +167,6 @@ return [
     },
 
     Doctrine\ORM\EntityManagerInterface::class => DI\Get(Doctrine\ORM\EntityManager::class),
-
-    // Event Dispatcher
-    Psr\EventDispatcher\EventDispatcherInterface::class => function() {
-        $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
-
-        if (file_exists(__DIR__ . '/events.php')) {
-            call_user_func(include(__DIR__ . '/events.php'), $dispatcher);
-        }
-
-        return $dispatcher;
-    },
 
     // Monolog Logger
     Monolog\Logger::class => function (Environment $environment) {
@@ -147,6 +188,7 @@ return [
 
         return $logger;
     },
+
     Psr\Log\LoggerInterface::class => DI\get(Monolog\Logger::class),
 
     Symfony\Contracts\Cache\CacheInterface::class => static function (
@@ -174,5 +216,5 @@ return [
     ),
     Psr\SimpleCache\CacheInterface::class => function (Psr\Cache\CacheItemPoolInterface $cache) {
         return new Symfony\Component\Cache\Psr16Cache($cache);
-    }
+    },
 ];

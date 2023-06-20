@@ -19,8 +19,7 @@
     "slim/http": "^1",
     "slim/slim": "^4",
     "symfony/cache": "^6",
-    "symfony/console": "^6",
-    "symfony/event-dispatcher": "^6"
+    "symfony/console": "^6"
   },
   "require-dev": {
     "php-parallel-lint/php-console-highlighter": "^1",
