@@ -1,5 +1,7 @@
 @charset "utf-8";
 
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap');
+
 @import "bulma/sass/utilities/functions";
 @import "bulma/sass/utilities/initial-variables";
 
@@ -9,13 +11,19 @@ $bottomright: #4aa995;
 $mauve: #AC3F79;
 
 $body-background-color: $topleft;
+
+$navbar-height: 3.5rem;
 $navbar-background-color: transparent;
+$navbar-item-hover-background-color: transparent;
 
 $text: $white;
 $text-light: $white-bis;
 $text-strong: $white-ter;
 
 $primary: $mauve;
+$link: change-color($mauve, $lightness: 80%);
+
+$family-sans-serif: "Dosis", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 
 @import "@oruga-ui/theme-bulma/dist/scss/components/utils/_all";
 
@@ -26,16 +34,38 @@ body {
   height: 100vh;
   background: $topleft;
   background: linear-gradient(45deg, $topleft 0%, $bottomright 100%);
+
+  padding: 1em 0;
 }
 
 nav {
+  margin-bottom: 1em;
+
   .navbar-brand .navbar-item {
-    font-size: 1.25em;
-    line-height: 1.0;
+    img {
+      max-height: 2.5rem;
+      width: 2.5rem;
+    }
+
+    .logotype {
+      white-space: nowrap;
+      display: block;
+    }
+
+    font-size: 1.3em;
+    line-height: 0.9;
+    font-weight: 800;
   }
 
   .navbar-item {
+    font-size: 1.15em;
     text-transform: uppercase;
     font-weight: bold;
+  }
+}
+
+.hero {
+  &.is-fullheight-with-navbar {
+    min-height: calc(100vh - #{$navbar-height} - 2em);
   }
 }

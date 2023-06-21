@@ -2,9 +2,12 @@
     <div class="container">
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a class="navbar-item" href="/">
-                    Furry Music<br>Database
-                </a>
+                <router-link class="navbar-item" to="/">
+                    <img src="/icon.svg" class="logo" alt="Logo"/>
+                    <span class="logotype">
+                        Furry Music<br>Database
+                    </span>
+                </router-link>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
                    data-target="navbarBasicExample">
@@ -16,7 +19,7 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
-                    <a class="navbar-item">About</a>
+                    <router-link class="navbar-item" to="/about">About</router-link>
                     <a class="navbar-item">Labels</a>
                     <a class="navbar-item">Musicians</a>
                     <a class="navbar-item">Reviews</a>
@@ -24,8 +27,8 @@
 
                 <div class="navbar-end">
                     <a class="navbar-item">Sign Up/Sign In</a>
-                    <a class="navbar-item">Help</a>
-                    <a class="navbar-item">Donate</a>
+                    <router-link class="navbar-item" to="/help">Help</router-link>
+                    <router-link class="navbar-item" to="/donate">Donate</router-link>
                 </div>
             </div>
         </nav>
@@ -34,4 +37,5 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+</script>
