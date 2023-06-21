@@ -29,6 +29,11 @@ body {
 }
 
 nav {
+  .navbar-brand .navbar-item {
+    font-size: 1.25em;
+    line-height: 1.0;
+  }
+
   .navbar-item {
     text-transform: uppercase;
     font-weight: bold;

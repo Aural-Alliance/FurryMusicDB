@@ -2,8 +2,8 @@
     <div class="container">
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a class="navbar-item" href="https://bulma.io">
-                    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                <a class="navbar-item" href="/">
+                    Furry Music<br>Database
                 </a>
 
                 <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
