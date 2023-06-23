@@ -7,6 +7,7 @@
     "ext-fileinfo": "*",
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
+    "auth0/auth0-php": "^8.6",
     "composer/ca-bundle": "^1.2",
     "doctrine/dbal": "^3",
     "doctrine/migrations": "^3",

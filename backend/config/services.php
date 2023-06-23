@@ -1,7 +1,7 @@
 <?php
 
-use Doctrine\ORM\EntityManager;
 use App\Environment;
+use Doctrine\ORM\EntityManager;
 
 return [
     // Slim app
@@ -12,7 +12,7 @@ return [
     ) {
         $app = new Slim\App(
             responseFactory: new App\Http\Factory\ResponseFactory(),
-            container:       $di,
+            container: $di,
         );
 
         $routeCollector = $app->getRouteCollector();
@@ -32,20 +32,22 @@ return [
         $app->add(new App\Middleware\ApplyXForwardedProto());
         $app->add(new App\Middleware\ApplyResponseDefaults());
 
-        $app->add(new RKA\Middleware\IpAddress(
-            true,
-            ['172.*.*.*'],
-            'ip',
-            [
-                'CF-Connecting-IP',
-                'True-Client-IP',
-                'Forwarded',
-                'X-Forwarded-For',
-                'X-Forwarded',
-                'X-Cluster-Client-Ip',
-                'Client-Ip',
-            ]
-        ));
+        $app->add(
+            new RKA\Middleware\IpAddress(
+                true,
+                ['172.*.*.*'],
+                'ip',
+                [
+                    'CF-Connecting-IP',
+                    'True-Client-IP',
+                    'Forwarded',
+                    'X-Forwarded-For',
+                    'X-Forwarded',
+                    'X-Cluster-Client-Ip',
+                    'Client-Ip',
+                ]
+            )
+        );
 
         // Add an error handler for most in-controller/task situations.
         $app->addErrorMiddleware(
@@ -139,7 +141,7 @@ return [
         Environment $environment
     ) {
         $parser = new Doctrine\DBAL\Tools\DsnParser([
-            'postgres' => 'pdo_pgsql'
+            'postgres' => 'pdo_pgsql',
         ]);
         $connectionOptions = $parser->parse($environment->getDatabaseUrl() ?? '');
 
@@ -213,5 +215,15 @@ return [
     ),
     Psr\SimpleCache\CacheInterface::class => function (Psr\Cache\CacheItemPoolInterface $cache) {
         return new Symfony\Component\Cache\Psr16Cache($cache);
+    },
+
+    Auth0\SDK\Auth0::class => function () {
+        $config = new Auth0\SDK\Configuration\SdkConfiguration(
+            strategy: Auth0\SDK\Configuration\SdkConfiguration::STRATEGY_API,
+            domain: $_ENV['AUTH0_DOMAIN'],
+            audience: [$_ENV['AUTH0_AUDIENCE']]
+        );
+
+        return new Auth0\SDK\Auth0($config);
     },
 ];

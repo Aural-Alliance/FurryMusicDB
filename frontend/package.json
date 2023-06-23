@@ -9,12 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^2.2.0",
     "@oruga-ui/oruga-next": "^0.6.0",
     "@oruga-ui/theme-bulma": "^0.2.11",
+    "@vueuse/core": "^10.2.0",
+    "axios": "^1.4.0",
     "bulma": "^0.9.4",
     "pinia": "^2.1.4",
     "sass": "^1.63.5",
     "vue": "^3.2.47",
+    "vue-axios": "^3.5.2",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {

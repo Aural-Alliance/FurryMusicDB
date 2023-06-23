@@ -7,6 +7,8 @@
 ### First Time Launch
 
 ```bash
+cp auth_config.dev.json auth_config.json
+
 make build
 make up
 ```

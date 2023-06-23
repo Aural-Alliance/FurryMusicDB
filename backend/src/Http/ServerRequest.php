@@ -10,6 +10,8 @@ use Slim\Routing\RouteContext;
 
 final class ServerRequest extends \Slim\Http\ServerRequest
 {
+    public const AUTH_SESSION = 'auth_session';
+
     public function getRouter(): RouteParserInterface
     {
         return $this->getAttributeOfClass(RouteContext::ROUTE_PARSER, RouteParserInterface::class);

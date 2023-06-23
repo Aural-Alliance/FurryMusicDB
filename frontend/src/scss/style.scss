@@ -16,6 +16,11 @@ $navbar-height: 3.5rem;
 $navbar-background-color: transparent;
 $navbar-item-hover-background-color: transparent;
 
+$navbar-dropdown-background-color: $mauve;
+$navbar-dropdown-item-hover-color: $white-bis;
+$navbar-dropdown-border-top: 0;
+$navbar-dropdown-item-hover-background-color: change-color($mauve, $lightness: 20%);
+
 $text: $white;
 $text-light: $white-bis;
 $text-strong: $white-ter;
