@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controller\Users;
 
+use App\Controller\AbstractEntityController;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 
-final class GetMeAction
+final class GetMeAction extends AbstractEntityController
 {
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
     {
-        $session = $request->getAttribute(ServerRequest::AUTH_SESSION);
+        $user = $request->getUser();
 
-        return $response->withJson($session);
+        return $response->withJson(
+            $this->toArray($user)
+        );
     }
 }

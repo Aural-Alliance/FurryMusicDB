@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use App\Entity\User;
 use InvalidArgumentException;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Routing\RouteContext;
 
 final class ServerRequest extends \Slim\Http\ServerRequest
 {
-    public const AUTH_SESSION = 'auth_session';
+    public const ATTR_USER = 'user';
 
     public function getRouter(): RouteParserInterface
     {
         return $this->getAttributeOfClass(RouteContext::ROUTE_PARSER, RouteParserInterface::class);
+    }
+
+    public function getUser(): User
+    {
+        return $this->getAttributeOfClass(self::ATTR_USER, User::class);
     }
 
     /**

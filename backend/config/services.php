@@ -217,6 +217,60 @@ return [
         return new Symfony\Component\Cache\Psr16Cache($cache);
     },
 
+    // Doctrine annotations reader
+    Doctrine\Common\Annotations\Reader::class => static function (
+        Psr\Cache\CacheItemPoolInterface $psr6Cache,
+        Environment $environment
+    ) {
+        $proxyCache = new Symfony\Component\Cache\Adapter\ProxyAdapter($psr6Cache, 'annotations.');
+
+        return new Doctrine\Common\Annotations\PsrCachedReader(
+            new Doctrine\Common\Annotations\AnnotationReader(),
+            $proxyCache,
+            !$environment->isProduction()
+        );
+    },
+
+    // Symfony Serializer
+    Symfony\Component\Serializer\Serializer::class => static function (
+        Doctrine\Common\Annotations\Reader $reader,
+        Doctrine\ORM\EntityManagerInterface $em
+    ) {
+        $classMetaFactory = new Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory(
+            new Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader($reader)
+        );
+
+        $normalizers = [
+            new Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer(),
+            new Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer(),
+            new App\Normalizer\DoctrineEntityNormalizer(
+                $em,
+                classMetadataFactory: $classMetaFactory
+            ),
+            new Symfony\Component\Serializer\Normalizer\ObjectNormalizer(
+                classMetadataFactory: $classMetaFactory
+            ),
+        ];
+        $encoders = [
+            new Symfony\Component\Serializer\Encoder\JsonEncoder(),
+        ];
+
+        return new Symfony\Component\Serializer\Serializer($normalizers, $encoders);
+    },
+
+    // Symfony Validator
+    Symfony\Component\Validator\Validator\ValidatorInterface::class => static function (
+        Doctrine\Common\Annotations\Reader $reader,
+        Symfony\Component\Validator\ContainerConstraintValidatorFactory $constraintValidatorFactory
+    ) {
+        $builder = new Symfony\Component\Validator\ValidatorBuilder();
+        $builder->setConstraintValidatorFactory($constraintValidatorFactory);
+        $builder->enableAnnotationMapping();
+        $builder->setDoctrineAnnotationReader($reader);
+
+        return $builder->getValidator();
+    },
+
     Auth0\SDK\Auth0::class => function () {
         $config = new Auth0\SDK\Configuration\SdkConfiguration(
             strategy: Auth0\SDK\Configuration\SdkConfiguration::STRATEGY_API,

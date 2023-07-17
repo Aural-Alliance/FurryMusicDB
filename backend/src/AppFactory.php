@@ -150,7 +150,7 @@ class AppFactory
         ini_set('display_errors', $displayStartupErrors);
 
         ini_set('log_errors', '1');
-        ini_set('error_log','/dev/stderr');
+        ini_set('error_log', '/dev/stderr');
         ini_set('session.use_only_cookies', '1');
         ini_set('session.cookie_httponly', '1');
         ini_set('session.cookie_lifetime', '86400');
