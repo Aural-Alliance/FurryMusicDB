@@ -10,18 +10,17 @@ use App\Exception\ValidationException;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Paginator;
+use App\Serializer\ApiSerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @template TEntity as object
- * @extends AbstractEntityController<TEntity>
  */
-abstract class AbstractCrudController extends AbstractEntityController
+abstract class AbstractCrudController
 {
     /** @var class-string<TEntity> The fully-qualified (::class) class name of the entity being managed. */
     protected string $entityClass;
@@ -30,11 +29,10 @@ abstract class AbstractCrudController extends AbstractEntityController
     protected string $resourceRouteName;
 
     public function __construct(
-        protected EntityManagerInterface $em,
-        Serializer $serializer,
-        ValidatorInterface $validator
+        protected readonly EntityManagerInterface $em,
+        protected readonly ApiSerializerInterface $apiSerializer,
+        protected readonly ValidatorInterface $validator
     ) {
-        parent::__construct($serializer, $validator);
     }
 
     public function listAction(
@@ -208,5 +206,36 @@ abstract class AbstractCrudController extends AbstractEntityController
 
         $this->em->remove($record);
         $this->em->flush();
+    }
+
+    /**
+     * @param TEntity $record
+     * @param array<string, mixed> $context
+     *
+     * @return array<mixed>
+     */
+    protected function toArray(object $record, array $context = []): array
+    {
+        return $this->apiSerializer->toArray(
+            $record,
+            $context
+        );
+    }
+
+    /**
+     * @param array<mixed> $data
+     * @param TEntity|null $record
+     * @param array<string, mixed> $context
+     *
+     * @return TEntity
+     */
+    protected function fromArray(array $data, ?object $record = null, array $context = []): object
+    {
+        return $this->apiSerializer->fromArray(
+            $data,
+            $this->entityClass,
+            $record,
+            $context
+        );
     }
 }

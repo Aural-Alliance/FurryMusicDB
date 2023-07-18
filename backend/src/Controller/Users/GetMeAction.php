@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace App\Controller\Users;
 
-use App\Controller\AbstractEntityController;
 use App\Http\Response;
 use App\Http\ServerRequest;
+use App\Serializer\ApiSerializerInterface;
 use Psr\Http\Message\ResponseInterface;
 
-final class GetMeAction extends AbstractEntityController
+final class GetMeAction
 {
+    public function __construct(
+        private readonly ApiSerializerInterface $apiSerializer
+    ) {
+    }
+
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
     {
         $user = $request->getUser();
 
         return $response->withJson(
-            $this->toArray($user)
+            $this->apiSerializer->toArray($user)
         );
     }
 }

@@ -24,6 +24,9 @@ return [
 
         call_user_func(include(__DIR__ . '/routes.php'), $app);
 
+        // Injections
+        $app->add(new App\Middleware\InjectRouter());
+
         // System middleware for routing and body parsing.
         $app->addBodyParsingMiddleware();
         $app->addRoutingMiddleware();
@@ -232,31 +235,9 @@ return [
     },
 
     // Symfony Serializer
-    Symfony\Component\Serializer\Serializer::class => static function (
-        Doctrine\Common\Annotations\Reader $reader,
-        Doctrine\ORM\EntityManagerInterface $em
-    ) {
-        $classMetaFactory = new Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory(
-            new Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader($reader)
-        );
-
-        $normalizers = [
-            new Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer(),
-            new Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer(),
-            new App\Normalizer\DoctrineEntityNormalizer(
-                $em,
-                classMetadataFactory: $classMetaFactory
-            ),
-            new Symfony\Component\Serializer\Normalizer\ObjectNormalizer(
-                classMetadataFactory: $classMetaFactory
-            ),
-        ];
-        $encoders = [
-            new Symfony\Component\Serializer\Encoder\JsonEncoder(),
-        ];
-
-        return new Symfony\Component\Serializer\Serializer($normalizers, $encoders);
-    },
+    App\Serializer\ApiSerializerInterface::class => DI\get(
+        App\Serializer\ApiSerializer::class
+    ),
 
     // Symfony Validator
     Symfony\Component\Validator\Validator\ValidatorInterface::class => static function (

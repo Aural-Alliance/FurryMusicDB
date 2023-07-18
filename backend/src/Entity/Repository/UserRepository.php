@@ -22,6 +22,10 @@ final class UserRepository
         $session = $this->auth0->getSessionFromToken($token);
         $id = $session->getSubject();
 
+        if (null === $id) {
+            throw new \RuntimeException('Session token ID is invalid.');
+        }
+
         $user = $this->em->find(User::class, $id);
 
         if (!($user instanceof User)) {

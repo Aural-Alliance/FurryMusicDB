@@ -34,7 +34,7 @@ final class ValidationException extends Exception
 
     public static function fromValidationErrors(ConstraintViolationListInterface $detailedErrors): self
     {
-        $exception = new self((string)$detailedErrors);
+        $exception = new self($detailedErrors->__toString());
         $exception->setDetailedErrors($detailedErrors);
         return $exception;
     }
