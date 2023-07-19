@@ -5,7 +5,7 @@
         </template>
 
         <template v-if="!userLoading">
-            <article class="media ml-3">
+            <article class="media mb-3">
                 <div class="media-left">
                     <figure class="image is-128x128">
                         <img :src="localUser.avatar" alt="Avatar">

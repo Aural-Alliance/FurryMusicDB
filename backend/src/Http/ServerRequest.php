@@ -4,22 +4,29 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-use App\Entity\User;
+use App\Auth\Acl;
+use App\Auth\CurrentUser;
 use InvalidArgumentException;
 
 final class ServerRequest extends \Slim\Http\ServerRequest
 {
     public const ATTR_USER = 'user';
     public const ATTR_ROUTER = 'router';
+    public const ATTR_ACL = 'acl';
 
     public function getRouter(): RouterInterface
     {
         return $this->getAttributeOfClass(self::ATTR_ROUTER, RouterInterface::class);
     }
 
-    public function getUser(): User
+    public function getUser(): CurrentUser
     {
-        return $this->getAttributeOfClass(self::ATTR_USER, User::class);
+        return $this->getAttributeOfClass(self::ATTR_USER, CurrentUser::class);
+    }
+
+    public function getAcl(): Acl
+    {
+        return $this->getAttributeOfClass(self::ATTR_ACL, Acl::class);
     }
 
     /**

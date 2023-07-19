@@ -18,10 +18,10 @@ final class GetMeAction
 
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
     {
-        $user = $request->getUser();
+        $currentUser = $request->getUser();
 
         return $response->withJson(
-            $this->apiSerializer->toArray($user)
+            $this->apiSerializer->toArray($currentUser->getLocalUser())
         );
     }
 }
