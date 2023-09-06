@@ -1,39 +1,44 @@
 body {
-    height: 100vh;
-    background: $topleft;
-    background: linear-gradient(45deg, $topleft 0%, $bottomright 100%);
+  height: 100vh;
+  background: $topleft;
+  background: linear-gradient(45deg, $topleft 0%, $bottomright 100%);
 
-    padding: 1em 0;
+  padding: 1em 0;
 }
 
 nav {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 
-    .navbar-brand .navbar-item {
-        img {
-            max-height: 2.5rem;
-            width: 2.5rem;
-        }
+  .navbar-brand {
+    display: flex;
+    align-items: center;
 
-        .logotype {
-            white-space: nowrap;
-            display: block;
-        }
-
-        font-size: 1.3em;
-        line-height: 0.9;
-        font-weight: 800;
+    img {
+      width: 30px;
+      height: 30px;
     }
 
-    .navbar-item {
-        font-size: 1.15em;
-        text-transform: uppercase;
-        font-weight: bold;
+    .logotype {
+      line-height: 1;
+      white-space: nowrap;
+      display: block;
     }
+
+    text-transform: uppercase;
+    font-size: 1.1em;
+    line-height: 0.9;
+    font-weight: 800;
+  }
+
+  .nav-item {
+    font-size: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 }
 
 .hero {
-    &.is-fullheight-with-navbar {
-        min-height: calc(100vh - #{$navbar-height} - 2em);
-    }
+  &.is-fullheight-with-navbar {
+    min-height: calc(100vh - #{$navbar-height} - 2em);
+  }
 }

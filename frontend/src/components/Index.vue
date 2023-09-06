@@ -1,7 +1,7 @@
 <template>
     <section class="hero is-fullheight-with-navbar">
         <div class="hero-body">
-            <div class="container has-text-centered">
+            <div class="container text-center">
                 <p class="title">
                     Welcome to the Furry Music DB
                 </p>
@@ -11,13 +11,13 @@
                 <div class="button-wrapper">
                     <router-link v-if="isAuthenticated"
                                  to="/profile"
-                                 class="button is-primary is-large"
+                                 class="btn btn-lg btn-primary"
                     >
                         Visit Profile
                     </router-link>
                     <button v-else
                             type="button"
-                            class="button is-primary is-large"
+                            class="btn btn-lg btn-primary"
                             @click.prevent="login"
                     >
                         Sign Up
@@ -28,7 +28,7 @@
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useAuth0} from "@auth0/auth0-vue";
 
 const {

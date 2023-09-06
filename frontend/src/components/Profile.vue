@@ -5,23 +5,21 @@
         </template>
 
         <template v-if="!userLoading">
-            <article class="media mb-3">
-                <div class="media-left">
-                    <figure class="image is-128x128">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
+                    <figure class="image" style="width: 128px; height: 128px;">
                         <img :src="localUser.avatar" alt="Avatar">
                     </figure>
                 </div>
-                <div class="media-content">
-                    <div class="content">
-                        <h1 class="title">{{ localUser.name }}</h1>
-                        <h2 class="subtitle">
-                            <a :href="`mailto:${localUser.email}`">
-                                {{ localUser.email }}
-                            </a>
-                        </h2>
-                    </div>
+                <div class="flex-grow-1 ms-3">
+                    <h1 class="title">{{ localUser.name }}</h1>
+                    <h2 class="subtitle">
+                        <a :href="`mailto:${localUser.email}`">
+                            {{ localUser.email }}
+                        </a>
+                    </h2>
                 </div>
-            </article>
+            </div>
         </template>
     </section>
 
@@ -52,15 +50,15 @@
                 select the appropriate option below.</p>
 
             <div class="buttons">
-                
+
             </div>
         </template>
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useAuth0} from "@auth0/auth0-vue";
-import {getAuthenticatedResource} from "../api.js";
+import {getAuthenticatedResource} from "../api";
 
 const {user} = useAuth0();
 

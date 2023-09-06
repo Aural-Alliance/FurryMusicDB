@@ -17,6 +17,7 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.3.1",
     "bootstrap-icons": "^1.10.5",
+    "lodash": "^4.17.21",
     "pinia": "^2.1.4",
     "sweetalert2": "11.4.8",
     "vue": "^3.2.47",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
+    "@types/lodash": "^4.14.198",
     "@vitejs/plugin-vue": "^4.1.0",
     "sass": "^1.66.1",
     "typescript": "^5.2.2",

@@ -294,13 +294,11 @@ import {filter, forEach, get, includes, indexOf, isEmpty, map, reverse, slice, s
 import Icon from './Icon.vue';
 import {computed, onMounted, ref, shallowRef, toRaw, toRef, useSlots, watch} from "vue";
 import {watchDebounced} from "@vueuse/core";
-import {useAxios} from "~/vendor/axios";
 import FormMultiCheck from "~/components/Form/FormMultiCheck.vue";
 import FormCheckbox from "~/components/Form/FormCheckbox.vue";
 import Pagination from "./Pagination.vue";
 import useOptionalStorage from "~/functions/useOptionalStorage";
-import {IconFilterList, IconRefresh} from "~/components/Common/icons";
-import {useAzuraCast} from "~/vendor/azuracast.ts";
+import {useInjectAxiosAuthenticated} from "~/api.ts";
 
 const props = defineProps({
     id: {
@@ -559,7 +557,7 @@ watch(toRef(props, 'items'), () => {
     immediate: true
 });
 
-const {axios} = useAxios();
+const axios = useInjectAxiosAuthenticated();
 
 const refreshServerSide = () => {
     const queryParams: {

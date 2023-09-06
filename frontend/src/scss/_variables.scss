@@ -9,10 +9,17 @@ $body-color: #FFF;
 $primary: $mauve;
 
 $link-color: change-color($mauve, $lightness: 80%);
+$link-hover-color: change-color($mauve, $lightness: 50%);
 
 $font-family-sans-serif: "Dosis", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 
 $navbar-height: 3.5rem;
+
+$navbar-light-brand-color: #FFF;
+$navbar-light-brand-hover-color: $link-color;
+
+$navbar-light-color: #FFF;
+$navbar-light-hover-color: $link-color;
 
 @import "bootstrap/scss/variables";
 

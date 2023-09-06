@@ -1,58 +1,64 @@
 <template>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <router-link class="navbar-item" to="/">
-                <img src="/icon.svg" class="logo" alt="Logo"/>
+    <nav class="navbar navbar-expand-md" role="navigation" aria-label="main navigation">
+        <div class="container-fluid">
+            <router-link class="navbar-brand d-flex" to="/">
+                <img src="/icon.svg" alt="Logo"/>
                 <span class="logotype">
                     Furry Music<br>Database
                 </span>
             </router-link>
-
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-               data-target="header-nav" @click.prevent="menuActive = !menuActive">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div id="header-nav" class="navbar-menu" :class="{ 'is-active': menuActive }">
-            <div class="navbar-start">
-                <router-link class="navbar-item" to="/about">About</router-link>
-                <a class="navbar-item">Labels</a>
-                <a class="navbar-item">Musicians</a>
-                <a class="navbar-item">Reviews</a>
-            </div>
-
-            <div class="navbar-end">
-                <template v-if="!isAuthenticated && !isLoading">
-                    <a class="navbar-item" href="#" @click.prevent="login">Sign Up/Sign In</a>
-                </template>
-                <template v-if="isAuthenticated">
-                    <div class="navbar-item has-dropdown is-hoverable">
-                        <a class="navbar-link">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#headerNavbar" aria-controls="headerNavbar"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="headerNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/about">About</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Labels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Musicians</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reviews</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" v-if="!isAuthenticated && !isLoading">
+                        <a class="nav-link" href="#" @click.prevent="login">Sign In</a>
+                    </li>
+                    <li class="nav-item" v-if="isAuthenticated">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
                             {{ user.name }}
                         </a>
-
-                        <div class="navbar-dropdown">
-                            <router-link class="navbar-item" to="/profile">My Profile</router-link>
-                            <a class="navbar-item" href="#" @click.prevent="logout">Sign Out</a>
-                        </div>
-                    </div>
-                </template>
-
-                <router-link class="navbar-item" to="/help">Help</router-link>
-                <router-link class="navbar-item" to="/donate">Donate</router-link>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <router-link class="dropdown-item" to="/profile">My Profile</router-link>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" @click.prevent="logout">Sign Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/help">Help</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/donate">Donate</router-link>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {useAuth0} from "@auth0/auth0-vue";
-import {ref} from "vue";
-
-const menuActive = ref(false);
 
 const {
     isAuthenticated,
