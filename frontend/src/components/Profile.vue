@@ -5,15 +5,13 @@
         </template>
 
         <template v-if="!userLoading">
-            <div class="d-flex">
+            <div class="d-flex align-items-center mb-3">
                 <div class="flex-shrink-0">
-                    <figure class="image" style="width: 128px; height: 128px;">
-                        <img :src="localUser.avatar" alt="Avatar">
-                    </figure>
+                    <img :src="localUser.avatar" style="width: 96px; height: 96px;" alt="Avatar">
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    <h1 class="title">{{ localUser.name }}</h1>
-                    <h2 class="subtitle">
+                    <h1 class="title m-0">{{ localUser.name }}</h1>
+                    <h2 class="subtitle m-0">
                         <a :href="`mailto:${localUser.email}`">
                             {{ localUser.email }}
                         </a>
@@ -38,10 +36,8 @@
             <h2>My Artist Profiles</h2>
 
             <div class="buttons">
-
+                
             </div>
-
-
         </template>
         <template v-else>
             <h2>Create a New Profile</h2>

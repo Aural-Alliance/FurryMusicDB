@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-md" role="navigation" aria-label="main navigation">
-        <div class="container-fluid">
+        <div class="container">
             <router-link class="navbar-brand d-flex" to="/">
                 <img src="/icon.svg" alt="Logo"/>
                 <span class="logotype">
@@ -13,7 +13,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="headerNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <router-link class="nav-link" to="/about">About</router-link>
                     </li>
@@ -31,7 +31,7 @@
                     <li class="nav-item" v-if="!isAuthenticated && !isLoading">
                         <a class="nav-link" href="#" @click.prevent="login">Sign In</a>
                     </li>
-                    <li class="nav-item" v-if="isAuthenticated">
+                    <li class="nav-item dropdown" v-if="isAuthenticated">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             {{ user.name }}

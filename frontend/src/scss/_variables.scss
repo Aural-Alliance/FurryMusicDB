@@ -21,14 +21,6 @@ $navbar-light-brand-hover-color: $link-color;
 $navbar-light-color: #FFF;
 $navbar-light-hover-color: $link-color;
 
+$dropdown-link-hover-bg: change-color($topleft, $lightness: 20%);
+
 @import "bootstrap/scss/variables";
-
-/*
-$navbar-background-color: transparent;
-$navbar-item-hover-background-color: transparent;
-
-$navbar-dropdown-background-color: $mauve;
-$navbar-dropdown-item-hover-color: rgba(255, 255, 255, 0.5);
-$navbar-dropdown-border-top: 0;
-$navbar-dropdown-item-hover-background-color: change-color($mauve, $lightness: 20%);
- */
