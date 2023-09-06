@@ -19,9 +19,38 @@ return function (Slim\App $app) {
     );
 
     $app->group(
-        '/users',
+        '',
         function (RouteCollectorProxy $group) {
-            $group->get('/me', App\Controller\Users\GetMeAction::class);
+            $group->group(
+                '/users',
+                function (RouteCollectorProxy $group) {
+                    $group->get('/me', App\Controller\Users\GetMeAction::class);
+                }
+            );
+
+            $apiEndpoints = [
+                [
+                    'label',
+                    'labels',
+                    App\Controller\LabelsController::class,
+                ],
+            ];
+
+            foreach ($apiEndpoints as [$singular, $plural, $class, $permission]) {
+                $group->group(
+                    '',
+                    function (RouteCollectorProxy $group) use ($singular, $plural, $class) {
+                        $group->get('/' . $plural, $class . ':listAction')
+                            ->setName('api:' . $plural);
+                        $group->post('/' . $plural, $class . ':createAction');
+
+                        $group->get('/' . $singular . '/{id}', $class . ':getAction')
+                            ->setName('api:' . $singular);
+                        $group->put('/' . $singular . '/{id}', $class . ':editAction');
+                        $group->delete('/' . $singular . '/{id}', $class . ':deleteAction');
+                    }
+                );
+            }
         }
     )->add(App\Middleware\GetUser::class);
 
