@@ -1,0 +1,27 @@
+$enable-dark-mode: false;
+
+$topleft: #3396b6;
+$bottomright: #4aa995;
+$mauve: #AC3F79;
+
+$body-bg: $topleft;
+$body-color: #FFF;
+$primary: $mauve;
+
+$link-color: change-color($mauve, $lightness: 80%);
+
+$font-family-sans-serif: "Dosis", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+
+$navbar-height: 3.5rem;
+
+@import "bootstrap/scss/variables";
+
+/*
+$navbar-background-color: transparent;
+$navbar-item-hover-background-color: transparent;
+
+$navbar-dropdown-background-color: $mauve;
+$navbar-dropdown-item-hover-color: rgba(255, 255, 255, 0.5);
+$navbar-dropdown-border-top: 0;
+$navbar-dropdown-item-hover-background-color: change-color($mauve, $lightness: 20%);
+ */

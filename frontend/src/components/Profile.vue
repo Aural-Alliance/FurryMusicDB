@@ -1,7 +1,7 @@
 <template>
     <section class="section">
         <template v-if="userLoading">
-            Loading...
+            <p>Loading...</p>
         </template>
 
         <template v-if="!userLoading">
@@ -24,6 +24,38 @@
             </article>
         </template>
     </section>
+
+    <section class="section">
+        <template v-if="labelsLoading || artistsLoading">
+            <p>Loading profiles...</p>
+        </template>
+        <template v-else-if="labels.length > 0">
+            <h2>My Label Profiles</h2>
+
+            <div class="buttons">
+
+            </div>
+        </template>
+        <template v-else-if="artists.length > 0">
+            <h2>My Artist Profiles</h2>
+
+            <div class="buttons">
+
+            </div>
+
+
+        </template>
+        <template v-else>
+            <h2>Create a New Profile</h2>
+
+            <p>You haven't created an artist or label profile yet. If you want to submit a new artist or label,
+                select the appropriate option below.</p>
+
+            <div class="buttons">
+                
+            </div>
+        </template>
+    </section>
 </template>
 
 <script setup>
@@ -34,8 +66,8 @@ const {user} = useAuth0();
 
 const {state: localUser, isLoading: userLoading} = getAuthenticatedResource(
     {
-        'url': '/users/me',
-        'method': 'GET'
+        url: '/users/me',
+        method: 'GET'
     }, {
         id: null,
         email: null,
@@ -43,5 +75,19 @@ const {state: localUser, isLoading: userLoading} = getAuthenticatedResource(
         avatar: null,
         updatedAt: 0
     }
-)
+);
+
+const {state: labels, isLoading: labelsLoading} = getAuthenticatedResource(
+    {
+        url: '/labels',
+        method: 'GET'
+    }, []
+);
+
+const {state: artists, isLoading: artistsLoading} = getAuthenticatedResource(
+    {
+        url: '/artists',
+        method: 'GET'
+    }, []
+);
 </script>
