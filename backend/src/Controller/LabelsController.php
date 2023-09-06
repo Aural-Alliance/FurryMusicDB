@@ -35,6 +35,12 @@ final class LabelsController extends AbstractCrudController
 
     protected function viewRecord(object $record, ServerRequest $request): array
     {
+        if (!($record instanceof Label)) {
+            throw new \InvalidArgumentException(
+                sprintf('Record must be an instance of %s.', Label::class)
+            );
+        }
+
         $router = $request->getRouter();
 
         $returnArray = $this->toArray($record);
@@ -54,7 +60,7 @@ final class LabelsController extends AbstractCrudController
 
         if ($record instanceof Label) {
             $acl = $request->getAcl();
-            if ($acl->canManageLabel($record)) {
+            if ($acl->canManageLabel($record->getIdRequired())) {
                 return $record;
             }
         }
