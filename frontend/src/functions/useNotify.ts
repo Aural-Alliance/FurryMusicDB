@@ -1,4 +1,3 @@
-import {useTranslate} from "~/vendor/gettext";
 import {h, render} from "vue";
 import {default as BSToast} from 'bootstrap/js/src/toast';
 
@@ -30,8 +29,6 @@ export function createToast(props) {
 
 /* Composition API BootstrapVue utilities */
 export function useNotify() {
-    const {$gettext} = useTranslate();
-
     const notify = (message = null, options = {}) => {
         if (document.hidden) {
             return;
@@ -46,7 +43,7 @@ export function useNotify() {
 
     const notifyError = (message = null, options = {}) => {
         if (message === null) {
-            message = $gettext('An error occurred and your request could not be completed.');
+            message = 'An error occurred and your request could not be completed.';
         }
 
         const defaults = {
@@ -60,7 +57,7 @@ export function useNotify() {
 
     const notifySuccess = (message = null, options = {}) => {
         if (message === null) {
-            message = $gettext('Changes saved.');
+            message = 'Changes saved!';
         }
 
         const defaults = {

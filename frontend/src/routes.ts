@@ -36,8 +36,8 @@ export default [
                 component: () => import('./components/Labels/EditLabel.vue'),
             },
             {
-                path: '/label/edit/:id',
-                menu: 'label:edit',
+                path: '/label/edit/:label_id',
+                name: 'label:edit',
                 component: () => import('./components/Labels/EditLabel.vue'),
             }
         ]

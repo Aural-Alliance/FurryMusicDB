@@ -1,6 +1,6 @@
 import {MaybeRefOrGetter, ref, shallowRef} from "vue";
 import {RemovableRef, useLocalStorage, UseStorageOptions} from "@vueuse/core";
-import storageAvailable from "~/functions/storageAvailable";
+import storageAvailable from "./storageAvailable";
 
 export default function useOptionalStorage<T extends (string | number | boolean | object | null)>(
     key: string,

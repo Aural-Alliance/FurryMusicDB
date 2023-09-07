@@ -6,28 +6,32 @@
         Create New Label
     </h1>
 
-    <form @submit.prevent="submit">
-        <div class="row g-2 mb-3">
-            <form-group-field id="form_edit_name" class="col-md-6"
-                              :field="v$.name"
-                              label="Label Name"></form-group-field>
-        </div>
-        <div class="buttons">
-            <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
-        </div>
-    </form>
+    <loading :loading="isLoading">
+        <form @submit.prevent="submit">
+            <div class="row g-2 mb-3">
+                <form-group-field id="form_edit_name" class="col-md-6"
+                                  :field="v$.name"
+                                  label="Label Name"></form-group-field>
+            </div>
+            <div class="buttons">
+                <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </loading>
 </template>
 
 <script setup lang="ts">
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {computed, onMounted, ref} from "vue";
 import mergeExisting from "~/functions/mergeExisting";
 import {useNotify} from "~/functions/useNotify";
 import {useVuelidateOnForm} from "~/functions/useVuelidateOnForm";
-import {useInjectAxiosAuthenticated} from "~/api.ts";
+import {useInjectAxiosAuthenticated} from "~/vendor/api";
 import FormGroupField from "~/components/Form/FormGroupField.vue";
+import {required} from "@vuelidate/validators";
+import Loading from "~/components/Common/Loading.vue";
 
-const loading = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
 
 const {params} = useRoute();
 
@@ -37,8 +41,8 @@ const isEditMode = computed(() => {
 
 const apiUrl = computed(() => {
     return (isEditMode.value)
-        ? `/api/label/${params.label_id}`
-        : `/api/labels`;
+        ? `/label/${params.label_id}`
+        : `/labels`;
 });
 
 const {
@@ -46,25 +50,30 @@ const {
     v$,
     ifValid
 } = useVuelidateOnForm(
-    {},
-    {}
+    {
+        name: {required}
+    },
+    {
+        name: ''
+    }
 );
 
 const axios = useInjectAxiosAuthenticated();
 
 onMounted(() => {
     if (isEditMode.value) {
-        loading.value = true;
+        isLoading.value = true;
 
         axios.get(apiUrl.value).then((resp) => {
             form.value = mergeExisting(form.value, resp.data);
         }).finally(() => {
-            loading.value = false;
+            isLoading.value = false;
         });
     }
 });
 
 const {notifySuccess} = useNotify();
+const router = useRouter();
 
 const submit = () => {
     ifValid(() => {
@@ -76,6 +85,8 @@ const submit = () => {
             data: form.value
         }).then(() => {
             notifySuccess();
+
+            router.push({name: 'profile'});
         });
     });
 };

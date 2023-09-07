@@ -31,7 +31,7 @@
                     <div class="flex-fill">
                         <div class="input-group">
                             <span class="input-group-text">
-                                <icon icon="bi-search"/>
+                                <icon icon="search"/>
                             </span>
                             <input
                                 v-model="searchPhrase"
@@ -51,7 +51,7 @@
                                 title="Refresh rows"
                                 @click="onClickRefresh"
                             >
-                                <icon :icon="IconRefresh"/>
+                                <icon icon="arrow-clockwise"/>
                             </button>
 
                             <div
@@ -103,7 +103,7 @@
                                     data-bs-placement="left"
                                     title="Display fields"
                                 >
-                                    <icon :icon="IconFilterList"/>
+                                    <icon icon="filter"/>
                                     <span class="caret"/>
                                 </button>
                                 <div class="dropdown-menu">
@@ -298,7 +298,7 @@ import FormMultiCheck from "~/components/Form/FormMultiCheck.vue";
 import FormCheckbox from "~/components/Form/FormCheckbox.vue";
 import Pagination from "./Pagination.vue";
 import useOptionalStorage from "~/functions/useOptionalStorage";
-import {useInjectAxiosAuthenticated} from "~/api.ts";
+import {useInjectAxiosAuthenticated} from "~/vendor/api";
 
 const props = defineProps({
     id: {
@@ -503,21 +503,27 @@ const showPagination = computed(() => {
 
 const refreshClientSide = () => {
     // Handle filtration client-side.
-    let itemsOnPage = filter(toRaw(props.items), (item) =>
-        Object.entries(item).filter((item) => {
-            const [key, val] = item;
-            if (!val || key[0] === '_') {
-                return false;
-            }
+    let itemsOnPage;
 
-            const itemValue = typeof val === 'object'
-                ? JSON.stringify(Object.values(val))
-                : typeof val === 'string'
-                    ? val : val.toString();
+    if (searchPhrase.value !== '') {
+        itemsOnPage = filter(toRaw(props.items), (item) =>
+            Object.entries(item).filter((item) => {
+                const [key, val] = item;
+                if (!val || key[0] === '_') {
+                    return false;
+                }
 
-            return itemValue.toLowerCase().includes(searchPhrase.value.toLowerCase())
-        }).length > 0
-    );
+                const itemValue = typeof val === 'object'
+                    ? JSON.stringify(Object.values(val))
+                    : typeof val === 'string'
+                        ? val : val.toString();
+
+                return itemValue.toLowerCase().includes(searchPhrase.value.toLowerCase())
+            }).length > 0
+        );
+    } else {
+        itemsOnPage = toRaw(props.items);
+    }
 
     totalRows.value = itemsOnPage.length;
 
@@ -542,7 +548,7 @@ const refreshClientSide = () => {
             currentPage.value * perPage.value
         );
     }
-
+    
     visibleItems.value = itemsOnPage;
     emit('refreshed');
 };
@@ -771,3 +777,4 @@ defineExpose({
     toggleDetails
 });
 </script>
+~/vendor/api

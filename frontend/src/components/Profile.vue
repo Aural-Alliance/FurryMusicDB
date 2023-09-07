@@ -29,8 +29,35 @@
             <h2>My Label Profiles</h2>
 
             <div class="buttons">
-
+                <router-link class="btn btn-primary" :to="{name: 'label:create'}">
+                    <icon icon="plus-lg"/>
+                    <span>
+                        Create Another Label Profile
+                    </span>
+                </router-link>
             </div>
+
+            <data-table ref="$datatable" :fields="labelFields" :items="labels" handle-client-side>
+                <template #cell(actions)="{item}">
+                    <div class="btn-group btn-group-sm">
+                        <router-link class="btn btn-primary"
+                                     :to="{name: 'label:edit', params: {'label_id': item.id}}"
+                        >
+                            <icon icon="pencil"/>
+                            <span>
+                                Edit
+                            </span>
+                        </router-link>
+                        <button class="btn btn-danger"
+                                @click="doDelete(item.links.self)">
+                            <icon icon="trash"/>
+                            <span>
+                                Delete
+                            </span>
+                        </button>
+                    </div>
+                </template>
+            </data-table>
         </template>
         <template v-else-if="artists.length > 0">
             <h2>My Artist Profiles</h2>
@@ -46,8 +73,11 @@
                 select the appropriate option below.</p>
 
             <div class="buttons">
-                <router-link :to="{name: 'label:create'}">
-                    Create Label Profile
+                <router-link class="btn btn-primary" :to="{name: 'label:create'}">
+                    <icon icon="plus-lg"/>
+                    <span>
+                        Create Label Profile
+                    </span>
                 </router-link>
             </div>
         </template>
@@ -56,7 +86,11 @@
 
 <script setup lang="ts">
 import {useAuth0} from "@auth0/auth0-vue";
-import {getAuthenticatedResource} from "../api";
+import {getAuthenticatedResource} from "~/vendor/api.ts";
+import Icon from "~/components/Common/Icon.vue";
+import DataTable, {DataTableField} from "~/components/Common/DataTable.vue";
+import {ref} from "vue";
+import useHasDatatable, {DataTableTemplateRef} from "~/functions/useHasDatatable.ts";
 
 const {user} = useAuth0();
 
@@ -73,6 +107,19 @@ const {state: localUser, isLoading: userLoading} = getAuthenticatedResource(
     }
 );
 
+const labelFields: DataTableField[] = [
+    {
+        key: 'name',
+        label: 'Name',
+        sortable: false,
+    },
+    {
+        key: 'actions',
+        label: 'Actions',
+        class: 'shrink'
+    }
+];
+
 const {state: labels, isLoading: labelsLoading} = getAuthenticatedResource(
     {
         url: '/labels',
@@ -86,4 +133,11 @@ const {state: artists, isLoading: artistsLoading} = getAuthenticatedResource(
         method: 'GET'
     }, []
 );
+
+const $datatable = ref<DataTableTemplateRef>();
+const {relist} = useHasDatatable($datatable);
+
+const doDelete = (deleteUrl: string): void => {
+    relist();
+}
 </script>

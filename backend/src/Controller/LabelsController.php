@@ -8,6 +8,7 @@ use App\Entity\Label;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 final class LabelsController extends AbstractCrudController
 {
@@ -52,6 +53,17 @@ final class LabelsController extends AbstractCrudController
         ];
 
         return $returnArray;
+    }
+
+    protected function createRecord(ServerRequest $request, array $data): object
+    {
+        return $this->editRecord($data, null, [
+            AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
+                $this->entityClass => [
+                    'owner' => $request->getUser()->getLocalUser(),
+                ],
+            ],
+        ]);
     }
 
     protected function getRecord(ServerRequest $request, array $params): ?object

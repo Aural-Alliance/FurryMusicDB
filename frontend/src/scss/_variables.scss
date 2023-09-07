@@ -7,6 +7,11 @@ $mauve: #AC3F79;
 $body-bg: $topleft;
 $body-color: #FFF;
 $primary: $mauve;
+$secondary: change-color($topleft, $lightness: 30%);
+$tertiary: change-color($bottomright, $lightness: 30%);
+
+$body-secondary-bg: $secondary;
+$body-tertiary-bg: $tertiary;
 
 $link-color: change-color($mauve, $lightness: 80%);
 $link-hover-color: change-color($mauve, $lightness: 50%);

@@ -1,0 +1,65 @@
+div.datatable-toolbar-top,
+div.datatable-toolbar-bottom {
+  &:empty {
+    display: none;
+  }
+}
+
+div.datatable-main {
+  table {
+    border-radius: 10px;
+
+    tr > th:first-child,
+    tr > td:first-child {
+      padding-left: 1rem;
+    }
+
+    tr > th:last-child,
+    tr > td:last-child {
+      padding-right: 1rem;
+    }
+
+    &.table-selectable {
+      tr > th:first-child,
+      tr > td:first-child {
+        width: .1%;
+        white-space: nowrap;
+        padding-right: 0.1rem;
+      }
+    }
+
+    th.sortable {
+      cursor: pointer;
+    }
+
+    th.shrink,
+    td.shrink {
+      width: 0.1%;
+      white-space: nowrap;
+    }
+
+    .form-check,
+    .form-check input,
+    .form-check label {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.table {
+  thead th {
+    font-size: 1.1rem;
+    font-weight: normal;
+  }
+
+  > :not(caption) > * > * {
+    padding: .5rem;
+  }
+
+  &.table-striped {
+    thead th {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+}

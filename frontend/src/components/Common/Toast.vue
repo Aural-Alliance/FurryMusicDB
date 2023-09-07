@@ -18,7 +18,7 @@
                     type="button"
                     class="btn-close"
                     data-bs-dismiss="toast"
-                    :aria-label="$gettext('Close')"
+                    aria-label="Close"
                 />
             </div>
             <div class="toast-body">
@@ -38,7 +38,7 @@
                     type="button"
                     class="btn-close me-2 m-auto"
                     data-bs-dismiss="toast"
-                    :aria-label="$gettext('Close')"
+                    aria-label="Close"
                 />
             </div>
         </template>

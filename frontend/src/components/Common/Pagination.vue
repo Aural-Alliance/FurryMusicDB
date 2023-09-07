@@ -47,7 +47,7 @@
                 :max="pageCount"
                 step="1"
                 class="form-control rounded-start-2"
-                :aria-label="$gettext('Page')"
+                aria-label="Page"
                 style="max-width: 60px;"
                 @keydown.enter.prevent="goToPage"
             >
@@ -56,7 +56,7 @@
                 type="button"
                 @click="goToPage"
             >
-                {{ $gettext('Go') }}
+                Go
             </button>
         </div>
     </nav>

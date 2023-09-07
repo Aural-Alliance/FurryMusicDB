@@ -1,5 +1,5 @@
 import {createAuth0} from "@auth0/auth0-vue";
-import authConfig from "../../auth_config.json";
+import authConfig from "../../../auth_config.json";
 
 const client = createAuth0({
     domain: authConfig.domain,

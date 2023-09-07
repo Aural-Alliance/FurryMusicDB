@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import {useTranslate} from "~/vendor/gettext";
 import {get, map} from "lodash";
 import {computed} from "vue";
 
@@ -20,57 +19,20 @@ const props = defineProps({
     }
 });
 
-const {$gettext} = useTranslate();
-
 const messages = {
-    required: () => {
-        return $gettext('This field is required.');
-    },
-    minLength: (params) => {
-        return $gettext(
-            'This field must have at least %{ min } letters.',
-            params
-        );
-    },
-    maxLength: (params) => {
-        return $gettext(
-            'This field must have at most %{ max } letters.',
-            params
-        );
-    },
-    between: (params) => {
-        return $gettext(
-            'This field must be between %{ min } and %{ max }.',
-            params
-        );
-    },
-    alpha: () => {
-        return $gettext('This field must only contain alphabetic characters.');
-    },
-    alphaNum: () => {
-        return $gettext('This field must only contain alphanumeric characters.');
-    },
-    numeric: () => {
-        return $gettext('This field must only contain numeric characters.');
-    },
-    integer: () => {
-        return $gettext('This field must be a valid integer.');
-    },
-    decimal: () => {
-        return $gettext('This field must be a valid decimal number.');
-    },
-    email: () => {
-        return $gettext('This field must be a valid e-mail address.');
-    },
-    ipAddress: () => {
-        return $gettext('This field must be a valid IP address.');
-    },
-    url: () => {
-        return $gettext('This field must be a valid URL.');
-    },
-    validatePassword: () => {
-        return $gettext('This password is too common or insecure.');
-    }
+    required: () => 'This field is required.',
+    minLength: (params) => `This field must have at least ${params.min} letters.`,
+    maxLength: (params) => `This field must have at most ${params.max} letters.`,
+    between: (params) => `This field must be between ${params.min} and ${params.max}.`,
+    alpha: () => 'This field must only contain alphabetic characters.',
+    alphaNum: () => 'This field must only contain alphanumeric characters.',
+    numeric: () => 'This field must only contain numeric characters.',
+    integer: () => 'This field must be a valid integer.',
+    decimal: () => 'This field must be a valid decimal number.',
+    email: () => 'This field must be a valid e-mail address.',
+    ipAddress: () => 'This field must be a valid IP address.',
+    url: () => 'This field must be a valid URL.',
+    validatePassword: () => 'This password is too common or insecure.'
 };
 
 const errorMessages = computed(() => {

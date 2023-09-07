@@ -1,5 +1,5 @@
 import useVuelidate from "@vuelidate/core";
-import {useResettableRef} from "~/functions/useResettableRef";
+import {useResettableRef} from "./useResettableRef";
 import {computed, unref} from "vue";
 import {useEventBus} from "@vueuse/core";
 import {cloneDeep, merge} from "lodash";
