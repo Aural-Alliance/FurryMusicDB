@@ -501,8 +501,6 @@ const showPagination = computed(() => {
     return props.paginated && perPage.value !== 0;
 });
 
-const {localeShort} = useAzuraCast();
-
 const refreshClientSide = () => {
     // Handle filtration client-side.
     let itemsOnPage = filter(toRaw(props.items), (item) =>
@@ -525,7 +523,7 @@ const refreshClientSide = () => {
 
     // Handle sorting client-side.
     if (sortField.value) {
-        const collator = new Intl.Collator(localeShort, {numeric: true, sensitivity: 'base'});
+        const collator = new Intl.Collator('en', {numeric: true, sensitivity: 'base'});
 
         itemsOnPage = itemsOnPage.sort(
             (a, b) => collator.compare(get(a, sortField.value), get(b, sortField.value))

@@ -2,20 +2,44 @@ import {authGuard} from "@auth0/auth0-vue";
 
 export default [
     {
-        path: '/', component: () => import('./components/Index.vue')
+        path: '/',
+        name: 'home',
+        component: () => import('./components/Index.vue')
     },
     {
-        path: '/about', component: () => import('./components/About.vue')
+        path: '/about',
+        name: 'about',
+        component: () => import('./components/About.vue')
     },
     {
-        path: '/help', component: () => import('./components/Help.vue')
+        path: '/help',
+        name: 'help',
+        component: () => import('./components/Help.vue')
     },
     {
-        path: '/donate', component: () => import('./components/Donate.vue')
+        path: '/donate',
+        name: 'donate',
+        component: () => import('./components/Donate.vue')
     },
     {
-        path: '/profile',
+        path: '',
         beforeEnter: authGuard,
-        component: () => import('./components/Profile.vue')
+        children: [
+            {
+                path: '/profile',
+                name: 'profile',
+                component: () => import('./components/Profile.vue')
+            },
+            {
+                path: '/label/create',
+                name: 'label:create',
+                component: () => import('./components/Labels/EditLabel.vue'),
+            },
+            {
+                path: '/label/edit/:id',
+                menu: 'label:edit',
+                component: () => import('./components/Labels/EditLabel.vue'),
+            }
+        ]
     }
 ];

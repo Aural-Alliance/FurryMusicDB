@@ -36,7 +36,7 @@
             <h2>My Artist Profiles</h2>
 
             <div class="buttons">
-                
+
             </div>
         </template>
         <template v-else>
@@ -46,7 +46,9 @@
                 select the appropriate option below.</p>
 
             <div class="buttons">
-
+                <router-link :to="{name: 'label:create'}">
+                    Create Label Profile
+                </router-link>
             </div>
         </template>
     </section>

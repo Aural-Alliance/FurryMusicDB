@@ -1,5 +1,5 @@
 <template>
-    <i :class="'bi-'+icon"></i>
+    <i class="bootstrap-icon" :class="'bi-'+icon"></i>
 </template>
 
 <script setup lang="ts">
