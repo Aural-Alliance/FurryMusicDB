@@ -37,7 +37,8 @@
                 </router-link>
             </div>
 
-            <data-table ref="$datatable" :fields="labelFields" :items="labels" handle-client-side>
+            <data-table :fields="labelFields" :items="labels"
+                        :loading="labelsLoading" @clickRefresh="refreshLabels" handle-client-side>
                 <template #cell(actions)="{item}">
                     <div class="btn-group btn-group-sm">
                         <router-link class="btn btn-primary"
@@ -63,8 +64,36 @@
             <h2>My Artist Profiles</h2>
 
             <div class="buttons">
-
+                <router-link class="btn btn-primary" :to="{name: 'label:create'}">
+                    <icon icon="plus-lg"/>
+                    <span>
+                        Create Another Artist Profile
+                    </span>
+                </router-link>
             </div>
+
+            <data-table :fields="artistFields" :items="artists"
+                        :loading="artistsLoading" @clickRefresh="refreshArtists" handle-client-side>
+                <template #cell(actions)="{item}">
+                    <div class="btn-group btn-group-sm">
+                        <router-link class="btn btn-primary"
+                                     :to="{name: 'artist:edit', params: {'artist_id': item.id}}"
+                        >
+                            <icon icon="pencil"/>
+                            <span>
+                                Edit
+                            </span>
+                        </router-link>
+                        <button class="btn btn-danger"
+                                @click="doDelete(item.links.self)">
+                            <icon icon="trash"/>
+                            <span>
+                                Delete
+                            </span>
+                        </button>
+                    </div>
+                </template>
+            </data-table>
         </template>
         <template v-else>
             <h2>Create a New Profile</h2>
@@ -79,6 +108,12 @@
                         Create Label Profile
                     </span>
                 </router-link>
+                <router-link class="btn btn-primary" :to="{name: 'artist:create'}">
+                    <icon icon="plus-lg"/>
+                    <span>
+                        Create Artist Profile
+                    </span>
+                </router-link>
             </div>
         </template>
     </section>
@@ -89,8 +124,7 @@ import {useAuth0} from "@auth0/auth0-vue";
 import {getAuthenticatedResource} from "~/vendor/api.ts";
 import Icon from "~/components/Common/Icon.vue";
 import DataTable, {DataTableField} from "~/components/Common/DataTable.vue";
-import {ref} from "vue";
-import useHasDatatable, {DataTableTemplateRef} from "~/functions/useHasDatatable.ts";
+import useConfirmAndDelete from "~/functions/useConfirmAndDelete.ts";
 
 const {user} = useAuth0();
 
@@ -111,7 +145,7 @@ const labelFields: DataTableField[] = [
     {
         key: 'name',
         label: 'Name',
-        sortable: false,
+        sortable: true,
     },
     {
         key: 'actions',
@@ -120,24 +154,38 @@ const labelFields: DataTableField[] = [
     }
 ];
 
-const {state: labels, isLoading: labelsLoading} = getAuthenticatedResource(
+const {state: labels, isLoading: labelsLoading, execute: refreshLabels} = getAuthenticatedResource(
     {
         url: '/labels',
         method: 'GET'
     }, []
 );
 
-const {state: artists, isLoading: artistsLoading} = getAuthenticatedResource(
+const artistFields: DataTableField[] = [
+    {
+        key: 'name',
+        label: 'Name',
+        sortable: true,
+    },
+    {
+        key: 'actions',
+        label: 'Actions',
+        class: 'shrink'
+    }
+];
+
+const {state: artists, isLoading: artistsLoading, execute: refreshArtists} = getAuthenticatedResource(
     {
         url: '/artists',
         method: 'GET'
     }, []
 );
 
-const $datatable = ref<DataTableTemplateRef>();
-const {relist} = useHasDatatable($datatable);
-
-const doDelete = (deleteUrl: string): void => {
-    relist();
-}
+const {doDelete} = useConfirmAndDelete(
+    'Delete record?',
+    () => {
+        refreshLabels();
+        refreshArtists();
+    }
+);
 </script>

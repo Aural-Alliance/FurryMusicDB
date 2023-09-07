@@ -39,6 +39,16 @@ export default [
                 path: '/label/edit/:label_id',
                 name: 'label:edit',
                 component: () => import('./components/Labels/EditLabel.vue'),
+            },
+            {
+                path: '/artist/create',
+                name: 'artist:create',
+                component: () => import('./components/Artists/EditArtist.vue'),
+            },
+            {
+                path: '/artist/edit/:artist_id',
+                name: 'artist:edit',
+                component: () => import('./components/Artists/EditArtist.vue'),
             }
         ]
     }

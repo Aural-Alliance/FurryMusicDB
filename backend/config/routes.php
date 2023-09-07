@@ -34,6 +34,11 @@ return function (Slim\App $app) {
                     'labels',
                     App\Controller\LabelsController::class,
                 ],
+                [
+                    'artist',
+                    'artists',
+                    App\Controller\ArtistsController::class,
+                ],
             ];
 
             foreach ($apiEndpoints as [$singular, $plural, $class, $permission]) {

@@ -7,7 +7,8 @@ const client = createAuth0({
     authorizationParams: {
         audience: authConfig.audience,
         redirect_uri: window.location.origin,
-    }
+    },
+    cacheLocation: 'localstorage'
 });
 
 export default client;

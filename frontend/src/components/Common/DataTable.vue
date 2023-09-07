@@ -370,6 +370,7 @@ const props = defineProps({
 const slots = useSlots();
 
 const emit = defineEmits([
+    'click-refresh',
     'refreshed',
     'row-selected',
     'filtered',
@@ -548,7 +549,7 @@ const refreshClientSide = () => {
             currentPage.value * perPage.value
         );
     }
-    
+
     visibleItems.value = itemsOnPage;
     emit('refreshed');
 };
@@ -643,6 +644,8 @@ const relist = () => {
 };
 
 const onClickRefresh = (e) => {
+    emit('click-refresh');
+
     if (e.shiftKey) {
         relist();
     } else {

@@ -1,6 +1,6 @@
 import {inject, InjectionKey} from "vue";
 import {useAsyncState} from "@vueuse/core";
-import axios, {AxiosStatic} from "axios";
+import axios, {AxiosRequestConfig, AxiosStatic} from "axios";
 import {getAccessToken} from "./auth0.js";
 import VueAxios from "vue-axios";
 
@@ -10,17 +10,29 @@ const AxiosAuthenticatedKey = Symbol() as InjectionKey<AxiosStatic>;
 /* Composition API Axios utilities */
 export const useInjectAxiosPublic = (): AxiosStatic => inject(AxiosPublicKey);
 
-export const getPublicResource = (config, initialState) => useAsyncState(
-    useInjectAxiosPublic().request(config).then(r => r.data),
+export const getPublicResource = (
+    config: AxiosRequestConfig,
     initialState
-);
+) => {
+    const axios = useInjectAxiosPublic();
+    return useAsyncState(
+        () => axios.request(config).then(r => r.data),
+        initialState
+    );
+};
 
 export const useInjectAxiosAuthenticated = (): AxiosStatic => inject(AxiosAuthenticatedKey);
 
-export const getAuthenticatedResource = (config, initialState) => useAsyncState(
-    useInjectAxiosAuthenticated().request(config).then(r => r.data),
+export const getAuthenticatedResource = (
+    config: AxiosRequestConfig,
     initialState
-);
+) => {
+    const axios = useInjectAxiosAuthenticated();
+    return useAsyncState(
+        () => axios.request(config).then(r => r.data),
+        initialState
+    );
+};
 
 export const setupApi = (app) => {
     const axiosPublic = axios.create({
