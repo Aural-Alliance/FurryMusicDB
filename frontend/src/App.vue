@@ -2,6 +2,8 @@
     <navbar/>
 
     <div class="container">
+        <breadcrumbs/>
+
         <router-view/>
     </div>
 
@@ -11,4 +13,5 @@
 
 <script setup lang="ts">
 import Navbar from "./components/Navbar.vue";
+import Breadcrumbs from "~/components/Common/Breadcrumbs.vue";
 </script>

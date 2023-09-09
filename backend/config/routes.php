@@ -2,6 +2,23 @@
 
 use Slim\Routing\RouteCollectorProxy;
 
+function buildCrudApiEndpoints(
+    RouteCollectorProxy $group,
+    array $apiEndpoints,
+    string $routePrefix = 'api:'
+): void {
+    foreach ($apiEndpoints as [$singular, $plural, $class]) {
+        $group->get('/' . $plural, $class . ':listAction')
+            ->setName($routePrefix . $plural);
+        $group->post('/' . $plural, $class . ':createAction');
+
+        $group->get('/' . $singular . '/{id}', $class . ':getAction')
+            ->setName($routePrefix . $singular);
+        $group->put('/' . $singular . '/{id}', $class . ':editAction');
+        $group->delete('/' . $singular . '/{id}', $class . ':deleteAction');
+    }
+}
+
 return function (Slim\App $app) {
     $app->setBasePath('/api');
 
@@ -41,21 +58,34 @@ return function (Slim\App $app) {
                 ],
             ];
 
-            foreach ($apiEndpoints as [$singular, $plural, $class, $permission]) {
-                $group->group(
-                    '',
-                    function (RouteCollectorProxy $group) use ($singular, $plural, $class) {
-                        $group->get('/' . $plural, $class . ':listAction')
-                            ->setName('api:' . $plural);
-                        $group->post('/' . $plural, $class . ':createAction');
+            buildCrudApiEndpoints($group, $apiEndpoints);
 
-                        $group->get('/' . $singular . '/{id}', $class . ':getAction')
-                            ->setName('api:' . $singular);
-                        $group->put('/' . $singular . '/{id}', $class . ':editAction');
-                        $group->delete('/' . $singular . '/{id}', $class . ':deleteAction');
-                    }
-                );
-            }
+            $group->group(
+                '/label/{label_id}',
+                function (RouteCollectorProxy $group) {
+                    $apiEndpoints = [
+                        [
+                            'artist',
+                            'artists',
+                            App\Controller\Label\LabelArtistsController::class,
+                        ],
+                    ];
+
+                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:label:');
+                }
+            )->add(new App\Middleware\Acl\CheckCanManageLabel())
+                ->add(App\Middleware\GetLabel::class);
+
+            $group->group(
+                '/artist/{artist_id}',
+                function (RouteCollectorProxy $group) {
+                    $apiEndpoints = [
+                    ];
+
+                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:label:');
+                }
+            )->add(new App\Middleware\Acl\CheckCanManageArtist())
+                ->add(App\Middleware\GetArtist::class);
         }
     )->add(App\Middleware\GetUser::class);
 

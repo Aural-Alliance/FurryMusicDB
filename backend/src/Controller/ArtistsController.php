@@ -9,9 +9,8 @@ use App\Entity\Label;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-final class ArtistsController extends AbstractCrudController
+class ArtistsController extends AbstractCrudController
 {
     protected string $entityClass = Artist::class;
     protected string $resourceRouteName = 'api:artist';
@@ -58,13 +57,12 @@ final class ArtistsController extends AbstractCrudController
 
     protected function createRecord(ServerRequest $request, array $data): object
     {
-        return $this->editRecord($data, null, [
-            AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                $this->entityClass => [
-                    'owner' => $request->getUser()->getLocalUser(),
-                ],
-            ],
-        ]);
+        return $this->editRecord(
+            $data,
+            new Artist(
+                owner: $request->getUser()->getLocalUser()
+            )
+        );
     }
 
     protected function getRecord(ServerRequest $request, array $params): ?object
@@ -78,6 +76,6 @@ final class ArtistsController extends AbstractCrudController
             }
         }
 
-        throw new \InvalidArgumentException('Record not found.');
+        return null;
     }
 }

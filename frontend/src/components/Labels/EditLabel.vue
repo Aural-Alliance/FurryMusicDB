@@ -1,11 +1,6 @@
 <template>
-    <h1 v-if="isEditMode">
-        Edit Label
-    </h1>
-    <h1 v-else>
-        Create New Label
-    </h1>
-
+    <h1>{{ meta.title }}</h1>
+    
     <loading :loading="isLoading">
         <form @submit.prevent="submit">
             <div class="row g-2 mb-3">
@@ -33,7 +28,7 @@ import Loading from "~/components/Common/Loading.vue";
 
 const isLoading = ref<boolean>(false);
 
-const {params} = useRoute();
+const {meta, params} = useRoute();
 
 const isEditMode = computed(() => {
     return 'label_id' in params;

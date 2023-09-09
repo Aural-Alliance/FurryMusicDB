@@ -64,7 +64,7 @@
             <h2>My Artist Profiles</h2>
 
             <div class="buttons">
-                <router-link class="btn btn-primary" :to="{name: 'label:create'}">
+                <router-link class="btn btn-primary" :to="{name: 'artist:create'}">
                     <icon icon="plus-lg"/>
                     <span>
                         Create Another Artist Profile

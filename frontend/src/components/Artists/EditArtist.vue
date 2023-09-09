@@ -1,10 +1,5 @@
 <template>
-    <h1 v-if="isEditMode">
-        Edit Artist
-    </h1>
-    <h1 v-else>
-        Create New Artist
-    </h1>
+    <h1>{{ meta.title }}</h1>
 
     <loading :loading="isLoading">
         <form @submit.prevent="submit">
@@ -33,7 +28,7 @@ import Loading from "~/components/Common/Loading.vue";
 
 const isLoading = ref<boolean>(false);
 
-const {params} = useRoute();
+const {meta, params} = useRoute();
 
 const isEditMode = computed(() => {
     return 'artist_id' in params;
@@ -77,6 +72,8 @@ const router = useRouter();
 
 const submit = () => {
     ifValid(() => {
+
+
         axios.request({
             method: (isEditMode.value)
                 ? 'PUT'

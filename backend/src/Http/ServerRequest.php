@@ -6,6 +6,8 @@ namespace App\Http;
 
 use App\Auth\Acl;
 use App\Auth\CurrentUser;
+use App\Entity\Artist;
+use App\Entity\Label;
 use InvalidArgumentException;
 
 final class ServerRequest extends \Slim\Http\ServerRequest
@@ -13,6 +15,9 @@ final class ServerRequest extends \Slim\Http\ServerRequest
     public const ATTR_USER = 'user';
     public const ATTR_ROUTER = 'router';
     public const ATTR_ACL = 'acl';
+
+    public const ATTR_ARTIST = 'artist';
+    public const ATTR_LABEL = 'label';
 
     public function getRouter(): RouterInterface
     {
@@ -27,6 +32,16 @@ final class ServerRequest extends \Slim\Http\ServerRequest
     public function getAcl(): Acl
     {
         return $this->getAttributeOfClass(self::ATTR_ACL, Acl::class);
+    }
+
+    public function getArtist(): Artist
+    {
+        return $this->getAttributeOfClass(self::ATTR_ARTIST, Artist::class);
+    }
+
+    public function getLabel(): Label
+    {
+        return $this->getAttributeOfClass(self::ATTR_LABEL, Label::class);
     }
 
     /**

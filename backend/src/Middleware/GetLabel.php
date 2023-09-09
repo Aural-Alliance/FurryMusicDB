@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Entity\Artist;
+use App\Entity\Label;
 use App\Http\ServerRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -13,7 +13,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Routing\RouteContext;
 
-final class GetArtist implements MiddlewareInterface
+final class GetLabel implements MiddlewareInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -23,16 +23,16 @@ final class GetArtist implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $routeArgs = RouteContext::fromRequest($request)->getRoute()?->getArguments();
-        $id = $routeArgs['artist_id'] ?? null;
+        $id = $routeArgs['label_id'] ?? null;
 
-        $record = $this->em->find(Artist::class, $id);
+        $record = $this->em->find(Label::class, $id);
 
-        if (!($record instanceof Artist)) {
-            throw new \InvalidArgumentException('Artist not found!');
+        if (!($record instanceof Label)) {
+            throw new \InvalidArgumentException('Label not found!');
         }
 
         $request = $request->withAttribute(
-            ServerRequest::ATTR_ARTIST,
+            ServerRequest::ATTR_LABEL,
             $record
         );
 
