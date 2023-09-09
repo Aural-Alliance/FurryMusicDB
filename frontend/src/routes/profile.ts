@@ -1,5 +1,4 @@
 import {RouteRecordRaw} from "vue-router";
-import labelRoutes from './labels';
 
 export default [
     {
@@ -19,19 +18,52 @@ export default [
         }
     },
     {
-        path: '/label/:label_id/manage',
-        name: 'label:manage',
-        component: () => import('~/components/Labels/ManageLabel.vue'),
+        path: '/label/:label_id/artists',
+        name: 'label:artists',
+        component: () => import('~/components/Labels/Artists.vue'),
         meta: {
-            title: 'Manage Label',
+            title: 'Label Artists',
         },
     },
     {
-        path: '/label/:label_id',
+        path: '',
         meta: {
-            breadcrumb: (route) => ([])
+            breadcrumb: (route) => ([
+                {
+                    label: 'My Profile',
+                    url: {
+                        name: 'profile'
+                    }
+                },
+                {
+                    label: 'Label Artists',
+                    url: {
+                        name: 'label:artists',
+                        params: {
+                            label_id: route.params.label_id
+                        }
+                    }
+                }
+            ])
         },
-        children: labelRoutes
+        children: [
+            {
+                path: '/label/:label_id/artists/create',
+                name: 'label:artist:create',
+                component: () => import('~/components/Artists/EditArtist.vue'),
+                meta: {
+                    title: 'Create New Artist in Label',
+                },
+            },
+            {
+                path: '/label/:label_id/artist/:artist_id/edit',
+                name: 'label:artist:edit',
+                component: () => import('~/components/Artists/EditArtist.vue'),
+                meta: {
+                    title: 'Edit Artist in Label',
+                },
+            }
+        ]
     },
     {
         path: '/artists/create',

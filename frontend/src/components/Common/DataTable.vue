@@ -202,7 +202,9 @@
                 <template v-else-if="visibleItems.length === 0">
                     <tr>
                         <td :colspan="columnCount">
-                            No records.
+                            <slot name="empty">
+                                No records.
+                            </slot>
                         </td>
                     </tr>
                 </template>
@@ -265,12 +267,6 @@
                         </td>
                     </tr>
                 </template>
-
-                <tr v-if="!visibleItems.length">
-                    <td :colspan="columnCount">
-                        <slot name="empty"/>
-                    </td>
-                </tr>
                 </tbody>
             </table>
         </div>

@@ -29,15 +29,16 @@ import Loading from "~/components/Common/Loading.vue";
 const isLoading = ref<boolean>(false);
 
 const {meta, params} = useRoute();
-
-const isEditMode = computed(() => {
-    return 'artist_id' in params;
-});
+const isEditMode = 'artist_id' in params;
 
 const apiUrl = computed(() => {
-    return (isEditMode.value)
-        ? `/artist/${params.label_id}`
-        : `/artists`;
+    const prefix = ('label_id' in params)
+        ? `/label/${params.label_id}`
+        : '';
+
+    return (isEditMode)
+        ? `${prefix}/artist/${params.artist_id}`
+        : `${prefix}/artists`;
 });
 
 const {
@@ -56,7 +57,7 @@ const {
 const axios = useInjectAxiosAuthenticated();
 
 onMounted(() => {
-    if (isEditMode.value) {
+    if (isEditMode) {
         isLoading.value = true;
 
         axios.get(apiUrl.value).then((resp) => {
@@ -72,10 +73,8 @@ const router = useRouter();
 
 const submit = () => {
     ifValid(() => {
-
-
         axios.request({
-            method: (isEditMode.value)
+            method: (isEditMode)
                 ? 'PUT'
                 : 'POST',
             url: apiUrl.value,
@@ -83,7 +82,16 @@ const submit = () => {
         }).then(() => {
             notifySuccess();
 
-            router.push({name: 'profile'});
+            if ('label_id' in params) {
+                router.push({
+                    name: 'label:artists',
+                    params: {
+                        label_id: params.label_id
+                    }
+                });
+            } else {
+                router.push({name: 'profile'});
+            }
         });
     });
 };

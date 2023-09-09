@@ -42,6 +42,14 @@
                 <template #cell(actions)="{item}">
                     <div class="btn-group btn-group-sm">
                         <router-link class="btn btn-primary"
+                                     :to="{name: 'label:artists', params: {'label_id': item.id}}"
+                        >
+                            <icon icon="people-fill"/>
+                            <span>
+                                Artists
+                            </span>
+                        </router-link>
+                        <router-link class="btn btn-secondary"
                                      :to="{name: 'label:edit', params: {'label_id': item.id}}"
                         >
                             <icon icon="pencil"/>
