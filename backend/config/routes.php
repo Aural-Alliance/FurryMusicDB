@@ -24,7 +24,7 @@ return function (Slim\App $app) {
 
     $app->options(
         '/{routes:.+}',
-        function (Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response) {
+        function (Psr\Http\Message\ServerRequestInterface $request, Psr\Http\Message\ResponseInterface $response) {
             return $response
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
                 ->withHeader(
@@ -45,47 +45,72 @@ return function (Slim\App $app) {
                 }
             );
 
-            $apiEndpoints = [
-                [
-                    'label',
-                    'labels',
-                    App\Controller\LabelsController::class,
-                ],
-                [
-                    'artist',
-                    'artists',
-                    App\Controller\ArtistsController::class,
-                ],
-            ];
-
-            buildCrudApiEndpoints($group, $apiEndpoints);
-
             $group->group(
-                '/label/{label_id}',
+                '/profile',
                 function (RouteCollectorProxy $group) {
                     $apiEndpoints = [
                         [
+                            'label',
+                            'labels',
+                            App\Controller\Profile\LabelsController::class,
+                        ],
+                        [
                             'artist',
                             'artists',
-                            App\Controller\Label\LabelArtistsController::class,
+                            App\Controller\Profile\ArtistsController::class,
                         ],
                     ];
 
-                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:label:');
-                }
-            )->add(new App\Middleware\Acl\CheckCanManageLabel())
-                ->add(App\Middleware\GetLabel::class);
+                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:');
 
-            $group->group(
-                '/artist/{artist_id}',
-                function (RouteCollectorProxy $group) {
-                    $apiEndpoints = [
-                    ];
+                    $group->group(
+                        '/label/{label_id}',
+                        function (RouteCollectorProxy $group) {
+                            $apiEndpoints = [
+                                [
+                                    'artist',
+                                    'artists',
+                                    App\Controller\Profile\LabelArtistsController::class,
+                                ],
+                            ];
 
-                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:label:');
+                            buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:label:');
+                        }
+                    )->add(new App\Middleware\Acl\CheckCanManageLabel())
+                        ->add(App\Middleware\GetLabel::class);
+
+                    $group->group(
+                        '/artist/{artist_id}',
+                        function (RouteCollectorProxy $group) {
+                            $apiEndpoints = [
+                                [
+                                    'album',
+                                    'albums',
+                                    App\Controller\Profile\AlbumsController::class,
+                                ],
+                            ];
+
+                            buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:artist:');
+
+                            $group->group(
+                                '/album/{album_id}',
+                                function (RouteCollectorProxy $group) {
+                                    $apiEndpoints = [
+                                        [
+                                            'track',
+                                            'tracks',
+                                            App\Controller\Profile\TracksController::class,
+                                        ],
+                                    ];
+
+                                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:artist:album');
+                                }
+                            );
+                        }
+                    )->add(new App\Middleware\Acl\CheckCanManageArtist())
+                        ->add(App\Middleware\GetArtist::class);
                 }
-            )->add(new App\Middleware\Acl\CheckCanManageArtist())
-                ->add(App\Middleware\GetArtist::class);
+            );
         }
     )->add(App\Middleware\GetUser::class);
 

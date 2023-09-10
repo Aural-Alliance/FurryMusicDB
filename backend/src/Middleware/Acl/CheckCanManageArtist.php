@@ -22,7 +22,7 @@ class CheckCanManageArtist
         RequestHandlerInterface $handler
     ): ResponseInterface {
         $routeParams = RouteContext::fromRequest($request);
-        $param = $routeParams->getRoute()->getArgument($this->param);
+        $param = $routeParams->getRoute()?->getArgument($this->param);
 
         if (empty($param)) {
             throw new \InvalidArgumentException(sprintf('Param %s not found.', $this->param));

@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Profile;
 
+use App\Controller\AbstractCrudController;
 use App\Entity\Label;
 use App\Http\Response;
 use App\Http\ServerRequest;
@@ -13,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 final class LabelsController extends AbstractCrudController
 {
     protected string $entityClass = Label::class;
-    protected string $resourceRouteName = 'api:label';
+    protected string $resourceRouteName = 'api:profile:label';
 
     public function listAction(
         ServerRequest $request,

@@ -10,6 +10,8 @@ $primary: $mauve;
 $secondary: change-color($topleft, $lightness: 30%);
 $tertiary: change-color($bottomright, $lightness: 30%);
 
+$border-color: change-color($topleft, $lightness: 50%);
+
 $body-secondary-bg: $secondary;
 $body-tertiary-bg: $tertiary;
 

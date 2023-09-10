@@ -1,12 +1,12 @@
 <template>
     <h1>{{ meta.title }}</h1>
-    
+
     <loading :loading="isLoading">
         <form @submit.prevent="submit">
             <div class="row g-2 mb-3">
                 <form-group-field id="form_edit_name" class="col-md-6"
                                   :field="v$.name"
-                                  label="Label Name"></form-group-field>
+                                  label="Artist Name"></form-group-field>
             </div>
             <div class="buttons">
                 <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
@@ -29,15 +29,16 @@ import Loading from "~/components/Common/Loading.vue";
 const isLoading = ref<boolean>(false);
 
 const {meta, params} = useRoute();
-
-const isEditMode = computed(() => {
-    return 'label_id' in params;
-});
+const isEditMode = 'artist_id' in params;
 
 const apiUrl = computed(() => {
-    return (isEditMode.value)
-        ? `/label/${params.label_id}`
-        : `/labels`;
+    const prefix = ('label_id' in params)
+        ? `/profile/label/${params.label_id}`
+        : '/profile';
+
+    return (isEditMode)
+        ? `${prefix}/artist/${params.artist_id}`
+        : `${prefix}/artists`;
 });
 
 const {
@@ -56,7 +57,7 @@ const {
 const axios = useInjectAxiosAuthenticated();
 
 onMounted(() => {
-    if (isEditMode.value) {
+    if (isEditMode) {
         isLoading.value = true;
 
         axios.get(apiUrl.value).then((resp) => {
@@ -73,7 +74,7 @@ const router = useRouter();
 const submit = () => {
     ifValid(() => {
         axios.request({
-            method: (isEditMode.value)
+            method: (isEditMode)
                 ? 'PUT'
                 : 'POST',
             url: apiUrl.value,
@@ -81,7 +82,16 @@ const submit = () => {
         }).then(() => {
             notifySuccess();
 
-            router.push({name: 'profile'});
+            if ('label_id' in params) {
+                router.push({
+                    name: 'profile:label:artists',
+                    params: {
+                        label_id: params.label_id
+                    }
+                });
+            } else {
+                router.push({name: 'profile'});
+            }
         });
     });
 };

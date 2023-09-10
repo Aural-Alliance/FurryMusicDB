@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Profile;
 
+use App\Controller\AbstractCrudController;
 use App\Entity\Artist;
-use App\Entity\Label;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 class ArtistsController extends AbstractCrudController
 {
     protected string $entityClass = Artist::class;
-    protected string $resourceRouteName = 'api:artist';
+    protected string $resourceRouteName = 'api:profile:artist';
 
     public function listAction(
         ServerRequest $request,
@@ -24,7 +24,7 @@ class ArtistsController extends AbstractCrudController
 
         $qb = $this->em->createQueryBuilder()
             ->select('e')
-            ->from(Label::class, 'e');
+            ->from(Artist::class, 'e');
 
         if (!$acl->isAdministrator()) {
             $qb->where('e.owner = :user')

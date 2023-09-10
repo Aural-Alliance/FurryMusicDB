@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Label;
+namespace App\Controller\Profile;
 
-use App\Controller\ArtistsController;
 use App\Entity\Artist;
 use App\Http\Response;
 use App\Http\ServerRequest;
@@ -12,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class LabelArtistsController extends ArtistsController
 {
-    protected string $resourceRouteName = 'api:label:artist';
+    protected string $resourceRouteName = 'api:profile:label:artist';
 
     public function listAction(
         ServerRequest $request,
@@ -29,7 +28,7 @@ class LabelArtistsController extends ArtistsController
 
         return $this->listPaginatedFromQuery($request, $response, $qb->getQuery());
     }
-    
+
     protected function createRecord(ServerRequest $request, array $data): object
     {
         return $this->editRecord(
@@ -51,6 +50,4 @@ class LabelArtistsController extends ArtistsController
                 'label' => $request->getLabel(),
             ]);
     }
-
-
 }

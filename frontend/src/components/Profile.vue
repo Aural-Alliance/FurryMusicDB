@@ -29,7 +29,7 @@
             <h2>My Label Profiles</h2>
 
             <div class="buttons">
-                <router-link class="btn btn-primary" :to="{name: 'label:create'}">
+                <router-link class="btn btn-primary" :to="{name: 'profile:label:create'}">
                     <icon icon="plus-lg"/>
                     <span>
                         Create Another Label Profile
@@ -42,7 +42,7 @@
                 <template #cell(actions)="{item}">
                     <div class="btn-group btn-group-sm">
                         <router-link class="btn btn-primary"
-                                     :to="{name: 'label:artists', params: {'label_id': item.id}}"
+                                     :to="{name: 'profile:label:artists', params: {'label_id': item.id}}"
                         >
                             <icon icon="people-fill"/>
                             <span>
@@ -50,7 +50,7 @@
                             </span>
                         </router-link>
                         <router-link class="btn btn-secondary"
-                                     :to="{name: 'label:edit', params: {'label_id': item.id}}"
+                                     :to="{name: 'profile:label:edit', params: {'label_id': item.id}}"
                         >
                             <icon icon="pencil"/>
                             <span>
@@ -72,7 +72,7 @@
             <h2>My Artist Profiles</h2>
 
             <div class="buttons">
-                <router-link class="btn btn-primary" :to="{name: 'artist:create'}">
+                <router-link class="btn btn-primary" :to="{name: 'profile:artist:create'}">
                     <icon icon="plus-lg"/>
                     <span>
                         Create Another Artist Profile
@@ -85,7 +85,15 @@
                 <template #cell(actions)="{item}">
                     <div class="btn-group btn-group-sm">
                         <router-link class="btn btn-primary"
-                                     :to="{name: 'artist:edit', params: {'artist_id': item.id}}"
+                                     :to="{name: 'profile:artist:albums', params: {
+                                 'artist_id': item.id
+                             }
+                        }">
+                            <icon icon="folder"/>
+                            <span>Albums</span>
+                        </router-link>
+                        <router-link class="btn btn-secondary"
+                                     :to="{name: 'profile:artist:edit', params: {'artist_id': item.id}}"
                         >
                             <icon icon="pencil"/>
                             <span>
@@ -110,13 +118,13 @@
                 select the appropriate option below.</p>
 
             <div class="buttons">
-                <router-link class="btn btn-primary" :to="{name: 'label:create'}">
+                <router-link class="btn btn-primary" :to="{name: 'profile:label:create'}">
                     <icon icon="plus-lg"/>
                     <span>
                         Create Label Profile
                     </span>
                 </router-link>
-                <router-link class="btn btn-primary" :to="{name: 'artist:create'}">
+                <router-link class="btn btn-primary" :to="{name: 'profile:artist:create'}">
                     <icon icon="plus-lg"/>
                     <span>
                         Create Artist Profile
@@ -164,7 +172,7 @@ const labelFields: DataTableField[] = [
 
 const {state: labels, isLoading: labelsLoading, execute: refreshLabels} = getAuthenticatedResource(
     {
-        url: '/labels',
+        url: '/profile/labels',
         method: 'GET'
     }, []
 );
@@ -184,7 +192,7 @@ const artistFields: DataTableField[] = [
 
 const {state: artists, isLoading: artistsLoading, execute: refreshArtists} = getAuthenticatedResource(
     {
-        url: '/artists',
+        url: '/profile/artists',
         method: 'GET'
     }, []
 );

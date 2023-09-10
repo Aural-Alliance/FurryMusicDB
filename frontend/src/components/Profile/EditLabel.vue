@@ -6,7 +6,7 @@
             <div class="row g-2 mb-3">
                 <form-group-field id="form_edit_name" class="col-md-6"
                                   :field="v$.name"
-                                  label="Artist Name"></form-group-field>
+                                  label="Label Name"></form-group-field>
             </div>
             <div class="buttons">
                 <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
@@ -29,16 +29,15 @@ import Loading from "~/components/Common/Loading.vue";
 const isLoading = ref<boolean>(false);
 
 const {meta, params} = useRoute();
-const isEditMode = 'artist_id' in params;
+
+const isEditMode = computed(() => {
+    return 'label_id' in params;
+});
 
 const apiUrl = computed(() => {
-    const prefix = ('label_id' in params)
-        ? `/label/${params.label_id}`
-        : '';
-
-    return (isEditMode)
-        ? `${prefix}/artist/${params.artist_id}`
-        : `${prefix}/artists`;
+    return (isEditMode.value)
+        ? `/profile/label/${params.label_id}`
+        : `/profile/labels`;
 });
 
 const {
@@ -57,7 +56,7 @@ const {
 const axios = useInjectAxiosAuthenticated();
 
 onMounted(() => {
-    if (isEditMode) {
+    if (isEditMode.value) {
         isLoading.value = true;
 
         axios.get(apiUrl.value).then((resp) => {
@@ -74,7 +73,7 @@ const router = useRouter();
 const submit = () => {
     ifValid(() => {
         axios.request({
-            method: (isEditMode)
+            method: (isEditMode.value)
                 ? 'PUT'
                 : 'POST',
             url: apiUrl.value,
@@ -82,16 +81,7 @@ const submit = () => {
         }).then(() => {
             notifySuccess();
 
-            if ('label_id' in params) {
-                router.push({
-                    name: 'label:artists',
-                    params: {
-                        label_id: params.label_id
-                    }
-                });
-            } else {
-                router.push({name: 'profile'});
-            }
+            router.push({name: 'profile'});
         });
     });
 };

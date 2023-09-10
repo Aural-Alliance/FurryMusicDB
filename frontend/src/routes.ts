@@ -1,6 +1,5 @@
 import {authGuard} from "@auth0/auth0-vue";
 import {RouteRecordRaw} from "vue-router";
-import profileRoutes from './routes/profile';
 
 export default [
     {
@@ -59,7 +58,177 @@ export default [
                         }
                     ]
                 },
-                children: profileRoutes,
+                children: [
+                    {
+                        path: '/labels/create',
+                        name: 'profile:label:create',
+                        component: () => import('~/components/Profile/EditLabel.vue'),
+                        meta: {
+                            title: 'Create New Label'
+                        }
+                    },
+                    {
+                        path: '/label/:label_id/edit',
+                        name: 'profile:label:edit',
+                        component: () => import('~/components/Profile/EditLabel.vue'),
+                        meta: {
+                            title: 'Edit Label',
+                        }
+                    },
+                    {
+                        path: '/label/:label_id/artists',
+                        name: 'profile:label:artists',
+                        component: () => import('~/components/Profile/LabelArtists.vue'),
+                        meta: {
+                            title: 'Label Artists',
+                        },
+                    },
+                    {
+                        path: '',
+                        meta: {
+                            breadcrumb: (route) => ([
+                                {
+                                    label: 'My Profile',
+                                    url: {
+                                        name: 'profile'
+                                    }
+                                },
+                                {
+                                    label: 'Label Artists',
+                                    url: {
+                                        name: 'profile:label:artists',
+                                        params: {
+                                            label_id: route.params.label_id
+                                        }
+                                    }
+                                }
+                            ])
+                        },
+                        children: [
+                            {
+                                path: '/label/:label_id/artists/create',
+                                name: 'profile:label:artist:create',
+                                component: () => import('~/components/Profile/EditArtist.vue'),
+                                meta: {
+                                    title: 'Create New Artist in Label',
+                                },
+                            },
+                            {
+                                path: '/label/:label_id/artist/:artist_id/edit',
+                                name: 'profile:label:artist:edit',
+                                component: () => import('~/components/Profile/EditArtist.vue'),
+                                meta: {
+                                    title: 'Edit Artist in Label',
+                                },
+                            }
+                        ]
+                    },
+                    {
+                        path: '/artists/create',
+                        name: 'profile:artist:create',
+                        component: () => import('~/components/Profile/EditArtist.vue'),
+                        meta: {
+                            title: 'Create New Artist'
+                        }
+                    },
+                    {
+                        path: '/artist/:artist_id/edit',
+                        name: 'profile:artist:edit',
+                        component: () => import('~/components/Profile/EditArtist.vue'),
+                        meta: {
+                            title: 'Edit Artist'
+                        }
+                    },
+                    {
+                        path: '/artist/:artist_id/albums',
+                        name: 'profile:artist:albums',
+                        component: () => import('~/components/Profile/Albums.vue'),
+                        meta: {
+                            title: 'Manage Albums'
+                        }
+                    },
+                    {
+                        path: '',
+                        meta: {
+                            breadcrumb: (route) => ([
+                                {
+                                    label: 'My Profile',
+                                    url: {
+                                        name: 'profile'
+                                    }
+                                },
+                                {
+                                    label: 'Manage Albums',
+                                    url: {
+                                        name: 'profile:artist:albums',
+                                        params: {
+                                            artist_id: route.params.artist_id
+                                        }
+                                    }
+                                }
+                            ])
+                        },
+                        children: [
+                            {
+                                path: '/artist/:artist_id/albums/create',
+                                name: 'profile:artist:album:create',
+                                component: () => import('~/components/Profile/EditAlbum.vue'),
+                                meta: {
+                                    title: 'Create New Album'
+                                }
+                            },
+                            {
+                                path: '/artist/:artist_id/album/:album_id/edit',
+                                name: 'profile:artist:album:edit',
+                                component: () => import('~/components/Profile/EditAlbum.vue'),
+                                meta: {
+                                    title: 'Edit Album'
+                                }
+                            },
+                            {
+                                path: '/artist/:artist_id/album/:album_id/tracks',
+                                name: 'profile:artist:album:tracks',
+                                component: () => import('~/components/Profile/Tracks.vue'),
+                                meta: {
+                                    title: 'Manage Tracks'
+                                }
+                            },
+                            {
+                                path: '',
+                                meta: {
+                                    breadcrumb: (route) => ([
+                                        {
+                                            label: 'My Profile',
+                                            url: {
+                                                name: 'profile'
+                                            }
+                                        },
+                                        {
+                                            label: 'Manage Albums',
+                                            url: {
+                                                name: 'profile:artist:albums',
+                                                params: {
+                                                    artist_id: route.params.artist_id
+                                                }
+                                            }
+                                        },
+                                        {
+                                            label: 'Album',
+                                            url: {
+                                                name: 'profile:artist:album:tracks',
+                                                params: {
+                                                    artist_id: route.params.artist_id,
+                                                    album_id: route.params.album_id
+                                                }
+                                            }
+                                        }
+                                    ])
+                                },
+                                children: []
+                            }
+                        ]
+                    }
+                ],
             }
         ]
     }
