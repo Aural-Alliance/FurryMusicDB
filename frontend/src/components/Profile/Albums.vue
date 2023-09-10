@@ -30,7 +30,7 @@
                                  'album_id': item.id
                              }
                 }">
-                    <icon icon="folder"/>
+                    <icon icon="file-music-fill"/>
                     <span>Tracks</span>
                 </router-link>
                 <router-link class="btn btn-secondary"

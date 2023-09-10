@@ -224,7 +224,24 @@ export default [
                                         }
                                     ])
                                 },
-                                children: []
+                                children: [
+                                    {
+                                        path: '/artist/:artist_id/album/:album_id/tracks/create',
+                                        name: 'profile:artist:album:track:create',
+                                        component: () => import('~/components/Profile/EditTrack.vue'),
+                                        meta: {
+                                            title: 'Add New Track'
+                                        }
+                                    },
+                                    {
+                                        path: '/artist/:artist_id/album/:album_id/track/:track_id/edit',
+                                        name: 'profile:artist:album:track:edit',
+                                        component: () => import('~/components/Profile/EditTrack.vue'),
+                                        meta: {
+                                            title: 'Edit Track'
+                                        }
+                                    },
+                                ]
                             }
                         ]
                     }

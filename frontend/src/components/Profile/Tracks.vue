@@ -57,7 +57,7 @@ const {params} = useRoute();
 const artistId = params.artist_id;
 const albumId = params.album_id;
 
-const {state: artist, isLoading} = getAuthenticatedResource(
+const {state: album, isLoading} = getAuthenticatedResource(
     {
         url: `/profile/artist/${artistId}/album/${albumId}`,
         method: 'GET'
@@ -69,8 +69,8 @@ const {state: artist, isLoading} = getAuthenticatedResource(
 
 const fields: DataTableField[] = [
     {
-        key: 'name',
-        label: 'Name',
+        key: 'title',
+        label: 'Title',
         sortable: true,
     },
     {

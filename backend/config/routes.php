@@ -103,7 +103,7 @@ return function (Slim\App $app) {
                                         ],
                                     ];
 
-                                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:artist:album');
+                                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:artist:album:');
                                 }
                             );
                         }

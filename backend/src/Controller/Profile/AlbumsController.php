@@ -35,9 +35,9 @@ final class AlbumsController extends AbstractCrudController
 
     protected function viewRecord(object $record, ServerRequest $request): array
     {
-        if (!($record instanceof Artist)) {
+        if (!($record instanceof Album)) {
             throw new \InvalidArgumentException(
-                sprintf('Record must be an instance of %s.', Artist::class)
+                sprintf('Record must be an instance of %s.', Album::class)
             );
         }
 

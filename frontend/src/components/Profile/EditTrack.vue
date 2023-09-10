@@ -4,9 +4,9 @@
     <loading :loading="isLoading">
         <form @submit.prevent="submit">
             <div class="row g-2 mb-3">
-                <form-group-field id="form_edit_name" class="col-md-6"
-                                  :field="v$.name"
-                                  label="Track Name"></form-group-field>
+                <form-group-field id="form_edit_title" class="col-md-6"
+                                  :field="v$.title"
+                                  label="Track Title"></form-group-field>
             </div>
             <div class="buttons">
                 <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
@@ -43,10 +43,10 @@ const {
     ifValid
 } = useVuelidateOnForm(
     {
-        name: {required}
+        title: {required}
     },
     {
-        name: ''
+        title: ''
     }
 );
 
