@@ -18,13 +18,13 @@
                         <router-link class="nav-link" to="/about">About</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Labels</a>
+                        <router-link class="nav-link" to="/labels">Labels</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Musicians</a>
+                        <router-link class="nav-link" to="/artists">Musicians</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Reviews</a>
+                        <router-link class="nav-link" to="/reviews">Reviews</router-link>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

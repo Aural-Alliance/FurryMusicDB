@@ -27,11 +27,63 @@ export default [
         }
     },
     {
+        path: '/reviews',
+        name: 'reviews',
+        component: () => import('~/components/Reviews.vue'),
+        meta: {
+            title: 'Reviews'
+        }
+    },
+    {
         path: '/donate',
         name: 'donate',
         component: () => import('~/components/Donate.vue'),
         meta: {
             title: 'Donate'
+        }
+    },
+    {
+        path: '/labels',
+        name: 'labels',
+        meta: {
+            title: 'Labels'
+        }
+    },
+    {
+        path: '/label/:label_id',
+        name: 'label',
+        meta: {
+            title: 'View Label',
+            breadcrumb: [
+                {
+                    label: 'Labels',
+                    url: {
+                        name: 'labels'
+                    }
+                }
+            ]
+        }
+    },
+    {
+        path: '/artists',
+        name: 'artists',
+        meta: {
+            title: 'Musicians'
+        }
+    },
+    {
+        path: '/artist/:artist_id',
+        name: 'artist',
+        meta: {
+            title: 'Musician',
+            breadcrumb: [
+                {
+                    label: 'Musicians',
+                    url: {
+                        name: 'artists'
+                    }
+                }
+            ]
         }
     },
     {
@@ -138,112 +190,6 @@ export default [
                         meta: {
                             title: 'Edit Artist'
                         }
-                    },
-                    {
-                        path: '/artist/:artist_id/albums',
-                        name: 'profile:artist:albums',
-                        component: () => import('~/components/Profile/Albums.vue'),
-                        meta: {
-                            title: 'Manage Albums'
-                        }
-                    },
-                    {
-                        path: '',
-                        meta: {
-                            breadcrumb: (route) => ([
-                                {
-                                    label: 'My Profile',
-                                    url: {
-                                        name: 'profile'
-                                    }
-                                },
-                                {
-                                    label: 'Manage Albums',
-                                    url: {
-                                        name: 'profile:artist:albums',
-                                        params: {
-                                            artist_id: route.params.artist_id
-                                        }
-                                    }
-                                }
-                            ])
-                        },
-                        children: [
-                            {
-                                path: '/artist/:artist_id/albums/create',
-                                name: 'profile:artist:album:create',
-                                component: () => import('~/components/Profile/EditAlbum.vue'),
-                                meta: {
-                                    title: 'Create New Album'
-                                }
-                            },
-                            {
-                                path: '/artist/:artist_id/album/:album_id/edit',
-                                name: 'profile:artist:album:edit',
-                                component: () => import('~/components/Profile/EditAlbum.vue'),
-                                meta: {
-                                    title: 'Edit Album'
-                                }
-                            },
-                            {
-                                path: '/artist/:artist_id/album/:album_id/tracks',
-                                name: 'profile:artist:album:tracks',
-                                component: () => import('~/components/Profile/Tracks.vue'),
-                                meta: {
-                                    title: 'Manage Tracks'
-                                }
-                            },
-                            {
-                                path: '',
-                                meta: {
-                                    breadcrumb: (route) => ([
-                                        {
-                                            label: 'My Profile',
-                                            url: {
-                                                name: 'profile'
-                                            }
-                                        },
-                                        {
-                                            label: 'Manage Albums',
-                                            url: {
-                                                name: 'profile:artist:albums',
-                                                params: {
-                                                    artist_id: route.params.artist_id
-                                                }
-                                            }
-                                        },
-                                        {
-                                            label: 'Album',
-                                            url: {
-                                                name: 'profile:artist:album:tracks',
-                                                params: {
-                                                    artist_id: route.params.artist_id,
-                                                    album_id: route.params.album_id
-                                                }
-                                            }
-                                        }
-                                    ])
-                                },
-                                children: [
-                                    {
-                                        path: '/artist/:artist_id/album/:album_id/tracks/create',
-                                        name: 'profile:artist:album:track:create',
-                                        component: () => import('~/components/Profile/EditTrack.vue'),
-                                        meta: {
-                                            title: 'Add New Track'
-                                        }
-                                    },
-                                    {
-                                        path: '/artist/:artist_id/album/:album_id/track/:track_id/edit',
-                                        name: 'profile:artist:album:track:edit',
-                                        component: () => import('~/components/Profile/EditTrack.vue'),
-                                        meta: {
-                                            title: 'Edit Track'
-                                        }
-                                    },
-                                ]
-                            }
-                        ]
                     }
                 ],
             }

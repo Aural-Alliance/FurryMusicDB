@@ -5,6 +5,7 @@ body {
   height: 100vh;
   background: $topleft;
   background: linear-gradient(45deg, $topleft 0%, $bottomright 100%);
+  background-attachment: fixed;
 
   padding: 1em 0;
 }

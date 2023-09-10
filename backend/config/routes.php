@@ -35,6 +35,26 @@ return function (Slim\App $app) {
         }
     );
 
+    $app->get(
+        '/artists',
+        App\Controller\Artists\ListArtistsAction::class
+    )->setName('artists');
+
+    $app->get(
+        '/artist/{artist_id}',
+        App\Controller\Artists\GetArtistAction::class
+    )->setName('artist');
+
+    $app->get(
+        '/labels',
+        App\Controller\Labels\ListLabelsAction::class
+    )->setName('labels');
+
+    $app->get(
+        '/label/{label_id}',
+        App\Controller\Labels\GetLabelAction::class
+    )->setName('label');
+
     $app->group(
         '',
         function (RouteCollectorProxy $group) {
@@ -78,37 +98,6 @@ return function (Slim\App $app) {
                         }
                     )->add(new App\Middleware\Acl\CheckCanManageLabel())
                         ->add(App\Middleware\GetLabel::class);
-
-                    $group->group(
-                        '/artist/{artist_id}',
-                        function (RouteCollectorProxy $group) {
-                            $apiEndpoints = [
-                                [
-                                    'album',
-                                    'albums',
-                                    App\Controller\Profile\AlbumsController::class,
-                                ],
-                            ];
-
-                            buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:artist:');
-
-                            $group->group(
-                                '/album/{album_id}',
-                                function (RouteCollectorProxy $group) {
-                                    $apiEndpoints = [
-                                        [
-                                            'track',
-                                            'tracks',
-                                            App\Controller\Profile\TracksController::class,
-                                        ],
-                                    ];
-
-                                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:profile:artist:album:');
-                                }
-                            );
-                        }
-                    )->add(new App\Middleware\Acl\CheckCanManageArtist())
-                        ->add(App\Middleware\GetArtist::class);
                 }
             );
         }

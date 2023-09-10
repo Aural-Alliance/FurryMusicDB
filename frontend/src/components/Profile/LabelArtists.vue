@@ -22,16 +22,20 @@
         @clickRefresh="relist"
         handle-client-side
     >
+        <template #cell(name)="{item}">
+            <big>
+                <router-link :to="{
+                    name: 'artist',
+                    params: {
+                        artist_id: item.id
+                    }
+                }" class="text-reset" target="_blank">
+                    {{ item.name }}
+                </router-link>
+            </big>
+        </template>
         <template #cell(actions)="{item}">
             <div class="btn-group btn-group-sm">
-                <router-link class="btn btn-primary"
-                             :to="{name: 'profile:artist:albums', params: {
-                                 'artist_id': item.id
-                             }
-                }">
-                    <icon icon="folder"/>
-                    <span>Albums</span>
-                </router-link>
                 <router-link class="btn btn-secondary"
                              :to="{name: 'profile:label:artist:edit', params: {
                                  'label_id': labelId, 'artist_id': item.id}

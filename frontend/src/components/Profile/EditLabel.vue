@@ -4,7 +4,7 @@
     <loading :loading="isLoading">
         <form @submit.prevent="submit">
             <div class="row g-2 mb-3">
-                <form-group-field id="form_edit_name" class="col-md-6"
+                <form-group-field id="form_edit_name" class="col-md-12"
                                   :field="v$.name"
                                   label="Label Name"></form-group-field>
             </div>
@@ -23,7 +23,7 @@ import {useNotify} from "~/functions/useNotify";
 import {useVuelidateOnForm} from "~/functions/useVuelidateOnForm";
 import {useInjectAxiosAuthenticated} from "~/vendor/api";
 import FormGroupField from "~/components/Form/FormGroupField.vue";
-import {required} from "@vuelidate/validators";
+import {maxLength, required} from "@vuelidate/validators";
 import Loading from "~/components/Common/Loading.vue";
 
 const isLoading = ref<boolean>(false);
@@ -46,7 +46,10 @@ const {
     ifValid
 } = useVuelidateOnForm(
     {
-        name: {required}
+        name: {
+            required,
+            maxLength: maxLength(255)
+        }
     },
     {
         name: ''

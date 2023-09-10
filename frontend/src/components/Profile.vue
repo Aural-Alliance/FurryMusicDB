@@ -21,100 +21,129 @@
         </template>
     </section>
 
-    <section class="section">
-        <template v-if="labelsLoading || artistsLoading">
+    <template v-if="labelsLoading || artistsLoading">
+        <hr>
+        <section class="section">
             <p>Loading profiles...</p>
-        </template>
-        <template v-else-if="labels.length > 0">
-            <h2>My Label Profiles</h2>
+        </section>
+    </template>
+    <template v-else-if="labels.length > 0 || artists.length > 0">
+        <template v-if="labels.length > 0">
+            <hr>
+            <section class="section">
+                <h2>My Label Profiles</h2>
 
-            <div class="buttons">
-                <router-link class="btn btn-primary" :to="{name: 'profile:label:create'}">
-                    <icon icon="plus-lg"/>
-                    <span>
+                <div class="buttons">
+                    <router-link class="btn btn-primary" :to="{name: 'profile:label:create'}">
+                        <icon icon="plus-lg"/>
+                        <span>
                         Create Another Label Profile
                     </span>
-                </router-link>
-            </div>
+                    </router-link>
+                </div>
 
-            <data-table :fields="labelFields" :items="labels"
-                        :loading="labelsLoading" @clickRefresh="refreshLabels" handle-client-side>
-                <template #cell(actions)="{item}">
-                    <div class="btn-group btn-group-sm">
-                        <router-link class="btn btn-primary"
-                                     :to="{name: 'profile:label:artists', params: {'label_id': item.id}}"
-                        >
-                            <icon icon="people-fill"/>
-                            <span>
+                <data-table :fields="labelFields" :items="labels"
+                            :loading="labelsLoading" @clickRefresh="refreshLabels" handle-client-side>
+                    <template #cell(name)="{item}">
+                        <big>
+                            <router-link :to="{
+                                name: 'label',
+                                params: {
+                                    label_id: item.id
+                                }
+                            }" class="text-reset" target="_blank">
+                                {{ item.name }}
+                            </router-link>
+                        </big>
+                    </template>
+                    <template #cell(actions)="{item}">
+                        <div class="btn-group btn-group-sm">
+                            <router-link class="btn btn-primary"
+                                         :to="{name: 'profile:label:artists', params: {'label_id': item.id}}"
+                            >
+                                <icon icon="people-fill"/>
+                                <span>
                                 Artists
                             </span>
-                        </router-link>
-                        <router-link class="btn btn-secondary"
-                                     :to="{name: 'profile:label:edit', params: {'label_id': item.id}}"
-                        >
-                            <icon icon="pencil"/>
-                            <span>
+                            </router-link>
+                            <router-link class="btn btn-secondary"
+                                         :to="{name: 'profile:label:edit', params: {'label_id': item.id}}"
+                            >
+                                <icon icon="pencil"/>
+                                <span>
                                 Edit
                             </span>
-                        </router-link>
-                        <button class="btn btn-danger"
-                                @click="doDelete(item.links.self)">
-                            <icon icon="trash"/>
-                            <span>
+                            </router-link>
+                            <button class="btn btn-danger"
+                                    @click="doDeleteLabel(item.links.self)">
+                                <icon icon="trash"/>
+                                <span>
                                 Delete
                             </span>
-                        </button>
-                    </div>
-                </template>
-            </data-table>
+                            </button>
+                        </div>
+                    </template>
+                </data-table>
+            </section>
         </template>
-        <template v-else-if="artists.length > 0">
-            <h2>My Artist Profiles</h2>
+        <template v-if="artists.length > 0">
+            <hr>
+            <section class="section">
+                <h2>My Artist Profiles</h2>
 
-            <div class="buttons">
-                <router-link class="btn btn-primary" :to="{name: 'profile:artist:create'}">
-                    <icon icon="plus-lg"/>
-                    <span>
+                <div class="buttons">
+                    <router-link class="btn btn-primary" :to="{name: 'profile:artist:create'}">
+                        <icon icon="plus-lg"/>
+                        <span>
                         Create Another Artist Profile
                     </span>
-                </router-link>
-            </div>
+                    </router-link>
+                </div>
 
-            <data-table :fields="artistFields" :items="artists"
-                        :loading="artistsLoading" @clickRefresh="refreshArtists" handle-client-side>
-                <template #cell(actions)="{item}">
-                    <div class="btn-group btn-group-sm">
-                        <router-link class="btn btn-primary"
-                                     :to="{name: 'profile:artist:albums', params: {
-                                 'artist_id': item.id
-                             }
-                        }">
-                            <icon icon="folder"/>
-                            <span>Albums</span>
-                        </router-link>
-                        <router-link class="btn btn-secondary"
-                                     :to="{name: 'profile:artist:edit', params: {'artist_id': item.id}}"
-                        >
-                            <icon icon="pencil"/>
-                            <span>
+                <data-table :fields="artistFields" :items="artists"
+                            :loading="artistsLoading" @clickRefresh="refreshArtists" handle-client-side>
+                    <template #cell(name)="{item}">
+                        <big>
+                            <router-link :to="{
+                                name: 'artist',
+                                params: {
+                                    artist_id: item.id
+                                }
+                            }" class="text-reset" target="_blank">
+                                {{ item.name }}
+                            </router-link>
+                        </big>
+                    </template>
+                    <template #cell(actions)="{item}">
+                        <div class="btn-group btn-group-sm">
+                            <router-link class="btn btn-secondary"
+                                         :to="{name: 'profile:artist:edit', params: {'artist_id': item.id}}"
+                            >
+                                <icon icon="pencil"/>
+                                <span>
                                 Edit
                             </span>
-                        </router-link>
-                        <button class="btn btn-danger"
-                                @click="doDelete(item.links.self)">
-                            <icon icon="trash"/>
-                            <span>
+                            </router-link>
+                            <button class="btn btn-danger"
+                                    @click="doDeleteArtist(item.links.self)">
+                                <icon icon="trash"/>
+                                <span>
                                 Delete
                             </span>
-                        </button>
-                    </div>
-                </template>
-            </data-table>
+                            </button>
+                        </div>
+                    </template>
+                </data-table>
+            </section>
         </template>
-        <template v-else>
+    </template>
+    <template v-else>
+        <hr>
+        <section class="section">
             <h2>Create a New Profile</h2>
 
-            <p>You haven't created an artist or label profile yet. If you want to submit a new artist or label,
+            <p>You haven't created an artist or label profile yet. If you want to submit an entry to the database as an
+                artist or label,
                 select the appropriate option below.</p>
 
             <div class="buttons">
@@ -131,8 +160,8 @@
                     </span>
                 </router-link>
             </div>
-        </template>
-    </section>
+        </section>
+    </template>
 </template>
 
 <script setup lang="ts">
@@ -197,10 +226,16 @@ const {state: artists, isLoading: artistsLoading, execute: refreshArtists} = get
     }, []
 );
 
-const {doDelete} = useConfirmAndDelete(
-    'Delete record?',
+const {doDelete: doDeleteLabel} = useConfirmAndDelete(
+    'Delete label profile?',
     () => {
         refreshLabels();
+    }
+);
+
+const {doDelete: doDeleteArtist} = useConfirmAndDelete(
+    'Delete artist profile?',
+    () => {
         refreshArtists();
     }
 );
