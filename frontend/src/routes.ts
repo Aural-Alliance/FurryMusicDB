@@ -45,6 +45,7 @@ export default [
     {
         path: '/labels',
         name: 'labels',
+        component: () => import('~/components/Labels.vue'),
         meta: {
             title: 'Labels'
         }
@@ -52,6 +53,7 @@ export default [
     {
         path: '/label/:label_id',
         name: 'label',
+        component: () => import('~/components/Label.vue'),
         meta: {
             title: 'View Label',
             breadcrumb: [
@@ -67,6 +69,7 @@ export default [
     {
         path: '/artists',
         name: 'artists',
+        component: () => import('~/components/Artists.vue'),
         meta: {
             title: 'Musicians'
         }
@@ -74,6 +77,7 @@ export default [
     {
         path: '/artist/:artist_id',
         name: 'artist',
+        component: () => import('~/components/Artist.vue'),
         meta: {
             title: 'Musician',
             breadcrumb: [

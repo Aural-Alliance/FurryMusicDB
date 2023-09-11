@@ -45,16 +45,14 @@
                 <data-table :fields="labelFields" :items="labels"
                             :loading="labelsLoading" @clickRefresh="refreshLabels" handle-client-side>
                     <template #cell(name)="{item}">
-                        <big>
-                            <router-link :to="{
-                                name: 'label',
-                                params: {
-                                    label_id: item.id
-                                }
-                            }" class="text-reset" target="_blank">
-                                {{ item.name }}
-                            </router-link>
-                        </big>
+                        <router-link :to="{
+                            name: 'label',
+                            params: {
+                                label_id: item.id
+                            }
+                        }" class="text-big text-reset" target="_blank">
+                            {{ item.name }}
+                        </router-link>
                     </template>
                     <template #cell(actions)="{item}">
                         <div class="btn-group btn-group-sm">
@@ -103,16 +101,14 @@
                 <data-table :fields="artistFields" :items="artists"
                             :loading="artistsLoading" @clickRefresh="refreshArtists" handle-client-side>
                     <template #cell(name)="{item}">
-                        <big>
-                            <router-link :to="{
-                                name: 'artist',
-                                params: {
-                                    artist_id: item.id
-                                }
-                            }" class="text-reset" target="_blank">
-                                {{ item.name }}
-                            </router-link>
-                        </big>
+                        <router-link :to="{
+                            name: 'artist',
+                            params: {
+                                artist_id: item.id
+                            }
+                        }" class="text-big text-reset" target="_blank">
+                            {{ item.name }}
+                        </router-link>
                     </template>
                     <template #cell(actions)="{item}">
                         <div class="btn-group btn-group-sm">

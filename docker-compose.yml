@@ -7,6 +7,7 @@ services:
       - db
     volumes:
       - .:/var/app/www
+      - uploads:/var/app/uploads
     env_file: env.dev
     restart: always
     ports:
@@ -26,4 +27,5 @@ services:
     logging: *default-logging
 
 volumes:
-  pgsql_data: {}
+  uploads: { }
+  pgsql_data: { }

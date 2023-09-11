@@ -10,13 +10,13 @@ $primary: $mauve;
 $secondary: change-color($topleft, $lightness: 30%);
 $tertiary: change-color($bottomright, $lightness: 30%);
 
-$border-color: change-color($topleft, $lightness: 50%);
+$border-color: change-color($topleft, $lightness: 70%);
 
 $body-secondary-bg: $secondary;
 $body-tertiary-bg: $tertiary;
 
-$link-color: change-color($mauve, $lightness: 80%);
-$link-hover-color: change-color($mauve, $lightness: 50%);
+$link-color: change-color($mauve, $lightness: 90%);
+$link-hover-color: change-color($mauve, $lightness: 70%);
 
 $font-family-sans-serif: "Dosis", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 

@@ -5,6 +5,8 @@ services:
       - db
     env_file: env.prod
     restart: always
+    volumes:
+      - uploads:/var/app/uploads
     ports:
       - "127.0.0.1:80:8000"
     logging: &default-logging
@@ -22,4 +24,5 @@ services:
     logging: *default-logging
 
 volumes:
-  pgsql_data: {}
+  uploads: { }
+  pgsql_data: { }

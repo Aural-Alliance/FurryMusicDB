@@ -34,7 +34,7 @@ RUN mkdir -p /var/app/www/backend /var/app/www/frontend \
     && addgroup -g 1000 app \
     && adduser -u 1000 -G app -h /var/app/ -s /bin/sh -D app \
     && addgroup app www-data \
-    && mkdir -p /var/app/www /var/app/www_tmp /run/supervisord \
+    && mkdir -p /var/app/www /var/app/uploads /var/app/www_tmp /run/supervisord \
     && chown -R app:app /var/app /run/supervisord \
     && chmod a+x /var/app/launch.sh
 

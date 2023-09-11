@@ -160,6 +160,10 @@ return [
             Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS_OR_CHANGED
         );
 
+        if (!Doctrine\DBAL\Types\Type::hasType('carbon_immutable')) {
+            Doctrine\DBAL\Types\Type::addType('carbon_immutable', Carbon\Doctrine\CarbonImmutableType::class);
+        }
+
         $eventManager = new Doctrine\Common\EventManager();
 
         $connection = Doctrine\DBAL\DriverManager::getConnection(
