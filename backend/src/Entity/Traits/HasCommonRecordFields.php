@@ -41,7 +41,10 @@ trait HasCommonRecordFields
         return $this->updated_at;
     }
 
-    #[ORM\PrePersist]
+    #[
+        ORM\PrePersist,
+        ORM\PreUpdate
+    ]
     public function updated(): void
     {
         $this->updated_at = CarbonImmutable::now();

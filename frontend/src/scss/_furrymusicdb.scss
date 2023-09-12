@@ -55,7 +55,7 @@ img.avatar {
   border: 1px solid var(--bs-border-color);
   border-radius: 10px;
 
-  .lg {
+  &.lg {
     width: 200px;
     height: 200px;
   }

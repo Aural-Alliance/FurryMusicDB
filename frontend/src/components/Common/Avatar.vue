@@ -24,6 +24,6 @@ const imgSrc = computed<string>(() => {
     }
 
     const timestamp = isoToTimestamp(props.artUpdatedAt);
-    return `/api/${type}/${id}/art-${timestamp}.jpg`;
+    return `/api/${props.type}/${props.id}/art-${timestamp}.jpg`;
 });
 </script>

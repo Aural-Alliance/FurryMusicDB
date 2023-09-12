@@ -46,7 +46,7 @@ return function (Slim\App $app) {
     )->setName('artist');
 
     $app->get(
-        '/artist/{artist_id}/art[-{timestamp}].jpg',
+        '/artist/{artist_id}/art[-{timestamp}.jpg]',
         App\Controller\Artists\GetArtAction::class
     )->setName('artist:art');
 
@@ -61,7 +61,7 @@ return function (Slim\App $app) {
     )->setName('label');
 
     $app->get(
-        '/label/{label_id}/art[-{timestamp}].jpg',
+        '/label/{label_id}/art[-{timestamp}.jpg]',
         App\Controller\Labels\GetArtAction::class
     )->setName('label:art');
 

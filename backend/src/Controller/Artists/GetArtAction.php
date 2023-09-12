@@ -23,7 +23,7 @@ final class GetArtAction
     ): ResponseInterface {
         $response = $response->withCacheLifetime(Response::CACHE_ONE_DAY);
 
-        $path = $this->avatars->getLabelPath($params['artist_id']);
+        $path = $this->avatars->getArtistPath($params['artist_id']);
 
         return $this->avatars->streamFilesystemOrDefault(
             $response,

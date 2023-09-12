@@ -35,7 +35,7 @@
                     <div class="flex-shrink-0">
                         <router-link :to="{name: 'label', params: {label_id: row.id}}"
                                      class="text-big fw-bold">
-                            <avatar type="artist" :id="row.id" :art-updated-at="row.art_updated_at"/>
+                            <avatar type="label" :id="row.id" :art-updated-at="row.art_updated_at"/>
                         </router-link>
                     </div>
                     <div class="flex-grow-1 ms-3">

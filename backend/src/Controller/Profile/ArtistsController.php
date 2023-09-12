@@ -4,16 +4,29 @@ declare(strict_types=1);
 
 namespace App\Controller\Profile;
 
+use App\Avatars;
 use App\Controller\AbstractCrudController;
 use App\Entity\Artist;
 use App\Http\Response;
 use App\Http\ServerRequest;
+use App\Serializer\ApiSerializerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ArtistsController extends AbstractCrudController
 {
     protected string $entityClass = Artist::class;
     protected string $resourceRouteName = 'api:profile:artist';
+
+    public function __construct(
+        EntityManagerInterface $em,
+        ApiSerializerInterface $apiSerializer,
+        ValidatorInterface $validator,
+        protected readonly Avatars $avatars
+    ) {
+        parent::__construct($em, $apiSerializer, $validator);
+    }
 
     public function listAction(
         ServerRequest $request,
@@ -77,5 +90,27 @@ class ArtistsController extends AbstractCrudController
         }
 
         return null;
+    }
+
+    protected function editRecord(?array $data, ?object $record = null, array $context = []): object
+    {
+        $avatar = $data['avatar'] ?? null;
+        unset($data['avatar']);
+
+        /** @var Artist $record */
+        $record = parent::editRecord($data, $record, $context);
+
+        if (null !== $avatar) {
+            $this->avatars->upload(
+                $avatar,
+                $this->avatars->getArtistPath($record->getIdRequired())
+            );
+
+            $record->setArtUpdated();
+            $this->em->persist($record);
+            $this->em->flush();
+        }
+
+        return $record;
     }
 }

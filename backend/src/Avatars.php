@@ -62,12 +62,12 @@ final class Avatars
         if ($this->filesystem->has($path)) {
             return $response->withFile(
                 $this->filesystem->readStream($path),
-                $this->filesystem->mimeType($path) ?? 'image/jpeg'
+                $this->filesystem->mimeType($path)
             );
         }
 
         return $response->withFile(
-            file_get_contents($this->getDefaultPath()),
+            file_get_contents($this->getDefaultPath()) ?: '',
             'image/jpeg'
         );
     }

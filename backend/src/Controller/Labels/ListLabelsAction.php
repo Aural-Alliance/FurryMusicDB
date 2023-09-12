@@ -66,7 +66,7 @@ final class ListLabelsAction
             'updated_at' => $record['updated_at'],
             'art_updated_at' => $record['art_updated_at'],
             'name' => $record['name'],
-            'description' => Strings::truncateText($record['description']),
+            'description' => Strings::truncateText($record['description'] ?? ''),
         ];
     }
 }
