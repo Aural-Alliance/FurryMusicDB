@@ -35,7 +35,7 @@
                     <div class="flex-shrink-0">
                         <router-link :to="{name: 'label', params: {label_id: row.id}}"
                                      class="text-big fw-bold">
-                            <avatar type="artist" :id="row.id" :art-updated-at="0"/>
+                            <avatar type="artist" :id="row.id" :art-updated-at="row.art_updated_at"/>
                         </router-link>
                     </div>
                     <div class="flex-grow-1 ms-3">
@@ -45,10 +45,11 @@
                                 {{ row.name }}
                             </router-link>
 
-                            <span class="badge ms-2 text-small text-bg-secondary">One Day Ago</span>
+                            <span class="badge ms-2 text-small text-bg-secondary">
+                                {{ isoToRelative(row.updated_at) }}
+                            </span>
                         </div>
                         <p class="mb-0">
-                            Description description!
                             {{ row.description }}
                         </p>
                     </div>
@@ -67,6 +68,7 @@ import Loading from "~/components/Common/Loading.vue";
 import {ref, toRaw} from "vue";
 import Pagination from "~/components/Common/Pagination.vue";
 import Avatar from "~/components/Common/Avatar.vue";
+import {useLuxon} from "~/vendor/luxon.ts";
 
 const {form, resetForm, v$} = useVuelidateOnForm(
     {
@@ -103,6 +105,8 @@ const {state, isLoading, execute: relist} = useAsyncState(
         rows: []
     }
 );
+
+const {isoToRelative} = useLuxon();
 
 const clearFilter = () => {
     currentPage.value = 1;

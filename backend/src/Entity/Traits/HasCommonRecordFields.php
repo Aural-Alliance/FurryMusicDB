@@ -47,6 +47,19 @@ trait HasCommonRecordFields
         $this->updated_at = CarbonImmutable::now();
     }
 
+    #[ORM\Column(type: 'carbon_immutable', nullable: true)]
+    protected ?CarbonImmutable $art_updated_at = null;
+
+    public function getArtUpdatedAt(): ?CarbonImmutable
+    {
+        return $this->art_updated_at;
+    }
+
+    public function setArtUpdated(): void
+    {
+        $this->art_updated_at = CarbonImmutable::now();
+    }
+
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $description;
 

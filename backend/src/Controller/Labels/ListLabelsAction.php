@@ -10,6 +10,7 @@ use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Paginator;
 use App\Serializer\ApiSerializerInterface;
+use App\Utilities\Strings;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -58,6 +59,14 @@ final class ListLabelsAction
 
     private function viewRecord(Label $label): array
     {
-        return $this->apiSerializer->toArray($label);
+        $record = $this->apiSerializer->toArray($label);
+
+        return [
+            'id' => $record['id'],
+            'updated_at' => $record['updated_at'],
+            'art_updated_at' => $record['art_updated_at'],
+            'name' => $record['name'],
+            'description' => Strings::truncateText($record['description']),
+        ];
     }
 }

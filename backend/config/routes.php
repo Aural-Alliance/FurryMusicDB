@@ -46,6 +46,11 @@ return function (Slim\App $app) {
     )->setName('artist');
 
     $app->get(
+        '/artist/{artist_id}/art[-{timestamp}].jpg',
+        App\Controller\Artists\GetArtAction::class
+    )->setName('artist:art');
+
+    $app->get(
         '/labels',
         App\Controller\Labels\ListLabelsAction::class
     )->setName('labels');
@@ -54,6 +59,11 @@ return function (Slim\App $app) {
         '/label/{label_id}',
         App\Controller\Labels\GetLabelAction::class
     )->setName('label');
+
+    $app->get(
+        '/label/{label_id}/art[-{timestamp}].jpg',
+        App\Controller\Labels\GetArtAction::class
+    )->setName('label:art');
 
     $app->group(
         '',

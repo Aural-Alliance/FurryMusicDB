@@ -13,6 +13,8 @@
     "doctrine/migrations": "^3",
     "doctrine/orm": "^2",
     "guzzlehttp/guzzle": "^7.0",
+    "intervention/image": "^2.7",
+    "league/flysystem": "^3.16",
     "monolog/monolog": "^3",
     "nesbot/carbon": "^2.45",
     "pagerfanta/doctrine-collections-adapter": "^4.2",

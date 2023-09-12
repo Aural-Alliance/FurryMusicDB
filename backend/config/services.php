@@ -256,6 +256,16 @@ return [
         return $builder->getValidator();
     },
 
+    // Flysystem (Filesystem uploads)
+    League\Flysystem\Filesystem::class => function (Environment $environment) {
+        return new League\Flysystem\Filesystem(
+            new League\Flysystem\Local\LocalFilesystemAdapter(
+                dirname($environment->getParentDirectory()) . '/uploads'
+            )
+        );
+    },
+
+    // Auth0
     Auth0\SDK\Auth0::class => function () {
         $config = new Auth0\SDK\Configuration\SdkConfiguration(
             strategy: Auth0\SDK\Configuration\SdkConfiguration::STRATEGY_API,
