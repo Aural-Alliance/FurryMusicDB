@@ -11,6 +11,7 @@ use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Serializer\ApiSerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -33,17 +34,26 @@ class ArtistsController extends AbstractCrudController
         Response $response,
         array $params
     ): ResponseInterface {
-        $acl = $request->getAcl();
-
         $qb = $this->em->createQueryBuilder()
             ->select('e')
-            ->from(Artist::class, 'e');
+            ->from(Artist::class, 'e')
+            ->where('e.owner = :user')
+            ->setParameter('user', $request->getUser());
 
-        if (!$acl->isAdministrator()) {
-            $qb->where('e.owner = :user')
-                ->setParameter('user', $request->getUser());
-        }
+        return $this->buildList(
+            $qb,
+            $request,
+            $response,
+            $params
+        );
+    }
 
+    protected function buildList(
+        QueryBuilder $qb,
+        ServerRequest $request,
+        Response $response,
+        array $params
+    ): ResponseInterface {
         return $this->listPaginatedFromQuery($request, $response, $qb->getQuery());
     }
 

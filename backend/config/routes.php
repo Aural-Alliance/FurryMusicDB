@@ -69,6 +69,26 @@ return function (Slim\App $app) {
         '',
         function (RouteCollectorProxy $group) {
             $group->group(
+                '/admin',
+                function (RouteCollectorProxy $group) {
+                    $apiEndpoints = [
+                        [
+                            'label',
+                            'labels',
+                            App\Controller\Admin\LabelsController::class,
+                        ],
+                        [
+                            'artist',
+                            'artists',
+                            App\Controller\Admin\ArtistsController::class,
+                        ],
+                    ];
+
+                    buildCrudApiEndpoints($group, $apiEndpoints, 'api:admin:');
+                }
+            )->add(new App\Middleware\Acl\CheckIsAdministrator());
+
+            $group->group(
                 '/users',
                 function (RouteCollectorProxy $group) {
                     $group->get('/me', App\Controller\Users\GetMeAction::class);

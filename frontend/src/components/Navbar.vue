@@ -38,6 +38,9 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
+                                <router-link class="dropdown-item" to="/admin">Administration</router-link>
+                            </li>
+                            <li>
                                 <router-link class="dropdown-item" to="/profile">My Profile</router-link>
                             </li>
                             <li>
@@ -59,14 +62,18 @@
 
 <script setup lang="ts">
 import {useAuth0} from "@auth0/auth0-vue";
+import {toRaw} from "vue";
 
 const {
     isAuthenticated,
     isLoading,
     user,
+    idTokenClaims,
     loginWithRedirect,
     logout: auth0Logout
 } = useAuth0();
+
+console.log(toRaw(idTokenClaims));
 
 const login = () => {
     loginWithRedirect();

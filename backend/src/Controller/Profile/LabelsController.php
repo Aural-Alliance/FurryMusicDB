@@ -11,11 +11,12 @@ use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Serializer\ApiSerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class LabelsController extends AbstractCrudController
+class LabelsController extends AbstractCrudController
 {
     protected string $entityClass = Label::class;
     protected string $resourceRouteName = 'api:profile:label';
@@ -45,6 +46,15 @@ final class LabelsController extends AbstractCrudController
                 ->setParameter('user', $request->getUser());
         }
 
+        return $this->listPaginatedFromQuery($request, $response, $qb->getQuery());
+    }
+
+    protected function buildList(
+        QueryBuilder $qb,
+        ServerRequest $request,
+        Response $response,
+        array $params
+    ): ResponseInterface {
         return $this->listPaginatedFromQuery($request, $response, $qb->getQuery());
     }
 
@@ -113,6 +123,6 @@ final class LabelsController extends AbstractCrudController
             }
         }
 
-        throw new \InvalidArgumentException('Record not found.');
+        return null;
     }
 }

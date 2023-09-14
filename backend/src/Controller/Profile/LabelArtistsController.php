@@ -26,7 +26,7 @@ class LabelArtistsController extends ArtistsController
             ->where('e.label = :label')
             ->setParameter('label', $label);
 
-        return $this->listPaginatedFromQuery($request, $response, $qb->getQuery());
+        return $this->buildList($qb, $request, $response, $params);
     }
 
     protected function createRecord(ServerRequest $request, array $data): object

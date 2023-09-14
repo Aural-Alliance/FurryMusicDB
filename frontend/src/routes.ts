@@ -95,6 +95,61 @@ export default [
         beforeEnter: authGuard,
         children: [
             {
+                path: '/admin',
+                name: 'admin',
+                component: () => import('~/components/Admin/Index.vue'),
+                meta: {
+                    title: 'Administration',
+                }
+            },
+            {
+                path: '',
+                meta: {
+                    breadcrumb: [
+                        {
+                            label: 'Administration',
+                            url: {
+                                name: 'admin'
+                            }
+                        }
+                    ]
+                },
+                children: [
+                    {
+                        path: '/labels',
+                        name: 'admin:labels',
+                        component: () => import('~/components/Admin/Labels.vue'),
+                        meta: {
+                            title: 'Administer Labels',
+                        }
+                    },
+                    {
+                        path: '/label/:label_id/edit',
+                        name: 'admin:label:edit',
+                        component: () => import('~/components/Profile/EditLabel.vue'),
+                        meta: {
+                            title: 'Edit Label',
+                        }
+                    },
+                    {
+                        path: '/artists',
+                        name: 'admin:artists',
+                        component: () => import('~/components/Admin/Artists.vue'),
+                        meta: {
+                            title: 'Administer Artists',
+                        }
+                    },
+                    {
+                        path: '/artist/:artist_id/edit',
+                        name: 'admin:artist:edit',
+                        component: () => import('~/components/Profile/EditArtist.vue'),
+                        meta: {
+                            title: 'Edit Artist'
+                        }
+                    }
+                ]
+            },
+            {
                 path: '/profile',
                 name: 'profile',
                 component: () => import('~/components/Profile.vue'),

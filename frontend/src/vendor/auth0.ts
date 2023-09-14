@@ -16,3 +16,7 @@ export default client;
 export const getAccessToken = async () => {
     return await client.getAccessTokenSilently()
 };
+
+export const isAdministrator = () => {
+
+};
