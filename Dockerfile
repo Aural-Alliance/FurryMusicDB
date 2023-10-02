@@ -40,7 +40,6 @@ RUN mkdir -p /var/app/www/backend /var/app/www/frontend \
 
 COPY --chown=app:app ./backend /var/app/www/backend
 COPY --chown=app:app ./frontend /var/app/www/frontend
-COPY --chown=app:app ./auth_config.prod.json /var/app/www/auth_config.json
 
 USER root
 

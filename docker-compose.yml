@@ -5,6 +5,7 @@ services:
       context: .
     depends_on:
       - db
+      - authentik_server
     volumes:
       - .:/var/app/www
       - uploads:/var/app/uploads
@@ -18,14 +19,71 @@ services:
         max-file: "5"
 
   db:
-    image: postgres:14-alpine
+    image: docker.io/library/postgres:14-alpine
     volumes:
+      - ./build/pg_multiple_dbs.sh:/docker-entrypoint-initdb.d/pg_multiple_dbs.sh
       - pgsql_data:/var/lib/postgresql/data
     env_file: env.dev
     ports:
       - "127.0.0.1:5432:5432"
     logging: *default-logging
 
+  redis:
+    image: docker.io/library/redis:alpine
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - redis_data:/data
+    logging: *default-logging
+  
+  authentik_server:
+    image: ghcr.io/goauthentik/server:2023.8.3
+    restart: unless-stopped
+    command: server
+    env_file: env.dev
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: db
+    volumes:
+      - authentik_media:/media
+      - authentik_templates:/templates
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9443:9443"
+    depends_on:
+      - db
+      - redis
+    logging: *default-logging
+
+  authentik_worker:
+    image: ghcr.io/goauthentik/server:2023.8.3
+    restart: unless-stopped
+    command: worker
+    env_file: env.dev
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: db
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - authentik_media:/media
+      - authentik_certs:/certs
+      - authentik_templates:/templates
+    depends_on:
+      - db
+      - redis
+    logging: *default-logging
+
 volumes:
   uploads: { }
   pgsql_data: { }
+  redis_data: { }
+  authentik_media: {}
+  authentik_certs: {}
+  authentik_templates: {}
