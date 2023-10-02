@@ -7,15 +7,11 @@
         <template v-if="!userLoading">
             <div class="d-flex align-items-center mb-3">
                 <div class="flex-shrink-0">
-                    <img :src="localUser.avatar" style="width: 96px; height: 96px;" alt="Avatar">
+                    <img :src="user.avatar" style="width: 96px; height: 96px;" alt="Avatar">
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    <h1 class="title m-0">{{ localUser.name }}</h1>
-                    <h2 class="subtitle m-0">
-                        <a :href="`mailto:${localUser.email}`">
-                            {{ localUser.email }}
-                        </a>
-                    </h2>
+                    <h1 class="title m-0">{{ user.name }}</h1>
+                    <h2 class="subtitle m-0">{{ user.email }}</h2>
                 </div>
             </div>
         </template>
@@ -161,26 +157,14 @@
 </template>
 
 <script setup lang="ts">
-import {useAuth0} from "@auth0/auth0-vue";
-import {getAuthenticatedResource} from "~/vendor/api.ts";
+import {useInjectAxios} from "~/vendor/api.ts";
 import Icon from "~/components/Common/Icon.vue";
 import DataTable, {DataTableField} from "~/components/Common/DataTable.vue";
 import useConfirmAndDelete from "~/functions/useConfirmAndDelete.ts";
+import {useAsyncState} from "@vueuse/core";
+import {useUserStore} from "~/stores/user.ts";
 
-const {user} = useAuth0();
-
-const {state: localUser, isLoading: userLoading} = getAuthenticatedResource(
-    {
-        url: '/users/me',
-        method: 'GET'
-    }, {
-        id: null,
-        email: null,
-        name: null,
-        avatar: null,
-        updatedAt: 0
-    }
-);
+const {user} = useUserStore();
 
 const labelFields: DataTableField[] = [
     {
@@ -195,11 +179,11 @@ const labelFields: DataTableField[] = [
     }
 ];
 
-const {state: labels, isLoading: labelsLoading, execute: refreshLabels} = getAuthenticatedResource(
-    {
-        url: '/profile/labels',
-        method: 'GET'
-    }, []
+const axios = useInjectAxios();
+
+const {state: labels, isLoading: labelsLoading, execute: refreshLabels} = useAsyncState(
+    () => axios.get('/profile/labels').then(r => r.data),
+    []
 );
 
 const artistFields: DataTableField[] = [
@@ -215,11 +199,9 @@ const artistFields: DataTableField[] = [
     }
 ];
 
-const {state: artists, isLoading: artistsLoading, execute: refreshArtists} = getAuthenticatedResource(
-    {
-        url: '/profile/artists',
-        method: 'GET'
-    }, []
+const {state: artists, isLoading: artistsLoading, execute: refreshArtists} = useAsyncState(
+    () => axios.get('/profile/artists').then(r => r.data),
+    []
 );
 
 const {doDelete: doDeleteLabel} = useConfirmAndDelete(

@@ -294,7 +294,7 @@ import FormMultiCheck from "~/components/Form/FormMultiCheck.vue";
 import FormCheckbox from "~/components/Form/FormCheckbox.vue";
 import Pagination from "./Pagination.vue";
 import useOptionalStorage from "~/functions/useOptionalStorage";
-import {useInjectAxiosAuthenticated} from "~/vendor/api";
+import {useInjectAxios} from "~/vendor/api";
 
 const props = defineProps({
     id: {
@@ -558,7 +558,7 @@ watch(toRef(props, 'items'), () => {
     immediate: true
 });
 
-const axios = useInjectAxiosAuthenticated();
+const axios = useInjectAxios();
 
 const refreshServerSide = () => {
     const queryParams: {

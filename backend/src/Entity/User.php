@@ -62,7 +62,19 @@ class User
 
     public function getAvatar(): ?string
     {
-        return $this->avatar;
+        if (null !== $this->avatar) {
+            return $this->avatar;
+        }
+
+        $urlParams = [
+            'd' => 'mm',
+            'r' => 'g',
+            'size' => 128,
+        ];
+
+        $avatarUrl = 'https://www.gravatar.com/avatar/' . md5(strtolower($this->getEmail() ?? ''))
+            . '?' . http_build_query($urlParams);
+        return htmlspecialchars($avatarUrl, ENT_QUOTES | ENT_HTML5);
     }
 
     public function setAvatar(?string $avatar): void

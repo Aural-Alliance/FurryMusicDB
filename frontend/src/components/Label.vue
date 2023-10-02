@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
 import {useAsyncState} from "@vueuse/core";
-import {useInjectAxiosPublic} from "~/vendor/api.ts";
+import {useInjectAxios} from "~/vendor/api.ts";
 import Loading from "~/components/Common/Loading.vue";
 import Avatar from "~/components/Common/Avatar.vue";
 import {useLuxon} from "~/vendor/luxon.ts";
@@ -25,7 +25,7 @@ import {useLuxon} from "~/vendor/luxon.ts";
 const {params} = useRoute();
 const labelId = params.label_id;
 
-const axios = useInjectAxiosPublic();
+const axios = useInjectAxios();
 const {state, isLoading} = useAsyncState(
     () => axios.get(`/label/${labelId}`).then(r => r.data),
     {

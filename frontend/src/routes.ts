@@ -1,4 +1,3 @@
-import {authGuard} from "@auth0/auth0-vue";
 import {RouteRecordRaw} from "vue-router";
 
 export default [
@@ -91,167 +90,161 @@ export default [
         }
     },
     {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('~/components/Admin/Index.vue'),
+        meta: {
+            title: 'Administration',
+        }
+    },
+    {
         path: '',
-        beforeEnter: authGuard,
+        meta: {
+            breadcrumb: [
+                {
+                    label: 'Administration',
+                    url: {
+                        name: 'admin'
+                    }
+                }
+            ]
+        },
         children: [
             {
-                path: '/admin',
-                name: 'admin',
-                component: () => import('~/components/Admin/Index.vue'),
+                path: '/labels',
+                name: 'admin:labels',
+                component: () => import('~/components/Admin/Labels.vue'),
                 meta: {
-                    title: 'Administration',
+                    title: 'Administer Labels',
                 }
             },
             {
-                path: '',
+                path: '/label/:label_id/edit',
+                name: 'admin:label:edit',
+                component: () => import('~/components/Profile/EditLabel.vue'),
                 meta: {
-                    breadcrumb: [
-                        {
-                            label: 'Administration',
-                            url: {
-                                name: 'admin'
-                            }
-                        }
-                    ]
-                },
-                children: [
-                    {
-                        path: '/labels',
-                        name: 'admin:labels',
-                        component: () => import('~/components/Admin/Labels.vue'),
-                        meta: {
-                            title: 'Administer Labels',
-                        }
-                    },
-                    {
-                        path: '/label/:label_id/edit',
-                        name: 'admin:label:edit',
-                        component: () => import('~/components/Profile/EditLabel.vue'),
-                        meta: {
-                            title: 'Edit Label',
-                        }
-                    },
-                    {
-                        path: '/artists',
-                        name: 'admin:artists',
-                        component: () => import('~/components/Admin/Artists.vue'),
-                        meta: {
-                            title: 'Administer Artists',
-                        }
-                    },
-                    {
-                        path: '/artist/:artist_id/edit',
-                        name: 'admin:artist:edit',
-                        component: () => import('~/components/Profile/EditArtist.vue'),
-                        meta: {
-                            title: 'Edit Artist'
-                        }
+                    title: 'Edit Label',
+                }
+            },
+            {
+                path: '/artists',
+                name: 'admin:artists',
+                component: () => import('~/components/Admin/Artists.vue'),
+                meta: {
+                    title: 'Administer Artists',
+                }
+            },
+            {
+                path: '/artist/:artist_id/edit',
+                name: 'admin:artist:edit',
+                component: () => import('~/components/Profile/EditArtist.vue'),
+                meta: {
+                    title: 'Edit Artist'
+                }
+            }
+        ]
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('~/components/Profile.vue'),
+        meta: {
+            title: 'My Profile',
+        }
+    },
+    {
+        path: '',
+        meta: {
+            breadcrumb: [
+                {
+                    label: 'My Profile',
+                    url: {
+                        name: 'profile'
                     }
-                ]
+                }
+            ]
+        },
+        children: [
+            {
+                path: '/labels/create',
+                name: 'profile:label:create',
+                component: () => import('~/components/Profile/EditLabel.vue'),
+                meta: {
+                    title: 'Create New Label'
+                }
             },
             {
-                path: '/profile',
-                name: 'profile',
-                component: () => import('~/components/Profile.vue'),
+                path: '/label/:label_id/edit',
+                name: 'profile:label:edit',
+                component: () => import('~/components/Profile/EditLabel.vue'),
                 meta: {
-                    title: 'My Profile',
+                    title: 'Edit Label',
                 }
+            },
+            {
+                path: '/label/:label_id/artists',
+                name: 'profile:label:artists',
+                component: () => import('~/components/Profile/LabelArtists.vue'),
+                meta: {
+                    title: 'Label Artists',
+                },
             },
             {
                 path: '',
                 meta: {
-                    breadcrumb: [
+                    breadcrumb: (route) => ([
                         {
                             label: 'My Profile',
                             url: {
                                 name: 'profile'
                             }
+                        },
+                        {
+                            label: 'Label Artists',
+                            url: {
+                                name: 'profile:label:artists',
+                                params: {
+                                    label_id: route.params.label_id
+                                }
+                            }
                         }
-                    ]
+                    ])
                 },
                 children: [
                     {
-                        path: '/labels/create',
-                        name: 'profile:label:create',
-                        component: () => import('~/components/Profile/EditLabel.vue'),
+                        path: '/label/:label_id/artists/create',
+                        name: 'profile:label:artist:create',
+                        component: () => import('~/components/Profile/EditArtist.vue'),
                         meta: {
-                            title: 'Create New Label'
-                        }
-                    },
-                    {
-                        path: '/label/:label_id/edit',
-                        name: 'profile:label:edit',
-                        component: () => import('~/components/Profile/EditLabel.vue'),
-                        meta: {
-                            title: 'Edit Label',
-                        }
-                    },
-                    {
-                        path: '/label/:label_id/artists',
-                        name: 'profile:label:artists',
-                        component: () => import('~/components/Profile/LabelArtists.vue'),
-                        meta: {
-                            title: 'Label Artists',
+                            title: 'Create New Artist in Label',
                         },
                     },
                     {
-                        path: '',
+                        path: '/label/:label_id/artist/:artist_id/edit',
+                        name: 'profile:label:artist:edit',
+                        component: () => import('~/components/Profile/EditArtist.vue'),
                         meta: {
-                            breadcrumb: (route) => ([
-                                {
-                                    label: 'My Profile',
-                                    url: {
-                                        name: 'profile'
-                                    }
-                                },
-                                {
-                                    label: 'Label Artists',
-                                    url: {
-                                        name: 'profile:label:artists',
-                                        params: {
-                                            label_id: route.params.label_id
-                                        }
-                                    }
-                                }
-                            ])
+                            title: 'Edit Artist in Label',
                         },
-                        children: [
-                            {
-                                path: '/label/:label_id/artists/create',
-                                name: 'profile:label:artist:create',
-                                component: () => import('~/components/Profile/EditArtist.vue'),
-                                meta: {
-                                    title: 'Create New Artist in Label',
-                                },
-                            },
-                            {
-                                path: '/label/:label_id/artist/:artist_id/edit',
-                                name: 'profile:label:artist:edit',
-                                component: () => import('~/components/Profile/EditArtist.vue'),
-                                meta: {
-                                    title: 'Edit Artist in Label',
-                                },
-                            }
-                        ]
-                    },
-                    {
-                        path: '/artists/create',
-                        name: 'profile:artist:create',
-                        component: () => import('~/components/Profile/EditArtist.vue'),
-                        meta: {
-                            title: 'Create New Artist'
-                        }
-                    },
-                    {
-                        path: '/artist/:artist_id/edit',
-                        name: 'profile:artist:edit',
-                        component: () => import('~/components/Profile/EditArtist.vue'),
-                        meta: {
-                            title: 'Edit Artist'
-                        }
                     }
-                ],
+                ]
+            },
+            {
+                path: '/artists/create',
+                name: 'profile:artist:create',
+                component: () => import('~/components/Profile/EditArtist.vue'),
+                meta: {
+                    title: 'Create New Artist'
+                }
+            },
+            {
+                path: '/artist/:artist_id/edit',
+                name: 'profile:artist:edit',
+                component: () => import('~/components/Profile/EditArtist.vue'),
+                meta: {
+                    title: 'Edit Artist'
+                }
             }
-        ]
+        ],
     }
 ] as RouteRecordRaw[];

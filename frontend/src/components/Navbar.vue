@@ -28,23 +28,23 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-                    <li class="nav-item" v-if="!isAuthenticated && !isLoading">
-                        <a class="nav-link" href="#" @click.prevent="login">Sign In</a>
+                    <li class="nav-item" v-if="!isLoggedIn && !isLoading">
+                        <a class="nav-link" href="/api/login">Sign In</a>
                     </li>
-                    <li class="nav-item dropdown" v-if="isAuthenticated">
+                    <li class="nav-item dropdown" v-if="isLoggedIn">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             {{ user.name }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
+                            <li v-if="isAdmin">
                                 <router-link class="dropdown-item" to="/admin">Administration</router-link>
                             </li>
                             <li>
                                 <router-link class="dropdown-item" to="/profile">My Profile</router-link>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#" @click.prevent="logout">Sign Out</a>
+                                <a class="dropdown-item" href="/api/logout">Sign Out</a>
                             </li>
                         </ul>
                     </li>
@@ -61,28 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import {useAuth0} from "@auth0/auth0-vue";
-import {toRaw} from "vue";
+import {useUserStore} from "~/stores/user.ts";
 
 const {
-    isAuthenticated,
     isLoading,
-    user,
-    idTokenClaims,
-    loginWithRedirect,
-    logout: auth0Logout
-} = useAuth0();
-
-console.log(toRaw(idTokenClaims));
-
-const login = () => {
-    loginWithRedirect();
-};
-const logout = () => {
-    auth0Logout({
-        logoutParams: {
-            returnTo: window.location.origin
-        }
-    });
-};
+    isLoggedIn,
+    isAdmin,
+    user
+} = useUserStore();
 </script>

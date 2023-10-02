@@ -35,9 +35,9 @@ final class Auth
     public function getUser(): ?User
     {
         if (null === $this->user) {
-            $userId = (int)$this->session->get(self::SESSION_USER_ID_KEY);
+            $userId = $this->session->get(self::SESSION_USER_ID_KEY);
 
-            if (0 === $userId) {
+            if (null === $userId) {
                 $this->user = false;
                 return null;
             }

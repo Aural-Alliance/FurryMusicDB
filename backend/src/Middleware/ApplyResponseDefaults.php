@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use App\Http\Response;
 use App\Http\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class ApplyResponseDefaults
 {
@@ -18,7 +18,7 @@ class ApplyResponseDefaults
         $response = $handler->handle($request);
 
         if (($response instanceof Response) && !$response->hasCacheLifetime()) {
-            $response = $response->withCacheLifetime(30);
+            $response = $response->withNoCache();
         }
 
         // Only set global CORS for GET requests and API-authenticated requests;

@@ -65,6 +65,17 @@ return function (Slim\App $app) {
         App\Controller\Labels\GetArtAction::class
     )->setName('label:art');
 
+    $app->get('/login', App\Controller\LoginAction::class);
+
+    $app->get('/logout', App\Controller\LogoutAction::class);
+
+    $app->group(
+        '/users',
+        function (RouteCollectorProxy $group) {
+            $group->get('/me', App\Controller\Users\GetMeAction::class);
+        }
+    );
+
     $app->group(
         '',
         function (RouteCollectorProxy $group) {
@@ -87,17 +98,6 @@ return function (Slim\App $app) {
                     buildCrudApiEndpoints($group, $apiEndpoints, 'api:admin:');
                 }
             )->add(new App\Middleware\Acl\CheckIsAdministrator());
-
-            $group->get('/login', App\Controller\LoginAction::class);
-
-            $group->get('/logout', App\Controller\LogoutAction::class);
-
-            $group->group(
-                '/users',
-                function (RouteCollectorProxy $group) {
-                    $group->get('/me', App\Controller\Users\GetMeAction::class);
-                }
-            );
 
             $group->group(
                 '/profile',
@@ -135,7 +135,7 @@ return function (Slim\App $app) {
                 }
             );
         }
-    )->add(App\Middleware\GetUser::class);
+    )->add(App\Middleware\RequireLoggedInUser::class);
 
     $app->get('/', App\Controller\IndexAction::class)
         ->setName('home');

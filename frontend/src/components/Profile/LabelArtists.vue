@@ -53,20 +53,20 @@
 
 <script setup lang="ts">
 import {useRoute} from "vue-router";
-import {getAuthenticatedResource} from "~/vendor/api.ts";
+import {useInjectAxios} from "~/vendor/api.ts";
 import Loading from "~/components/Common/Loading.vue";
 import DataTable, {DataTableField} from "~/components/Common/DataTable.vue";
 import Icon from "~/components/Common/Icon.vue";
 import useConfirmAndDelete from "~/functions/useConfirmAndDelete.ts";
+import {useAsyncState} from "@vueuse/core";
 
 const {params} = useRoute();
 const labelId = params.label_id;
 
-const {state: label, isLoading} = getAuthenticatedResource(
-    {
-        url: `/profile/label/${labelId}`,
-        method: 'GET'
-    },
+const axios = useInjectAxios();
+
+const {state: label, isLoading} = useAsyncState(
+    () => axios.get(`/profile/label/${labelId}`).then(r => r.data),
     {
         name: null
     }
@@ -85,11 +85,8 @@ const fields: DataTableField[] = [
     }
 ];
 
-const {state, isLoading: stateLoading, execute: relist} = getAuthenticatedResource(
-    {
-        url: `/profile/label/${labelId}/artists`,
-        method: 'GET'
-    },
+const {state, isLoading: stateLoading, execute: relist} = useAsyncState(
+    () => axios.get(`/profile/label/${labelId}/artists`).then(r => r.data),
     []
 );
 

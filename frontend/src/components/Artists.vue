@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import {useVuelidateOnForm} from "~/functions/useVuelidateOnForm.ts";
 import FormGroupField from "~/components/Form/FormGroupField.vue";
-import {useInjectAxiosPublic} from "~/vendor/api.ts";
+import {useInjectAxios} from "~/vendor/api.ts";
 import {useAsyncState} from "@vueuse/core";
 import Loading from "~/components/Common/Loading.vue";
 import {ref, toRaw} from "vue";
@@ -82,7 +82,7 @@ const {form, resetForm, v$} = useVuelidateOnForm(
 const perPage = 15;
 const currentPage = ref<number>(1);
 
-const axios = useInjectAxiosPublic();
+const axios = useInjectAxios();
 const {state, isLoading, execute: relist} = useAsyncState(
     () => {
         const filters = toRaw(form.value);

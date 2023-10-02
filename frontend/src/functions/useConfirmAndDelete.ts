@@ -1,6 +1,6 @@
 import {useSweetAlert} from "~/vendor/sweetalert";
 import {useNotify} from "~/functions/useNotify";
-import {useInjectAxiosAuthenticated} from "~/vendor/api.ts";
+import {useInjectAxios} from "~/vendor/api.ts";
 
 export default function useConfirmAndDelete(
     confirmMessage,
@@ -8,7 +8,7 @@ export default function useConfirmAndDelete(
 ) {
     const {confirmDelete} = useSweetAlert();
     const {notifySuccess} = useNotify();
-    const axios = useInjectAxiosAuthenticated();
+    const axios = useInjectAxios();
 
     const doDelete = (deleteUrl) => {
         confirmDelete({

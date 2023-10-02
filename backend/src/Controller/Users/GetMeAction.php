@@ -18,8 +18,18 @@ final class GetMeAction
 
     public function __invoke(ServerRequest $request, Response $response): ResponseInterface
     {
-        return $response->withJson(
-            $this->apiSerializer->toArray($request->getUser())
-        );
+        $auth = $request->getAuth();
+
+        if ($auth->isLoggedIn()) {
+            return $response->withJson([
+                'isLoggedIn' => true,
+                'user' => $this->apiSerializer->toArray($request->getUser()),
+            ]);
+        }
+
+        return $response->withJson([
+            'isLoggedIn' => false,
+            'user' => null,
+        ]);
     }
 }

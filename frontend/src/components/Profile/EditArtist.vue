@@ -43,7 +43,7 @@ import {computed, onMounted, ref} from "vue";
 import mergeExisting from "~/functions/mergeExisting";
 import {useNotify} from "~/functions/useNotify";
 import {useVuelidateOnForm} from "~/functions/useVuelidateOnForm";
-import {useInjectAxiosAuthenticated} from "~/vendor/api";
+import {useInjectAxios} from "~/vendor/api";
 import FormGroupField from "~/components/Form/FormGroupField.vue";
 import {maxLength, required} from "@vuelidate/validators";
 import Loading from "~/components/Common/Loading.vue";
@@ -90,7 +90,7 @@ const {
     }
 );
 
-const axios = useInjectAxiosAuthenticated();
+const axios = useInjectAxios();
 
 onMounted(() => {
     if (isEditMode) {

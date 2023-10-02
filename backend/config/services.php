@@ -25,6 +25,7 @@ return [
         call_user_func(include(__DIR__ . '/routes.php'), $app);
 
         // Injections
+        $app->add(App\Middleware\GetUser::class);
         $app->add(new App\Middleware\InjectRouter());
         $app->add(App\Middleware\InjectSession::class);
 

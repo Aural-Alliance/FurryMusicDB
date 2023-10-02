@@ -8,33 +8,27 @@
                 Discover new artists or add yourself to the database!
             </h2>
             <div class="buttons mt-5">
-                <router-link v-if="isAuthenticated"
+                <router-link v-if="isLoggedIn"
                              to="/profile"
                              class="btn btn-lg btn-primary"
                 >
                     Visit Profile
                 </router-link>
-                <button v-else
-                        type="button"
-                        class="btn btn-lg btn-primary"
-                        @click.prevent="login"
+                <a v-else
+                   class="btn btn-lg btn-primary"
+                   href="/api/login"
                 >
                     Sign Up
-                </button>
+                </a>
             </div>
         </div>
     </section>
 </template>
 
 <script setup lang="ts">
-import {useAuth0} from "@auth0/auth0-vue";
+import {useUserStore} from "~/stores/user.ts";
 
 const {
-    isAuthenticated,
-    loginWithRedirect,
-} = useAuth0();
-
-const login = () => {
-    loginWithRedirect();
-};
+    isLoggedIn
+} = useUserStore();
 </script>
