@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use App\Auth\Acl;
-use App\Auth\CurrentUser;
+use App\Auth\Auth;
 use App\Http\ServerRequest;
-use App\Service\Auth0;
 use Doctrine\ORM\EntityManagerInterface;
+use Mezzio\Session\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -17,35 +17,30 @@ use Psr\Http\Server\RequestHandlerInterface;
 final class GetUser implements MiddlewareInterface
 {
     public function __construct(
-        private readonly Auth0 $auth0,
         private readonly EntityManagerInterface $em,
     ) {
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $token = $this->auth0->getTokenFromRequest($request);
+        /** @var SessionInterface $session */
+        $session = $request->getAttribute(ServerRequest::ATTR_SESSION);
 
-        $currentUser = new CurrentUser(
-            $token,
-            $this->auth0,
-            $this->em
+        $auth = new Auth(
+            $this->em,
+            $session,
         );
 
-        $request = $request->withAttribute(
-            ServerRequest::ATTR_USER,
-            $currentUser
-        );
+        $user = $auth->getUser();
 
         $acl = new Acl(
-            $currentUser,
-            $this->em
+            $this->em,
+            $user
         );
 
-        $request = $request->withAttribute(
-            ServerRequest::ATTR_ACL,
-            $acl
-        );
+        $request = $request->withAttribute(ServerRequest::ATTR_AUTH, $auth)
+            ->withAttribute(ServerRequest::ATTR_USER, $user)
+            ->withAttribute(ServerRequest::ATTR_ACL, $acl);
 
         return $handler->handle($request);
     }

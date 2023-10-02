@@ -88,6 +88,10 @@ return function (Slim\App $app) {
                 }
             )->add(new App\Middleware\Acl\CheckIsAdministrator());
 
+            $group->get('/login', App\Controller\LoginAction::class);
+
+            $group->get('/logout', App\Controller\LogoutAction::class);
+
             $group->group(
                 '/users',
                 function (RouteCollectorProxy $group) {

@@ -26,6 +26,7 @@ return [
 
         // Injections
         $app->add(new App\Middleware\InjectRouter());
+        $app->add(App\Middleware\InjectSession::class);
 
         // System middleware for routing and body parsing.
         $app->addBodyParsingMiddleware();
@@ -265,14 +266,29 @@ return [
         );
     },
 
-    // Auth0
-    Auth0\SDK\Auth0::class => function () {
-        $config = new Auth0\SDK\Configuration\SdkConfiguration(
-            strategy: Auth0\SDK\Configuration\SdkConfiguration::STRATEGY_API,
-            domain: $_ENV['AUTH0_DOMAIN'],
-            audience: [$_ENV['AUTH0_AUDIENCE']]
-        );
+    // OAuth client
+    League\OAuth2\Client\Provider\GenericProvider::class => function (
+        Environment $environment,
+        GuzzleHttp\Client $httpClient
+    ) {
+        $baseUrl = $environment->getBaseUrl();
+        $serviceUrl = $environment->getOAuthServiceUrl();
+        $internalServiceUrl = $environment->getOAuthInternalServiceUrl();
 
-        return new Auth0\SDK\Auth0($config);
+        $provider = new League\OAuth2\Client\Provider\GenericProvider([
+            'clientId' => $environment->getOAuthClientId(),
+            'clientSecret' => $environment->getOAuthClientSecret(),
+            'redirectUri' => $baseUrl . '/api/login',
+            'urlAuthorize' => $serviceUrl . '/application/o/authorize/',
+            'urlAccessToken' => $internalServiceUrl . '/application/o/token/',
+            'urlResourceOwnerDetails' => $internalServiceUrl . '/application/o/userinfo/',
+            'pkceMethod' => League\OAuth2\Client\Provider\AbstractProvider::PKCE_METHOD_S256,
+            'scopes' => 'openid profile email',
+            'responseResourceOwnerId' => 'sub',
+        ]);
+
+        $provider->setHttpClient($httpClient);
+
+        return $provider;
     },
 ];

@@ -83,7 +83,7 @@ class ArtistsController extends AbstractCrudController
         return $this->editRecord(
             $data,
             new Artist(
-                owner: $request->getUser()->getLocalUser()
+                owner: $request->getUser()
             )
         );
     }

@@ -84,7 +84,7 @@ class LabelsController extends AbstractCrudController
         return $this->editRecord($data, null, [
             AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
                 $this->entityClass => [
-                    'owner' => $request->getUser()->getLocalUser(),
+                    'owner' => $request->getUser(),
                 ],
             ],
         ]);

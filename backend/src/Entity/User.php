@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Auth\Permissions;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -67,6 +68,30 @@ class User
     public function setAvatar(?string $avatar): void
     {
         $this->avatar = $avatar;
+    }
+
+    /**
+     * @var Permissions[]
+     */
+    #[
+        ORM\Column(type: 'simple_array', nullable: false, enumType: Permissions::class)
+    ]
+    protected array $permissions = [];
+
+    /**
+     * @return Permissions[]
+     */
+    public function getPermissions(): array
+    {
+        return $this->permissions;
+    }
+
+    /**
+     * @param Permissions[] $permissions
+     */
+    public function setPermissions(array $permissions): void
+    {
+        $this->permissions = $permissions;
     }
 
     #[

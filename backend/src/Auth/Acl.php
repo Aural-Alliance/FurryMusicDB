@@ -2,18 +2,23 @@
 
 namespace App\Auth;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class Acl
 {
     public function __construct(
-        private readonly CurrentUser $currentUser,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
+        private readonly ?User $user
     ) {
     }
 
     public function canManageArtist(string $artistId): bool
     {
+        if (null === $this->user) {
+            return false;
+        }
+
         if ($this->isAdministrator()) {
             return true;
         }
@@ -28,7 +33,7 @@ final class Acl
                 )
             DQL
         )->setParameter('id', $artistId)
-            ->setParameter('user', $this->currentUser->getLocalUser())
+            ->setParameter('user', $this->user)
             ->getOneOrNullResult();
 
         return null !== $aclResult;
@@ -36,6 +41,10 @@ final class Acl
 
     public function canManageLabel(string $labelId): bool
     {
+        if (null === $this->user) {
+            return false;
+        }
+
         if ($this->isAdministrator()) {
             return true;
         }
@@ -47,7 +56,7 @@ final class Acl
                 AND l.owner = :user
             DQL
         )->setParameter('id', $labelId)
-            ->setParameter('user', $this->currentUser->getLocalUser())
+            ->setParameter('user', $this->user)
             ->getOneOrNullResult();
 
         return null !== $aclResult;
@@ -55,7 +64,11 @@ final class Acl
 
     public function isAdministrator(): bool
     {
-        $permissions = $this->currentUser->getPermissions();
+        if (null === $this->user) {
+            return false;
+        }
+
+        $permissions = $this->user->getPermissions();
         return in_array(Permissions::AdministerAll, $permissions, true);
     }
 }

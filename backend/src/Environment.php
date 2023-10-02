@@ -25,6 +25,13 @@ class Environment
     // Database
     public const DATABASE_URL = 'DATABASE_URL';
 
+    // OAuth
+    public const APP_BASE_URL = 'APP_BASE_URL';
+    public const OAUTH_SERVICE_URL = 'OAUTH_SERVICE_URL';
+    public const OAUTH_INTERNAL_SERVICE_URL = 'OAUTH_INTERNAL_SERVICE_URL';
+    public const OAUTH_CLIENT_ID = 'OAUTH_CLIENT_ID';
+    public const OAUTH_CLIENT_SECRET = 'OAUTH_CLIENT_SECRET';
+
     // Default settings
     protected array $defaults = [
         self::APP_ENV => self::ENV_PRODUCTION,
@@ -103,5 +110,30 @@ class Environment
     public function getDatabaseUrl(): ?string
     {
         return $this->data[self::DATABASE_URL] ?? null;
+    }
+
+    public function getBaseUrl(): string
+    {
+        return $this->data[self::APP_BASE_URL];
+    }
+
+    public function getOAuthServiceUrl(): string
+    {
+        return $this->data[self::OAUTH_SERVICE_URL];
+    }
+
+    public function getOAuthInternalServiceUrl(): string
+    {
+        return $this->data[self::OAUTH_INTERNAL_SERVICE_URL] ?? $this->getOAuthServiceUrl();
+    }
+
+    public function getOAuthClientId(): string
+    {
+        return $this->data[self::OAUTH_CLIENT_ID];
+    }
+
+    public function getOAuthClientSecret(): string
+    {
+        return $this->data[self::OAUTH_CLIENT_SECRET];
     }
 }

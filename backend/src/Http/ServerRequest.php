@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace App\Http;
 
 use App\Auth\Acl;
-use App\Auth\CurrentUser;
+use App\Auth\Auth;
 use App\Entity\Artist;
 use App\Entity\Label;
+use App\Entity\User;
 use InvalidArgumentException;
+use Mezzio\Session\SessionInterface;
 
 final class ServerRequest extends \Slim\Http\ServerRequest
 {
     public const ATTR_USER = 'user';
     public const ATTR_ROUTER = 'router';
+    public const ATTR_AUTH = 'auth';
     public const ATTR_ACL = 'acl';
+    public const ATTR_SESSION = 'session';
 
     public const ATTR_ARTIST = 'artist';
     public const ATTR_LABEL = 'label';
@@ -24,14 +28,24 @@ final class ServerRequest extends \Slim\Http\ServerRequest
         return $this->getAttributeOfClass(self::ATTR_ROUTER, RouterInterface::class);
     }
 
-    public function getUser(): CurrentUser
+    public function getUser(): User
     {
-        return $this->getAttributeOfClass(self::ATTR_USER, CurrentUser::class);
+        return $this->getAttributeOfClass(self::ATTR_USER, User::class);
+    }
+
+    public function getAuth(): Auth
+    {
+        return $this->getAttributeOfClass(self::ATTR_AUTH, Auth::class);
     }
 
     public function getAcl(): Acl
     {
         return $this->getAttributeOfClass(self::ATTR_ACL, Acl::class);
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->getAttributeOfClass(self::ATTR_SESSION, SessionInterface::class);
     }
 
     public function getArtist(): Artist
