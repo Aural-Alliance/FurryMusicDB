@@ -23,7 +23,17 @@ final class InitCommand extends AbstractCommand
 
         $this->runCommand(
             $output,
+            'clear-cache'
+        );
+
+        $this->runCommand(
+            $output,
             'migrate'
+        );
+
+        $this->runCommand(
+            $output,
+            'orm:generate-proxies'
         );
 
         return 0;

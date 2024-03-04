@@ -41,7 +41,11 @@ final class UptimeWaitCommand extends AbstractCommand
         while ($elapsed <= $timeout) {
             try {
                 $conn = DriverManager::getConnection($connectionOptions);
-                $conn->getNativeConnection()->exec('SELECT 1');
+                $pdo = $conn->getNativeConnection();
+
+                assert($pdo instanceof \PDO);
+
+                $pdo->exec('SELECT 1');
 
                 $io->success('Services started up and ready!');
                 return 0;

@@ -6,10 +6,10 @@ use App\Normalizer\Attributes\DeepNormalize;
 use App\Normalizer\Exception\NoGetterAvailableException;
 use ArrayObject;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
@@ -43,11 +43,12 @@ final class DoctrineEntityNormalizer extends AbstractObjectNormalizer
 
     /**
      * Replicates the "toArray" functionality previously present in Doctrine 1.
-     *
-     * @return array|string|int|float|bool|ArrayObject<int, mixed>|null
      */
-    public function normalize(mixed $object, ?string $format = null, array $context = []): mixed
-    {
+    public function normalize(
+        mixed $object,
+        ?string $format = null,
+        array $context = []
+    ): array|ArrayObject|bool|float|int|null|string {
         if (!is_object($object)) {
             throw new InvalidArgumentException('Cannot normalize non-object.');
         }
@@ -114,12 +115,12 @@ final class DoctrineEntityNormalizer extends AbstractObjectNormalizer
         return $context;
     }
 
-    public function supportsNormalization($data, string $format = null): bool
+    public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         return $this->isEntity($data);
     }
 
-    public function supportsDenormalization($data, $type, string $format = null): bool
+    public function supportsDenormalization($data, $type, string $format = null, array $context = []): bool
     {
         return $this->isEntity($type);
     }
@@ -372,7 +373,7 @@ final class DoctrineEntityNormalizer extends AbstractObjectNormalizer
     private function isEntity(mixed $class): bool
     {
         if (is_object($class)) {
-            $class = ClassUtils::getClass($class);
+            $class = DefaultProxyClassNameResolver::getClass($class);
         }
 
         if (!is_string($class) || !class_exists($class)) {

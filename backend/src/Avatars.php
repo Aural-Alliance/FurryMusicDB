@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App;
 
 use App\Http\Response;
-use Intervention\Image\Constraint;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Filesystem;
 
@@ -13,7 +12,8 @@ final class Avatars
 {
     public function __construct(
         private readonly Environment $environment,
-        private readonly Filesystem $filesystem
+        private readonly Filesystem $filesystem,
+        private readonly ImageManager $imageManager
     ) {
     }
 
@@ -36,18 +36,10 @@ final class Avatars
         string $original,
         string $path
     ): void {
-        $imageManager = new ImageManager(
-            [
-                'driver' => 'gd',
-            ]
-        );
+        $image = $this->imageManager->read($original);
+        $image = $image->cover(512, 512);
 
-        $image = $imageManager->make($original);
-        $image->fit(512, 512, function (Constraint $constraint) {
-            $constraint->upsize();
-        });
-
-        $newImageData = $image->encode('jpg', 90);
+        $newImageData = $image->toJpeg();
 
         $this->filesystem->write(
             $path,

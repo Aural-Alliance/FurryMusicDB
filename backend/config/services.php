@@ -100,6 +100,7 @@ return [
         $commandLoader = new Symfony\Component\Console\CommandLoader\ContainerCommandLoader(
             $di,
             [
+                'clear-cache' => App\Console\Command\ClearCacheCommand::class,
                 'init' => App\Console\Command\InitCommand::class,
                 'migrate' => App\Console\Command\MigrateCommand::class,
                 'uptime-wait' => App\Console\Command\UptimeWaitCommand::class,
@@ -148,7 +149,7 @@ return [
         $parser = new Doctrine\DBAL\Tools\DsnParser([
             'postgres' => 'pdo_pgsql',
         ]);
-        $connectionOptions = $parser->parse($environment->getDatabaseUrl() ?? '');
+        $connectionOptions = $parser->parse($environment->getDatabaseUrl());
 
         return Doctrine\DBAL\DriverManager::getConnection($connectionOptions);
     },
@@ -201,29 +202,28 @@ return [
 
     Psr\Log\LoggerInterface::class => DI\get(Monolog\Logger::class),
 
-    Symfony\Contracts\Cache\CacheInterface::class => static function (
+    Symfony\Component\Cache\Adapter\AdapterInterface::class => static function (
         Environment $environment,
         Psr\Log\LoggerInterface $logger
     ) {
-        /** @var Symfony\Contracts\Cache\CacheInterface $cacheInterface */
         if ($environment->isTesting()) {
-            $cacheInterface = new Symfony\Component\Cache\Adapter\ArrayAdapter();
+            $cache = new Symfony\Component\Cache\Adapter\ArrayAdapter();
         } else {
-            $tempDir = $environment->getTempDirectory() . DIRECTORY_SEPARATOR . 'cache';
-            $cacheInterface = new Symfony\Component\Cache\Adapter\FilesystemAdapter(
+            $cache = new Symfony\Component\Cache\Adapter\FilesystemAdapter(
                 '',
                 0,
-                $tempDir
+                $environment->getTempDirectory() . DIRECTORY_SEPARATOR . 'cache'
             );
         }
 
-        $cacheInterface->setLogger($logger);
-        return $cacheInterface;
+        $cache->setLogger($logger);
+        return $cache;
     },
 
     Psr\Cache\CacheItemPoolInterface::class => DI\get(
-        Symfony\Contracts\Cache\CacheInterface::class
+        Symfony\Component\Cache\Adapter\AdapterInterface::class
     ),
+
     Psr\SimpleCache\CacheInterface::class => function (Psr\Cache\CacheItemPoolInterface $cache) {
         return new Symfony\Component\Cache\Psr16Cache($cache);
     },
@@ -252,6 +252,11 @@ return [
             )
         );
     },
+
+    // Intervention Image Manager
+    Intervention\Image\ImageManager::class => fn() => new Intervention\Image\ImageManager(
+        new Intervention\Image\Drivers\Gd\Driver()
+    ),
 
     // OAuth client
     League\OAuth2\Client\Provider\GenericProvider::class => function (

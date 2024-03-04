@@ -3,12 +3,11 @@
 namespace App\Serializer;
 
 use App\Normalizer\DoctrineEntityNormalizer;
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManagerInterface;
 use Stringable;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -21,11 +20,10 @@ final class ApiSerializer implements ApiSerializerInterface
     private readonly Serializer $parentSerializer;
 
     public function __construct(
-        Reader $reader,
         EntityManagerInterface $em
     ) {
         $classMetaFactory = new ClassMetadataFactory(
-            new AnnotationLoader($reader)
+            new AttributeLoader()
         );
 
         $normalizers = [
@@ -39,7 +37,6 @@ final class ApiSerializer implements ApiSerializerInterface
                 classMetadataFactory: $classMetaFactory
             ),
         ];
-
         $encoders = [
             new JsonEncoder(),
         ];

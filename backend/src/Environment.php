@@ -96,9 +96,9 @@ class Environment
             : LogLevel::INFO;
     }
 
-    public function getDatabaseUrl(): ?string
+    public function getDatabaseUrl(): string
     {
-        return $this->data[self::DATABASE_URL] ?? null;
+        return $this->data[self::DATABASE_URL] ?? throw new \RuntimeException('No Database URL specified!');
     }
 
     public function getBaseUrl(): string
