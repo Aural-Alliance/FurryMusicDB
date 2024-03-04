@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine3.18
+FROM php:8.3-fpm-alpine3.19 AS base
 
 ENV TZ=UTC
 
@@ -15,19 +15,15 @@ RUN apk add --update --no-cache \
     supercronic \
     npm
 
-# Install Dockerize
-ENV DOCKERIZE_VERSION v0.7.0
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-
 # Copy build config files
-COPY ./build/Caddyfile.tmpl /etc/Caddyfile.tmpl
-COPY ./build/launch.sh /var/app/launch.sh
-COPY ./build/supervisord.conf.tmpl /etc/supervisor/supervisord.conf.tmpl
+COPY ./build/supervisord.conf /etc/supervisor/supervisord.conf
+COPY ./build/services/ /etc/supervisor.d/
 COPY ./build/phpfpmpool.conf /usr/local/etc/php-fpm.d/www.conf
 COPY ./build/php.ini /usr/local/etc/php/php.ini
 COPY ./build/crontab /var/app/crontab
+COPY ./build/scripts/ /usr/local/bin
+
+RUN chmod a+rx /usr/local/bin
 
 # Set up App user
 RUN mkdir -p /var/app/www/backend /var/app/www/frontend \
@@ -36,13 +32,25 @@ RUN mkdir -p /var/app/www/backend /var/app/www/frontend \
     && addgroup app www-data \
     && mkdir -p /var/app/www /var/app/uploads /var/app/www_tmp /run/supervisord \
     && chown -R app:app /var/app /run/supervisord \
-    && chmod a+x /var/app/launch.sh
-
-COPY --chown=app:app ./backend /var/app/www/backend
-COPY --chown=app:app ./frontend /var/app/www/frontend
+    && chmod a+rx /var/app/launch.sh
 
 USER root
 
 EXPOSE 8000
 
-CMD ["/var/app/launch.sh"]
+ENTRYPOINT ["/var/app/launch.sh"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+
+FROM base AS development
+
+COPY ./build/dev/Caddyfile /etc/Caddyfile
+COPY ./build/dev/services/ /etc/supervisor.d/
+COPY ./build/dev/launch.sh /var/app/launch.sh
+
+FROM base AS production
+
+COPY ./build/prod/Caddyfile /etc/Caddyfile
+COPY ./build/prod/launch.sh /var/app/launch.sh
+
+COPY --chown=app:app ./backend /var/app/www/backend
+COPY --chown=app:app ./frontend /var/app/www/frontend

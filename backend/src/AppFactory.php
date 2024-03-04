@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Http\Factory\ServerRequestFactory;
 use DI;
+use Monolog\ErrorHandler;
+use Monolog\Logger;
 use Monolog\Registry;
-use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Factory\ServerRequestCreatorFactory;
-use App\Http\Factory\ServerRequestFactory;
 use Symfony\Component\Console\Application;
-
-use const E_COMPILE_ERROR;
-use const E_CORE_ERROR;
-use const E_ERROR;
-use const E_PARSE;
-use const E_USER_ERROR;
 
 class AppFactory
 {
@@ -63,8 +58,12 @@ class AppFactory
         array $appEnvironment = [],
         array $diDefinitions = []
     ): DI\Container {
-        // Register Annotation autoloader
-        $environment = self::buildEnvironment($appEnvironment);
+        $_ENV = getenv();
+
+        $environment = new Environment([
+            ...$_ENV,
+            ...$appEnvironment,
+        ]);
 
         self::applyPhpSettings($environment);
 
@@ -88,55 +87,13 @@ class AppFactory
 
         $di = $containerBuilder->build();
 
-        $logger = $di->get(LoggerInterface::class);
-
-        register_shutdown_function(
-            static function (LoggerInterface $logger): void {
-                $error = error_get_last();
-                if (null === $error) {
-                    return;
-                }
-
-                $errno = $error["type"];
-                $errfile = $error["file"];
-                $errline = $error["line"];
-                $errstr = $error["message"];
-
-                if ($errno &= E_PARSE | E_ERROR | E_USER_ERROR | E_CORE_ERROR | E_COMPILE_ERROR) {
-                    $logger->critical(
-                        sprintf(
-                            'Fatal error: %s in %s on line %d',
-                            $errstr,
-                            $errfile,
-                            $errline
-                        )
-                    );
-                }
-            },
-            $logger
-        );
+        $logger = $di->get(Logger::class);
+        $errorHandler = new ErrorHandler($logger);
+        $errorHandler->registerFatalHandler();
 
         Registry::addLogger($logger, 'app', true);
 
         return $di;
-    }
-
-    /**
-     * @param array<string, mixed> $environment
-     */
-    public static function buildEnvironment(array $environment = []): Environment
-    {
-        if (!isset($environment[Environment::BASE_DIR])) {
-            throw new \LogicException('No base directory specified!');
-        }
-
-        $environment[Environment::TEMP_DIR] ??= dirname($environment[Environment::BASE_DIR], 2) . '/www_tmp';
-        $environment[Environment::CONFIG_DIR] ??= $environment[Environment::BASE_DIR] . '/config';
-
-        $_ENV = getenv();
-        $environment = array_merge(array_filter($_ENV), $environment);
-
-        return new Environment($environment);
     }
 
     protected static function applyPhpSettings(Environment $environment): void

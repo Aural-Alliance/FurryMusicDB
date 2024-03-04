@@ -100,7 +100,9 @@ return [
         $commandLoader = new Symfony\Component\Console\CommandLoader\ContainerCommandLoader(
             $di,
             [
-                // TODO Cli Commands
+                'init' => App\Console\Command\InitCommand::class,
+                'migrate' => App\Console\Command\MigrateCommand::class,
+                'uptime-wait' => App\Console\Command\UptimeWaitCommand::class,
             ]
         );
         $console->setCommandLoader($commandLoader);

@@ -16,12 +16,6 @@ class Environment
     // Core settings values
     public const APP_ENV = 'APPLICATION_ENV';
 
-    public const BASE_DIR = 'BASE_DIR';
-    public const TEMP_DIR = 'TEMP_DIR';
-    public const CONFIG_DIR = 'CONFIG_DIR';
-
-    public const IS_CLI = 'IS_CLI';
-
     // Database
     public const DATABASE_URL = 'DATABASE_URL';
 
@@ -33,14 +27,9 @@ class Environment
     public const OAUTH_CLIENT_SECRET = 'OAUTH_CLIENT_SECRET';
 
     // Default settings
-    protected array $defaults = [
-        self::APP_ENV => self::ENV_PRODUCTION,
-        self::IS_CLI => ('cli' === PHP_SAPI),
-    ];
-
     public function __construct(array $elements = [])
     {
-        $this->data = array_merge($this->defaults, $elements);
+        $this->data = $elements;
     }
 
     public function getAppEnvironment(): string
@@ -65,7 +54,7 @@ class Environment
 
     public function isCli(): bool
     {
-        return $this->data[self::IS_CLI] ?? ('cli' === PHP_SAPI);
+        return ('cli' === PHP_SAPI);
     }
 
     /**
@@ -73,7 +62,7 @@ class Environment
      */
     public function getBaseDirectory(): string
     {
-        return $this->data[self::BASE_DIR];
+        return dirname(__DIR__);
     }
 
     /**
@@ -81,7 +70,7 @@ class Environment
      */
     public function getTempDirectory(): string
     {
-        return $this->data[self::TEMP_DIR];
+        return dirname($this->getBaseDirectory(), 2) . '/www_tmp';
     }
 
     /**
@@ -89,7 +78,7 @@ class Environment
      */
     public function getConfigDirectory(): string
     {
-        return $this->data[self::CONFIG_DIR];
+        return $this->getBaseDirectory() . '/config';
     }
 
     /**
