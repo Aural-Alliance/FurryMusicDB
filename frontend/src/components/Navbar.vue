@@ -23,9 +23,6 @@
                     <li class="nav-item">
                         <router-link class="nav-link" to="/artists">Musicians</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/reviews">Reviews</router-link>
-                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item" v-if="!isLoggedIn && !isLoading">

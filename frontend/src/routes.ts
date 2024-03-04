@@ -26,14 +26,6 @@ export default [
         }
     },
     {
-        path: '/reviews',
-        name: 'reviews',
-        component: () => import('~/components/Reviews.vue'),
-        meta: {
-            title: 'Reviews'
-        }
-    },
-    {
         path: '/donate',
         name: 'donate',
         component: () => import('~/components/Donate.vue'),
