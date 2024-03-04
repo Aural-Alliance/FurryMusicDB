@@ -12,7 +12,7 @@ services:
     env_file: env.dev
     restart: always
     ports:
-      - "127.0.0.1:80:8000"
+      - "127.0.0.1:8080:8000"
     logging: &default-logging
       options:
         max-size: "1m"

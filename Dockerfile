@@ -23,7 +23,7 @@ COPY ./build/php.ini /usr/local/etc/php/php.ini
 COPY ./build/crontab /var/app/crontab
 COPY ./build/scripts/ /usr/local/bin
 
-RUN chmod a+rx /usr/local/bin
+RUN chmod a+rx /usr/local/bin/*
 
 # Set up App user
 RUN mkdir -p /var/app/www/backend /var/app/www/frontend \
@@ -31,8 +31,7 @@ RUN mkdir -p /var/app/www/backend /var/app/www/frontend \
     && adduser -u 1000 -G app -h /var/app/ -s /bin/sh -D app \
     && addgroup app www-data \
     && mkdir -p /var/app/www /var/app/uploads /var/app/www_tmp /run/supervisord \
-    && chown -R app:app /var/app /run/supervisord \
-    && chmod a+rx /var/app/launch.sh
+    && chown -R app:app /var/app /run/supervisord
 
 USER root
 
@@ -47,10 +46,35 @@ COPY ./build/dev/Caddyfile /etc/Caddyfile
 COPY ./build/dev/services/ /etc/supervisor.d/
 COPY ./build/dev/launch.sh /var/app/launch.sh
 
+RUN chmod a+rx /var/app/launch.sh
+
+WORKDIR /var/app/www
+
 FROM base AS production
 
 COPY ./build/prod/Caddyfile /etc/Caddyfile
 COPY ./build/prod/launch.sh /var/app/launch.sh
 
+RUN chmod a+rx /var/app/launch.sh
+
+USER app
+
 COPY --chown=app:app ./backend /var/app/www/backend
+
+WORKDIR /var/app/www/backend
+
+RUN composer install --no-dev --no-ansi --no-autoloader --no-interaction \
+    && composer dump-autoload --optimize --classmap-authoritative \
+    && composer clear-cache
+
 COPY --chown=app:app ./frontend /var/app/www/frontend
+
+WORKDIR /var/app/www/frontend
+
+RUN npm ci --include=dev \
+    && npm cache clean --force \
+    && npm run build
+
+WORKDIR /var/app/www
+
+USER root

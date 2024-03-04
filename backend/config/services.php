@@ -142,9 +142,7 @@ return [
         );
     },
 
-    // Doctrine Entity Manager
-    Doctrine\ORM\EntityManager::class => function (
-        Psr\Cache\CacheItemPoolInterface $psr6Cache,
+    Doctrine\DBAL\Connection::class => function (
         Environment $environment
     ) {
         $parser = new Doctrine\DBAL\Tools\DsnParser([
@@ -152,6 +150,15 @@ return [
         ]);
         $connectionOptions = $parser->parse($environment->getDatabaseUrl() ?? '');
 
+        return Doctrine\DBAL\DriverManager::getConnection($connectionOptions);
+    },
+
+    // Doctrine Entity Manager
+    Doctrine\ORM\EntityManager::class => function (
+        Doctrine\DBAL\Connection $connection,
+        Psr\Cache\CacheItemPoolInterface $psr6Cache,
+        Environment $environment
+    ) {
         // Fetch and store entity manager.
         $config = Doctrine\ORM\ORMSetup::createAttributeMetadataConfiguration(
             [$environment->getBaseDirectory() . '/src/Entity'],
@@ -161,21 +168,14 @@ return [
         );
 
         $config->setAutoGenerateProxyClasses(
-            Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS_OR_CHANGED
+            Doctrine\ORM\Proxy\ProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS_OR_CHANGED
         );
 
         if (!Doctrine\DBAL\Types\Type::hasType('carbon_immutable')) {
             Doctrine\DBAL\Types\Type::addType('carbon_immutable', Carbon\Doctrine\CarbonImmutableType::class);
         }
 
-        $eventManager = new Doctrine\Common\EventManager();
-
-        $connection = Doctrine\DBAL\DriverManager::getConnection(
-            $connectionOptions,
-            $config,
-            $eventManager
-        );
-        return new EntityManager($connection, $config, $eventManager);
+        return new EntityManager($connection, $config);
     },
 
     Doctrine\ORM\EntityManagerInterface::class => DI\Get(Doctrine\ORM\EntityManager::class),
@@ -228,20 +228,6 @@ return [
         return new Symfony\Component\Cache\Psr16Cache($cache);
     },
 
-    // Doctrine annotations reader
-    Doctrine\Common\Annotations\Reader::class => static function (
-        Psr\Cache\CacheItemPoolInterface $psr6Cache,
-        Environment $environment
-    ) {
-        $proxyCache = new Symfony\Component\Cache\Adapter\ProxyAdapter($psr6Cache, 'annotations.');
-
-        return new Doctrine\Common\Annotations\PsrCachedReader(
-            new Doctrine\Common\Annotations\AnnotationReader(),
-            $proxyCache,
-            !$environment->isProduction()
-        );
-    },
-
     // Symfony Serializer
     App\Serializer\ApiSerializerInterface::class => DI\get(
         App\Serializer\ApiSerializer::class
@@ -249,13 +235,11 @@ return [
 
     // Symfony Validator
     Symfony\Component\Validator\Validator\ValidatorInterface::class => static function (
-        Doctrine\Common\Annotations\Reader $reader,
         Symfony\Component\Validator\ContainerConstraintValidatorFactory $constraintValidatorFactory
     ) {
         $builder = new Symfony\Component\Validator\ValidatorBuilder();
         $builder->setConstraintValidatorFactory($constraintValidatorFactory);
-        $builder->enableAnnotationMapping();
-        $builder->setDoctrineAnnotationReader($reader);
+        $builder->enableAttributeMapping();
 
         return $builder->getValidator();
     },
