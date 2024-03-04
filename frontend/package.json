@@ -27,12 +27,12 @@
     "@types/bootstrap": "^5.2.6",
     "@types/lodash": "^4.14.198",
     "@types/luxon": "^3.3.2",
-    "@vitejs/plugin-vue": "^4.1.0",
-    "@vue/eslint-config-typescript": "^11.0.3",
+    "@vitejs/plugin-vue": "^5",
+    "@vue/eslint-config-typescript": "^12",
     "sass": "^1.66.1",
     "typescript": "^5.2.2",
-    "vite": "^4.3.9",
+    "vite": "^5",
     "vite-plugin-eslint": "^1.8.1",
-    "vue-tsc": "^1.8.10"
+    "vue-tsc": "^2"
   }
 }
