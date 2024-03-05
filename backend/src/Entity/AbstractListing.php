@@ -1,15 +1,19 @@
 <?php
 
-declare(strict_types=1);
+namespace App\Entity;
 
-namespace App\Entity\Traits;
-
+use App\Entity\Traits\HasUniqueId;
+use App\Entity\Traits\TruncateStrings;
 use Doctrine\ORM\Mapping as ORM;
 
-trait HasCommonRecordFields
+abstract class AbstractListing
 {
     use HasUniqueId;
     use TruncateStrings;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    protected ?User $owner = null;
 
     #[ORM\Column(length: 255, nullable: false)]
     protected string $name;
@@ -75,21 +79,9 @@ trait HasCommonRecordFields
         $this->description = $description;
     }
 
-    #[ORM\Column(length: 255, nullable: true)]
-    protected ?string $url;
-
-    public function getUrl(): ?string
+    public function __construct(?User $owner)
     {
-        return $this->url;
-    }
-
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
-    }
-
-    public function __construct()
-    {
+        $this->owner = $owner;
         $this->created_at = time();
     }
 }

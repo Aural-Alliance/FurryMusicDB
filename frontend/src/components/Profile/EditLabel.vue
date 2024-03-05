@@ -4,31 +4,38 @@
     <loading :loading="isLoading">
         <form @submit.prevent="submit">
             <div class="row g-2 mb-3">
-                <form-group-field id="form_edit_name" class="col-md-12"
-                                  :field="v$.name"
-                                  label="Label Name"></form-group-field>
+                <div class="col-md-6">
+                    <form-group-field id="form_edit_name" class="mb-3"
+                                      :field="v$.name"
+                                      label="Label Name"></form-group-field>
 
-                <form-group-field input-type="textarea" id="form_edit_description" class="col-md-12"
-                                  :field="v$.description"
-                                  label="Description"></form-group-field>
+                    <form-group-field input-type="textarea" id="form_edit_description"
+                                      :field="v$.description"
+                                      label="Description"></form-group-field>
+                </div>
+                <div class="col-md-6">
+                    <form-group id="form_edit_avatar">
+                        <template #label>
+                            <template v-if="isEditMode">
+                                Upload New Avatar
+                            </template>
+                            <template v-else>
+                                Upload Avatar
+                            </template>
+                        </template>
+                        <template #description v-if="isEditMode">Leave this field blank to use the existing avatar.
+                        </template>
 
-                <form-group id="form_edit_avatar" class="col-md-12">
-                    <template #label>Upload New Avatar</template>
-                    <template #description>Leave this field blank to use the existing avatar.</template>
-
-                    <form-file v-model="avatar" accept="image/*"></form-file>
-                </form-group>
+                        <form-file v-model="avatar" accept="image/*"></form-file>
+                    </form-group>
+                </div>
             </div>
 
-            <fieldset>
-                <legend>Social Links</legend>
+            <hr>
 
-                <div class="row g-2 mb-3">
-                    <form-group-field input-type="url" id="form_edit_url" class="col-md-6"
-                                      :field="v$.url"
-                                      label="Web Site"></form-group-field>
-                </div>
-            </fieldset>
+            <common-social-fields :socials="form.socials"/>
+
+            <hr>
 
             <div class="buttons">
                 <button type="submit" class="btn btn-lg btn-primary">Save Changes</button>
@@ -50,6 +57,7 @@ import Loading from "~/components/Common/Loading.vue";
 import FormFile from "~/components/Form/FormFile.vue";
 import FormGroup from "~/components/Form/FormGroup.vue";
 import getFileBase64 from "~/functions/getFileBase64";
+import CommonSocialFields from "~/components/Profile/CommonSocialFields.vue";
 
 const isLoading = ref<boolean>(false);
 

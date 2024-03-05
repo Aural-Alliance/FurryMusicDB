@@ -1,7 +1,7 @@
 <template>
     <navbar/>
 
-    <div class="container">
+    <div class="container mb-4">
         <breadcrumbs/>
 
         <router-view/>

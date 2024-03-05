@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\HasCommonRecordFields;
 use App\Normalizer\Attributes\DeepNormalize;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,17 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
     ORM\Table(name: 'artists'),
     ORM\HasLifecycleCallbacks
 ]
-class Artist
+class Artist extends AbstractListing
 {
-    use HasCommonRecordFields;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'label_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Label $label = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    protected ?User $owner = null;
 
     /** @var Collection<array-key, Social> */
     #[ORM\OneToMany(targetEntity: Social::class, mappedBy: 'artist')]
@@ -38,8 +31,8 @@ class Artist
         ?Label $label = null,
         ?User $owner = null
     ) {
-        $this->created_at = time();
         $this->label = $label;
-        $this->owner = $owner;
+
+        parent::__construct($owner);
     }
 }

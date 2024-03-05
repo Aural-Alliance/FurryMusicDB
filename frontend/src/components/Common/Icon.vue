@@ -1,5 +1,5 @@
 <template>
-    <i class="bi" :class="'bi-'+icon"></i>
+    <i class="bi" :class="'bi-'+icon" aria-hidden="true"></i>
 </template>
 
 <script setup lang="ts">

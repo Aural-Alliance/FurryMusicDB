@@ -4,31 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\Profile;
 
-use App\Avatars;
-use App\Controller\AbstractCrudController;
 use App\Entity\Label;
 use App\Http\Response;
 use App\Http\ServerRequest;
-use App\Serializer\ApiSerializerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class LabelsController extends AbstractCrudController
+class LabelsController extends AbstractListingController
 {
     protected string $entityClass = Label::class;
     protected string $resourceRouteName = 'api:profile:label';
-
-    public function __construct(
-        EntityManagerInterface $em,
-        ApiSerializerInterface $apiSerializer,
-        ValidatorInterface $validator,
-        private readonly Avatars $avatars
-    ) {
-        parent::__construct($em, $apiSerializer, $validator);
-    }
 
     public function listAction(
         ServerRequest $request,

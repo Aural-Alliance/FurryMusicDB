@@ -7,7 +7,7 @@ namespace App\Entity\Migration;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20240305062644 extends AbstractMigration
+final class Version20240305220224 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -17,19 +17,22 @@ final class Version20240305062644 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(
-            'CREATE TABLE artists (name VARCHAR(255) NOT NULL, created_at TIMESTAMP(6) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(6) WITHOUT TIME ZONE NOT NULL, art_updated_at TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT NULL, description TEXT DEFAULT NULL, url VARCHAR(255) DEFAULT NULL, id UUID NOT NULL, label_id UUID DEFAULT NULL, owner_id VARCHAR(150) DEFAULT NULL, PRIMARY KEY(id))'
+            'CREATE TABLE artists (name VARCHAR(255) NOT NULL, created_at INT NOT NULL, updated_at INT NOT NULL, art_updated_at INT DEFAULT NULL, description TEXT DEFAULT NULL, id UUID NOT NULL, label_id UUID DEFAULT NULL, owner_id VARCHAR(150) DEFAULT NULL, PRIMARY KEY(id))'
         );
         $this->addSql('CREATE INDEX IDX_68D3801E33B92F39 ON artists (label_id)');
         $this->addSql('CREATE INDEX IDX_68D3801E7E3C61F9 ON artists (owner_id)');
+
         $this->addSql(
-            'CREATE TABLE labels (name VARCHAR(255) NOT NULL, created_at TIMESTAMP(6) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(6) WITHOUT TIME ZONE NOT NULL, art_updated_at TIMESTAMP(6) WITHOUT TIME ZONE DEFAULT NULL, description TEXT DEFAULT NULL, url VARCHAR(255) DEFAULT NULL, id UUID NOT NULL, owner_id VARCHAR(150) DEFAULT NULL, PRIMARY KEY(id))'
+            'CREATE TABLE labels (name VARCHAR(255) NOT NULL, created_at INT NOT NULL, updated_at INT NOT NULL, art_updated_at INT DEFAULT NULL, description TEXT DEFAULT NULL, id UUID NOT NULL, owner_id VARCHAR(150) DEFAULT NULL, PRIMARY KEY(id))'
         );
         $this->addSql('CREATE INDEX IDX_B5D102117E3C61F9 ON labels (owner_id)');
+
         $this->addSql(
             'CREATE TABLE socials (type VARCHAR(150) NOT NULL, name VARCHAR(255) DEFAULT NULL, value VARCHAR(255) NOT NULL, id UUID NOT NULL, label_id UUID DEFAULT NULL, artist_id UUID DEFAULT NULL, PRIMARY KEY(id))'
         );
         $this->addSql('CREATE INDEX IDX_68A3B86933B92F39 ON socials (label_id)');
         $this->addSql('CREATE INDEX IDX_68A3B869B7970CF8 ON socials (artist_id)');
+
         $this->addSql(
             'CREATE TABLE users (id VARCHAR(150) NOT NULL, email VARCHAR(100) DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, avatar VARCHAR(255) DEFAULT NULL, permissions TEXT DEFAULT NULL, updatedAt INT NOT NULL, PRIMARY KEY(id))'
         );

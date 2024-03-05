@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Entity\Artist;
+use App\Entity\Label;
 use App\Http\Response;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Filesystem;
@@ -25,6 +27,14 @@ final class Avatars
     public function getArtistPath(string $artistId): string
     {
         return '/artists/' . $artistId . '.jpg';
+    }
+
+    public function getPathForListing(Artist|Label $listing): string
+    {
+        return match (true) {
+            $listing instanceof Label => $this->getLabelPath($listing->getIdRequired()),
+            $listing instanceof Artist => $this->getArtistPath($listing->getIdRequired())
+        };
     }
 
     public function getDefaultPath(): string
