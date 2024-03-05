@@ -1,7 +1,7 @@
 <template>
     <h1>Administer Artists</h1>
 
-    <data-table :fields="artistFields" api-url="/admin/artists">
+    <data-table :fields="artistFields" api-url="/api/admin/artists">
         <template #cell(name)="{item}">
             <router-link :to="{
                 name: 'artist',
@@ -15,7 +15,7 @@
         <template #cell(actions)="{item}">
             <div class="btn-group btn-group-sm">
                 <router-link class="btn btn-secondary"
-                             :to="{name: 'admin:edit', params: {'artist_id': item.id}}"
+                             :to="{name: 'admin:artist:edit', params: {'artist_id': item.id}}"
                 >
                     <icon icon="pencil"/>
                     <span>

@@ -66,7 +66,7 @@ const labelId = params.label_id;
 const axios = useInjectAxios();
 
 const {state: label, isLoading} = useAsyncState(
-    () => axios.get(`/profile/label/${labelId}`).then(r => r.data),
+    () => axios.get(`/api/profile/label/${labelId}`).then(r => r.data),
     {
         name: null
     }
@@ -86,7 +86,7 @@ const fields: DataTableField[] = [
 ];
 
 const {state, isLoading: stateLoading, execute: relist} = useAsyncState(
-    () => axios.get(`/profile/label/${labelId}/artists`).then(r => r.data),
+    () => axios.get(`/api/profile/label/${labelId}/artists`).then(r => r.data),
     []
 );
 

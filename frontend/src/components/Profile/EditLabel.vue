@@ -68,8 +68,8 @@ const isEditMode = 'label_id' in params;
 
 const apiUrl = computed(() => {
     return (isEditMode)
-        ? `/profile/label/${params.label_id}`
-        : `/profile/labels`;
+        ? `/api/profile/label/${params.label_id}`
+        : `/api/profile/labels`;
 });
 
 const {

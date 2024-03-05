@@ -93,7 +93,7 @@ const {state, isLoading, execute: relist} = useAsyncState(
         };
 
         return axios.get(
-            '/labels',
+            '/api/labels',
             {
                 params: queryParams
             }

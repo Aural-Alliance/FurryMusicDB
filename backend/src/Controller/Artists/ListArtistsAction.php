@@ -6,7 +6,6 @@ namespace App\Controller\Artists;
 
 use App\Controller\Traits\CanSortResults;
 use App\Entity\Artist;
-use App\Entity\Label;
 use App\Http\Response;
 use App\Http\ServerRequest;
 use App\Paginator;
@@ -52,13 +51,13 @@ final class ListArtistsAction
         $paginator = Paginator::fromQueryBuilder($qb, $request);
 
         $paginator->setPostprocessor(
-            fn(Label $row) => $this->viewRecord($row)
+            fn(Artist $row) => $this->viewRecord($row)
         );
 
         return $paginator->write($response);
     }
 
-    private function viewRecord(Label $label): array
+    private function viewRecord(Artist $label): array
     {
         $record = $this->apiSerializer->toArray($label);
 

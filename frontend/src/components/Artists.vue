@@ -33,7 +33,7 @@
 
                 <div class="d-flex align-items-center mb-3" v-for="row in state.rows" :key="row.id">
                     <div class="flex-shrink-0">
-                        <router-link :to="{name: 'artist', params: {artist: row.id}}"
+                        <router-link :to="{name: 'artist', params: {artist_id: row.id}}"
                                      class="text-big fw-bold">
                             <avatar type="artist" :id="row.id" :art-updated-at="row.art_updated_at"/>
                         </router-link>
@@ -93,7 +93,7 @@ const {state, isLoading, execute: relist} = useAsyncState(
         };
 
         return axios.get(
-            '/artists',
+            '/api/artists',
             {
                 params: queryParams
             }

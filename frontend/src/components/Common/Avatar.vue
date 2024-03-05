@@ -10,7 +10,7 @@ const props = withDefaults(
     defineProps<{
         type: string,
         id: string,
-        artUpdatedAt?: string | null
+        artUpdatedAt?: Number | null
     }>(), {
         artUpdatedAt: null
     }

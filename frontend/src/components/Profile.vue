@@ -1,10 +1,10 @@
 <template>
     <section class="section">
-        <template v-if="userLoading">
+        <template v-if="user.isLoading">
             <p>Loading...</p>
         </template>
 
-        <template v-if="!userLoading">
+        <template v-if="!user.isLoading">
             <div class="d-flex align-items-center mb-3">
                 <div class="flex-shrink-0">
                     <img :src="user.avatar" style="width: 96px; height: 96px;" alt="Avatar">
@@ -134,9 +134,21 @@
         <section class="section">
             <h2>Create a New Profile</h2>
 
-            <p>You haven't created an artist or label profile yet. If you want to submit an entry to the database as an
+            <p class="card-text">You haven't created an artist or label profile yet. If you want to submit an entry to
+                the database as an
                 artist or label,
                 select the appropriate option below.</p>
+
+            <p class="card-text">
+                <strong>Label Profiles</strong> are for musical groups that contain multiple artists that share a common
+                organization. If you manage a label and would like to list all of your artists in this directory without
+                them individually creating profiles, choose this option.
+            </p>
+
+            <p class="card-text">
+                <strong>Artist Profiles</strong> are for individual musicians. If you are a musician wanting to list
+                yourself in the directory, choose this option.
+            </p>
 
             <div class="buttons">
                 <router-link class="btn btn-primary" :to="{name: 'profile:label:create'}">
@@ -182,7 +194,7 @@ const labelFields: DataTableField[] = [
 const axios = useInjectAxios();
 
 const {state: labels, isLoading: labelsLoading, execute: refreshLabels} = useAsyncState(
-    () => axios.get('/profile/labels').then(r => r.data),
+    () => axios.get('/api/profile/labels').then(r => r.data),
     []
 );
 
@@ -200,7 +212,7 @@ const artistFields: DataTableField[] = [
 ];
 
 const {state: artists, isLoading: artistsLoading, execute: refreshArtists} = useAsyncState(
-    () => axios.get('/profile/artists').then(r => r.data),
+    () => axios.get('/api/profile/artists').then(r => r.data),
     []
 );
 

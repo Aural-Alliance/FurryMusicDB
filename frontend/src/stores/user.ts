@@ -1,5 +1,5 @@
 import {createGlobalState, useAsyncState} from "@vueuse/core";
-import {computed, ComputedRef, Ref, toRef} from "vue";
+import {computed, ComputedRef, Ref} from "vue";
 import {useInjectAxios} from "~/vendor/api.ts";
 import {includes} from "lodash";
 import {Permissions} from "~/stores/permissions.ts";
@@ -28,7 +28,7 @@ export const useUserStore: UseUserStore = createGlobalState(
             isLoading,
             state
         } = useAsyncState(
-            () => axios.get('/users/me').then(r => r.data),
+            () => axios.get('/api/users/me').then(r => r.data),
             {
                 isLoggedIn: false,
                 user: null

@@ -9,7 +9,6 @@ export const useInjectAxios = (): AxiosStatic => inject(AxiosKey);
 
 export const setupApi = (app) => {
     const axiosInstance = axios.create({
-        baseURL: '/api',
         headers: {
             "Content-Type": "application/json",
         }

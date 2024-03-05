@@ -1,7 +1,7 @@
 <template>
     <h1>Administer Labels</h1>
 
-    <data-table :fields="labelFields" api-url="/admin/labels">
+    <data-table :fields="labelFields" api-url="/api/admin/labels">
         <template #cell(name)="{item}">
             <router-link :to="{
                 name: 'label',

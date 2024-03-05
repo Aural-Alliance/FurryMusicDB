@@ -103,7 +103,7 @@ export default [
         },
         children: [
             {
-                path: '/labels',
+                path: '/admin/labels',
                 name: 'admin:labels',
                 component: () => import('~/components/Admin/Labels.vue'),
                 meta: {
@@ -111,7 +111,7 @@ export default [
                 }
             },
             {
-                path: '/label/:label_id/edit',
+                path: '/admin/label/:label_id/edit',
                 name: 'admin:label:edit',
                 component: () => import('~/components/Profile/EditLabel.vue'),
                 meta: {
@@ -119,7 +119,7 @@ export default [
                 }
             },
             {
-                path: '/artists',
+                path: '/admin/artists',
                 name: 'admin:artists',
                 component: () => import('~/components/Admin/Artists.vue'),
                 meta: {
@@ -127,7 +127,7 @@ export default [
                 }
             },
             {
-                path: '/artist/:artist_id/edit',
+                path: '/admin/artist/:artist_id/edit',
                 name: 'admin:artist:edit',
                 component: () => import('~/components/Profile/EditArtist.vue'),
                 meta: {
@@ -158,7 +158,7 @@ export default [
         },
         children: [
             {
-                path: '/labels/create',
+                path: '/profile/labels/create',
                 name: 'profile:label:create',
                 component: () => import('~/components/Profile/EditLabel.vue'),
                 meta: {
@@ -166,7 +166,7 @@ export default [
                 }
             },
             {
-                path: '/label/:label_id/edit',
+                path: '/profile/label/:label_id/edit',
                 name: 'profile:label:edit',
                 component: () => import('~/components/Profile/EditLabel.vue'),
                 meta: {
@@ -174,7 +174,7 @@ export default [
                 }
             },
             {
-                path: '/label/:label_id/artists',
+                path: '/profile/label/:label_id/artists',
                 name: 'profile:label:artists',
                 component: () => import('~/components/Profile/LabelArtists.vue'),
                 meta: {
@@ -204,7 +204,7 @@ export default [
                 },
                 children: [
                     {
-                        path: '/label/:label_id/artists/create',
+                        path: '/profile/label/:label_id/artists/create',
                         name: 'profile:label:artist:create',
                         component: () => import('~/components/Profile/EditArtist.vue'),
                         meta: {
@@ -212,7 +212,7 @@ export default [
                         },
                     },
                     {
-                        path: '/label/:label_id/artist/:artist_id/edit',
+                        path: '/profile/label/:label_id/artist/:artist_id/edit',
                         name: 'profile:label:artist:edit',
                         component: () => import('~/components/Profile/EditArtist.vue'),
                         meta: {
@@ -222,7 +222,7 @@ export default [
                 ]
             },
             {
-                path: '/artists/create',
+                path: '/profile/artists/create',
                 name: 'profile:artist:create',
                 component: () => import('~/components/Profile/EditArtist.vue'),
                 meta: {
@@ -230,7 +230,7 @@ export default [
                 }
             },
             {
-                path: '/artist/:artist_id/edit',
+                path: '/profile/artist/:artist_id/edit',
                 name: 'profile:artist:edit',
                 component: () => import('~/components/Profile/EditArtist.vue'),
                 meta: {

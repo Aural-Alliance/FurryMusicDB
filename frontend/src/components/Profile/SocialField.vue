@@ -34,6 +34,7 @@ import {computed, toRef} from "vue";
 import useVuelidate from "@vuelidate/core";
 import FormGroupField from "~/components/Form/FormGroupField.vue";
 import FormGroupSelect from "~/components/Form/FormGroupSelect.vue";
+import {getSocialName, SocialType} from "~/entities/Socials.ts";
 
 const props = defineProps({
     index: {
@@ -67,44 +68,13 @@ const v$ = useVuelidate(
     row
 );
 
-const typeOptions = [
-    {
-        value: 'website',
-        text: 'Web Site'
-    },
-    {
-        value: 'twitter',
-        text: 'Twitter/X'
-    },
-    {
-        value: 'tumblr',
-        text: 'Tumblr'
-    },
-    {
-        value: 'bluesky',
-        text: 'Bluesky'
-    },
-    {
-        value: 'mastodon',
-        text: 'Mastodon'
-    },
-    {
-        value: 'soundcloud',
-        text: 'SoundCloud'
-    },
-    {
-        value: 'bandcamp',
-        text: 'Bandcamp'
-    },
-    {
-        value: 'beatport',
-        text: 'Beatport'
-    },
-    {
-        value: 'custom',
-        text: 'Custom'
-    }
-];
+let typeOptions = [];
+Object.values(SocialType).forEach((type) => {
+    typeOptions.push({
+        value: type,
+        text: getSocialName(type)
+    })
+});
 
 const doRemove = () => {
     emit('remove');

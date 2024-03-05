@@ -1,12 +1,13 @@
 <template>
-    <loading :loading="isLoading">
+    <loading :loading="isLoading" lazy>
         <div class="d-flex mb-3">
             <div class="flex-shrink-0">
                 <avatar type="label" class="lg" :id="state.id" :art-updated-at="state.art_updated_at"/>
             </div>
             <div class="flex-grow-1 ms-3">
                 <h1>{{ state.name }}</h1>
-                <h6>Submitted {{ formatIso(state.created_at) }} &bull; Updated {{ formatIso(state.updated_at) }}</h6>
+                <h6>Submitted {{ formatTimestamp(state.created_at) }} &bull; Updated
+                    {{ formatTimestamp(state.updated_at) }}</h6>
                 <h4>{{ state.description }}</h4>
             </div>
         </div>
@@ -27,7 +28,7 @@ const labelId = params.label_id;
 
 const axios = useInjectAxios();
 const {state, isLoading} = useAsyncState(
-    () => axios.get(`/label/${labelId}`).then(r => r.data),
+    () => axios.get(`/api/label/${labelId}`).then(r => r.data),
     {
         id: null,
         name: null
@@ -35,7 +36,7 @@ const {state, isLoading} = useAsyncState(
 );
 
 const {DateTime} = useLuxon();
-const formatIso = (datetime: string): string => {
-    return DateTime.fromISO(datetime).toLocaleString(DateTime.DATE_MED);
+const formatTimestamp = (datetime: string): string => {
+    return DateTime.fromSeconds(Number(datetime)).toLocaleString(DateTime.DATE_MED);
 }
 </script>

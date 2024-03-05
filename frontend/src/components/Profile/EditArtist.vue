@@ -68,8 +68,8 @@ const isEditMode = 'artist_id' in params;
 
 const apiUrl = computed(() => {
     const prefix = ('label_id' in params)
-        ? `/profile/label/${params.label_id}`
-        : '/profile';
+        ? `/api/profile/label/${params.label_id}`
+        : '/api/profile';
 
     return (isEditMode)
         ? `${prefix}/artist/${params.artist_id}`

@@ -1,16 +1,18 @@
 <template>
-    <loading :loading="isLoading">
+    <loading :loading="isLoading" lazy>
         <div class="d-flex mb-3">
             <div class="flex-shrink-0">
                 <avatar type="artist" class="lg" :id="state.id" :art-updated-at="state.art_updated_at"/>
             </div>
             <div class="flex-grow-1 ms-3">
                 <h1>{{ state.name }}</h1>
-                <h6>Submitted {{ formatIso(state.created_at) }} &bull; Updated {{ formatIso(state.updated_at) }}</h6>
+                <h6>Submitted {{ formatTimestamp(state.created_at) }} &bull; Updated
+                    {{ formatTimestamp(state.updated_at) }}</h6>
                 <h4>{{ state.description }}</h4>
+
+                <social-links :socials="state.socials"/>
             </div>
         </div>
-        <hr>
     </loading>
 </template>
 
@@ -21,13 +23,14 @@ import {useInjectAxios} from "~/vendor/api.ts";
 import Loading from "~/components/Common/Loading.vue";
 import Avatar from "~/components/Common/Avatar.vue";
 import {useLuxon} from "~/vendor/luxon.ts";
+import SocialLinks from "~/components/SocialLinks.vue";
 
 const {params} = useRoute();
 const artistId = params.artist_id;
 
 const axios = useInjectAxios();
 const {state, isLoading} = useAsyncState(
-    () => axios.get(`/artist/${artistId}`).then(r => r.data),
+    () => axios.get(`/api/artist/${artistId}`).then(r => r.data),
     {
         id: null,
         name: null
@@ -35,7 +38,7 @@ const {state, isLoading} = useAsyncState(
 );
 
 const {DateTime} = useLuxon();
-const formatIso = (datetime: string): string => {
-    return DateTime.fromISO(datetime).toLocaleString(DateTime.DATE_MED);
+const formatTimestamp = (datetime: string): string => {
+    return DateTime.fromSeconds(Number(datetime)).toLocaleString(DateTime.DATE_MED);
 }
 </script>
