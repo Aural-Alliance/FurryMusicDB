@@ -146,7 +146,7 @@ final class Router implements RouterInterface
         array $queryParams = [],
         bool $absolute = false
     ): UriInterface {
-        $relativeUri = $this->routeParser->relativeUrlFor($routeName, $routeParams, $queryParams);
+        $relativeUri = $this->routeParser->urlFor($routeName, $routeParams, $queryParams);
 
         return ($absolute)
             ? self::resolveUri($this->getBaseUrl(), $relativeUri, true)
@@ -159,7 +159,7 @@ final class Router implements RouterInterface
         array $queryParams = [],
         bool $absolute = false
     ): string {
-        $relativeUri = $this->routeParser->relativeUrlFor($routeName, $routeParams, $queryParams);
+        $relativeUri = $this->routeParser->urlFor($routeName, $routeParams, $queryParams);
 
         return ($absolute)
             ? (string)self::resolveUri($this->getBaseUrl(), $relativeUri, true)

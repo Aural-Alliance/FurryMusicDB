@@ -40,6 +40,9 @@ EXPOSE 8000
 ENTRYPOINT ["/var/app/launch.sh"]
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
+#
+# Development Image
+#
 FROM base AS development
 
 COPY ./build/dev/Caddyfile /etc/Caddyfile
@@ -50,6 +53,9 @@ RUN chmod a+rx /var/app/launch.sh
 
 WORKDIR /var/app/www
 
+#
+# Production Image
+#
 FROM base AS production
 
 COPY ./build/prod/Caddyfile /etc/Caddyfile

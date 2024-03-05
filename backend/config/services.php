@@ -10,8 +10,13 @@ return [
         Environment $environment,
         Psr\Log\LoggerInterface $logger
     ) {
+        $httpFactory = new App\Http\HttpFactory();
+
+        Slim\Factory\ServerRequestCreatorFactory::setSlimHttpDecoratorsAutomaticDetection(false);
+        Slim\Factory\ServerRequestCreatorFactory::setServerRequestCreator($httpFactory);
+
         $app = new Slim\App(
-            responseFactory: new App\Http\Factory\ResponseFactory(),
+            responseFactory: $httpFactory,
             container: $di,
         );
 
@@ -258,29 +263,19 @@ return [
         new Intervention\Image\Drivers\Gd\Driver()
     ),
 
-    // OAuth client
-    League\OAuth2\Client\Provider\GenericProvider::class => function (
+    // Auth0
+    Auth0\SDK\Auth0::class => static function (
         Environment $environment,
-        GuzzleHttp\Client $httpClient
+        Psr\Cache\CacheItemPoolInterface $psr6Cache,
     ) {
-        $baseUrl = $environment->getBaseUrl();
-        $serviceUrl = $environment->getOAuthServiceUrl();
-        $internalServiceUrl = $environment->getOAuthInternalServiceUrl();
+        $httpFactory = new GuzzleHttp\Psr7\HttpFactory();
 
-        $provider = new League\OAuth2\Client\Provider\GenericProvider([
-            'clientId' => $environment->getOAuthClientId(),
-            'clientSecret' => $environment->getOAuthClientSecret(),
-            'redirectUri' => $baseUrl . '/api/login',
-            'urlAuthorize' => $serviceUrl . '/application/o/authorize/',
-            'urlAccessToken' => $internalServiceUrl . '/application/o/token/',
-            'urlResourceOwnerDetails' => $internalServiceUrl . '/application/o/userinfo/',
-            'pkceMethod' => League\OAuth2\Client\Provider\AbstractProvider::PKCE_METHOD_S256,
-            'scopes' => 'openid profile email',
-            'responseResourceOwnerId' => 'sub',
-        ]);
+        $sdk = new Auth0\SDK\Auth0($environment->getAuth0Info());
+        $sdk->configuration()->setTokenCache($psr6Cache)
+            ->setHttpRequestFactory($httpFactory)
+            ->setHttpResponseFactory($httpFactory)
+            ->setHttpStreamFactory($httpFactory);
 
-        $provider->setHttpClient($httpClient);
-
-        return $provider;
+        return $sdk;
     },
 ];

@@ -7,7 +7,7 @@
 ### First Time Launch
 
 ```bash
-cp auth_config.dev.json auth_config.json
+cp dev.dist.env dev.env
 
 make build
 make up

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Auth\Permissions;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -86,7 +87,7 @@ class User
      * @var Permissions[]
      */
     #[
-        ORM\Column(type: 'simple_array', nullable: false, enumType: Permissions::class)
+        ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true, enumType: Permissions::class)
     ]
     protected array $permissions = [];
 
@@ -125,5 +126,6 @@ class User
         string $id
     ) {
         $this->id = $id;
+        $this->permissions = Permissions::authenticated();
     }
 }

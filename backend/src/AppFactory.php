@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Http\Factory\ServerRequestFactory;
 use DI;
 use Monolog\ErrorHandler;
 use Monolog\Logger;
 use Monolog\Registry;
 use Slim\App;
-use Slim\Factory\ServerRequestCreatorFactory;
 use Symfony\Component\Console\Application;
 
 class AppFactory
@@ -44,9 +42,6 @@ class AppFactory
 
     public static function buildAppFromContainer(DI\Container $container): App
     {
-        ServerRequestCreatorFactory::setSlimHttpDecoratorsAutomaticDetection(false);
-        ServerRequestCreatorFactory::setServerRequestCreator(new ServerRequestFactory());
-
         return $container->get(App::class);
     }
 

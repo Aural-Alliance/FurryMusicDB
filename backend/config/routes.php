@@ -65,9 +65,14 @@ return function (Slim\App $app) {
         App\Controller\Labels\GetArtAction::class
     )->setName('label:art');
 
-    $app->get('/login', App\Controller\LoginAction::class);
+    $app->get('/login', App\Controller\AuthController::class . ':loginAction')
+        ->setName('login');
 
-    $app->get('/logout', App\Controller\LogoutAction::class);
+    $app->get('/callback', App\Controller\AuthController::class . ':callbackAction')
+        ->setName('callback');
+
+    $app->get('/logout', App\Controller\AuthController::class . ':logoutAction')
+        ->setName('logout');
 
     $app->group(
         '/users',

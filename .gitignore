@@ -1,4 +1,4 @@
 /.idea
 /vendor/
-/env.prod
 /auth_config.json
+/dev.env

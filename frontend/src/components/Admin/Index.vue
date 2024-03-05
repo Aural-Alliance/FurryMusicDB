@@ -12,9 +12,9 @@
     </div>
     <hr>
     <h2>Administer Users</h2>
-    <p>Users are managed via the Authentik service.</p>
+    <p>Users are managed via the Auth0 service.</p>
     <div class="buttons">
-        <a class="btn btn-secondary" target="_blank" href="">
+        <a class="btn btn-secondary" target="_blank" href="https://auth0.com">
             Manage Users
         </a>
     </div>

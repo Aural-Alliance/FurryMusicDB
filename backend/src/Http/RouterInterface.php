@@ -8,6 +8,8 @@ use Psr\Http\Message\UriInterface;
 
 interface RouterInterface
 {
+    public function getBaseUrl(): UriInterface;
+
     /**
      * Simpler format for calling "named" routes with parameters.
      */

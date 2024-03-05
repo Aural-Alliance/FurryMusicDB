@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/var/app/www
       - uploads:/var/app/uploads
-    env_file: env.dev
+    env_file: dev.env
     restart: always
     ports:
       - "127.0.0.1:8080:8000"
@@ -19,10 +19,10 @@ services:
         max-file: "5"
 
   db:
-    image: docker.io/library/postgres:14-alpine
+    image: docker.io/library/postgres:16-alpine
     volumes:
       - pgsql_data:/var/lib/postgresql/data
-    env_file: env.dev
+    env_file: dev.env
     ports:
       - "127.0.0.1:5432:5432"
     logging: *default-logging
