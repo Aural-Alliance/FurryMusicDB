@@ -120,17 +120,6 @@ return [
     GuzzleHttp\Client::class => function (Psr\Log\LoggerInterface $logger) {
         $stack = GuzzleHttp\HandlerStack::create();
 
-        $stack->unshift(
-            function (callable $handler) {
-                return function (Psr\Http\Message\RequestInterface $request, array $options) use ($handler) {
-                    $options[GuzzleHttp\RequestOptions::VERIFY] = Composer\CaBundle\CaBundle::getSystemCaRootBundlePath(
-                    );
-                    return $handler($request, $options);
-                };
-            },
-            'ssl_verify'
-        );
-
         $stack->push(
             GuzzleHttp\Middleware::log(
                 $logger,
@@ -142,8 +131,6 @@ return [
         return new GuzzleHttp\Client(
             [
                 'handler' => $stack,
-                GuzzleHttp\RequestOptions::HTTP_ERRORS => false,
-                GuzzleHttp\RequestOptions::TIMEOUT => 3.0,
             ]
         );
     },
@@ -176,10 +163,6 @@ return [
         $config->setAutoGenerateProxyClasses(
             Doctrine\ORM\Proxy\ProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS_OR_CHANGED
         );
-
-        if (!Doctrine\DBAL\Types\Type::hasType('carbon_immutable')) {
-            Doctrine\DBAL\Types\Type::addType('carbon_immutable', Carbon\Doctrine\CarbonImmutableType::class);
-        }
 
         return new EntityManager($connection, $config);
     },

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity\Traits;
 
-use Carbon\CarbonImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 trait HasCommonRecordFields
@@ -25,18 +24,18 @@ trait HasCommonRecordFields
         $this->name = $this->truncateString($name);
     }
 
-    #[ORM\Column(type: 'carbon_immutable')]
-    protected CarbonImmutable $created_at;
+    #[ORM\Column]
+    protected int $created_at;
 
-    public function getCreatedAt(): CarbonImmutable
+    public function getCreatedAt(): int
     {
         return $this->created_at;
     }
 
-    #[ORM\Column(type: 'carbon_immutable')]
-    protected CarbonImmutable $updated_at;
+    #[ORM\Column]
+    protected int $updated_at;
 
-    public function getUpdatedAt(): CarbonImmutable
+    public function getUpdatedAt(): int
     {
         return $this->updated_at;
     }
@@ -47,20 +46,20 @@ trait HasCommonRecordFields
     ]
     public function updated(): void
     {
-        $this->updated_at = CarbonImmutable::now();
+        $this->updated_at = time();
     }
 
-    #[ORM\Column(type: 'carbon_immutable', nullable: true)]
-    protected ?CarbonImmutable $art_updated_at = null;
+    #[ORM\Column(nullable: true)]
+    protected ?int $art_updated_at = null;
 
-    public function getArtUpdatedAt(): ?CarbonImmutable
+    public function getArtUpdatedAt(): ?int
     {
         return $this->art_updated_at;
     }
 
     public function setArtUpdated(): void
     {
-        $this->art_updated_at = CarbonImmutable::now();
+        $this->art_updated_at = time();
     }
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -91,6 +90,6 @@ trait HasCommonRecordFields
 
     public function __construct()
     {
-        $this->created_at = CarbonImmutable::now();
+        $this->created_at = time();
     }
 }

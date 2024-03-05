@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Traits\HasCommonRecordFields;
-use Carbon\CarbonImmutable;
+use App\Normalizer\Attributes\DeepNormalize;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[
@@ -19,10 +20,20 @@ class Label
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?User $owner = null;
 
+    /** @var Collection<array-key, Social> */
+    #[ORM\OneToMany(targetEntity: Social::class, mappedBy: 'label')]
+    #[DeepNormalize(true)]
+    protected Collection $socials;
+
+    public function getSocials(): Collection
+    {
+        return $this->socials;
+    }
+
     public function __construct(
         ?User $owner = null
     ) {
-        $this->created_at = CarbonImmutable::now();
+        $this->created_at = time();
         $this->owner = $owner;
     }
 }
