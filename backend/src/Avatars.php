@@ -69,7 +69,7 @@ final class Avatars
         }
 
         return $response->withFile(
-            file_get_contents($this->getDefaultPath()) ?: '',
+            $this->getDefaultPath(),
             'image/jpeg'
         );
     }
