@@ -20,5 +20,6 @@
 
     log {
         output stdout
+        level ERROR
     }
 }
