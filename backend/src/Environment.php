@@ -61,7 +61,15 @@ class Environment
      */
     public function getBaseDirectory(): string
     {
-        return dirname(__DIR__);
+        return dirname(__DIR__, 2);
+    }
+
+    /**
+     * @return string The parent directory the application is within, i.e. `/var/app`.
+     */
+    public function getParentDirectory(): string
+    {
+        return dirname($this->getBaseDirectory());
     }
 
     /**
@@ -69,7 +77,7 @@ class Environment
      */
     public function getTempDirectory(): string
     {
-        return dirname($this->getBaseDirectory(), 2) . '/www_tmp';
+        return $this->getParentDirectory() . '/www_tmp';
     }
 
     /**
@@ -77,15 +85,7 @@ class Environment
      */
     public function getConfigDirectory(): string
     {
-        return $this->getBaseDirectory() . '/config';
-    }
-
-    /**
-     * @return string The parent directory the application is within, i.e. `/var/azuracast`.
-     */
-    public function getParentDirectory(): string
-    {
-        return dirname($this->getBaseDirectory());
+        return $this->getBaseDirectory() . '/backend/config';
     }
 
     public function getLogLevel(): string

@@ -39,7 +39,7 @@ final class Avatars
 
     public function getDefaultPath(): string
     {
-        return $this->environment->getParentDirectory() . '/frontend/public/avatar.jpg';
+        return $this->environment->getBaseDirectory() . '/frontend/public/avatar.jpg';
     }
 
     public function upload(

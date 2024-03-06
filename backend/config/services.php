@@ -154,7 +154,7 @@ return [
     ) {
         // Fetch and store entity manager.
         $config = Doctrine\ORM\ORMSetup::createAttributeMetadataConfiguration(
-            [$environment->getBaseDirectory() . '/src/Entity'],
+            [$environment->getBaseDirectory() . '/backend/src/Entity'],
             !$environment->isProduction(),
             $environment->getTempDirectory() . '/proxies',
             $psr6Cache
