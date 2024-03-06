@@ -1,3 +1,9 @@
+{
+    servers {
+        trusted proxies static 172.16.0.0/16
+    }
+}
+
 :8000 {
     root * /var/app/www/frontend/dist
 
