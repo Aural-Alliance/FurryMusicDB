@@ -37,6 +37,8 @@ USER root
 
 EXPOSE 8000
 
+VOLUME ["/var/app/uploads"]
+
 ENTRYPOINT ["/var/app/launch.sh"]
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 

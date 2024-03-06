@@ -8,6 +8,10 @@ primary_region = 'dfw'
 
 [build]
 
+[mounts]
+  source = "fmdb_uploads"
+  destination = "/var/app/uploads"
+
 [http_service]
   internal_port = 8000
   force_https = true
