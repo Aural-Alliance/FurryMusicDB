@@ -236,7 +236,7 @@ return [
     League\Flysystem\Filesystem::class => function (Environment $environment) {
         return new League\Flysystem\Filesystem(
             new League\Flysystem\Local\LocalFilesystemAdapter(
-                dirname($environment->getParentDirectory()) . '/uploads'
+                $environment->getParentDirectory() . '/uploads'
             )
         );
     },
