@@ -35,8 +35,8 @@ const {state, isLoading} = useAsyncState(
     }
 );
 
-const {DateTime} = useLuxon();
-const formatTimestamp = (datetime: string): string => {
-    return DateTime.fromSeconds(Number(datetime)).toLocaleString(DateTime.DATE_MED);
+const {DateTime, timestampToDateTime} = useLuxon();
+const formatTimestamp = (datetime: string | number): string => {
+    return timestampToDateTime(datetime).toLocaleString(DateTime.DATE_MED);
 }
 </script>

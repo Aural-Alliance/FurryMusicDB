@@ -46,7 +46,7 @@
                             </router-link>
 
                             <span class="badge ms-2 text-small text-bg-secondary">
-                                {{ isoToRelative(row.updated_at) }}
+                                {{ timestampToRelative(row.updated_at) }}
                             </span>
                         </div>
                         <p class="mb-0">
@@ -106,7 +106,7 @@ const {state, isLoading, execute: relist} = useAsyncState(
     }
 );
 
-const {isoToRelative} = useLuxon();
+const {timestampToRelative} = useLuxon();
 
 const clearFilter = () => {
     currentPage.value = 1;

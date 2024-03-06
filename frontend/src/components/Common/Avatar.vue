@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import {computed} from "vue";
-import {useLuxon} from "~/vendor/luxon.ts";
 
 const props = withDefaults(
     defineProps<{
@@ -16,14 +15,11 @@ const props = withDefaults(
     }
 );
 
-const {isoToTimestamp} = useLuxon();
-
 const imgSrc = computed<string>(() => {
     if (props.artUpdatedAt === null) {
         return '/public/avatar.jpg';
     }
 
-    const timestamp = isoToTimestamp(props.artUpdatedAt);
-    return `/api/${props.type}/${props.id}/art-${timestamp}.jpg`;
+    return `/api/${props.type}/${props.id}/art-${props.artUpdatedAt}.jpg`;
 });
 </script>

@@ -4,24 +4,24 @@ interface UseLuxon {
     DateTime: typeof DateTime,
     Duration: typeof Duration,
 
-    isoToRelative(string): string,
+    timestampToDateTime(timestamp: string | number): DateTime,
 
-    isoToTimestamp(string): number
+    timestampToRelative(timestamp: string | number): string
 }
 
 export function useLuxon(): UseLuxon {
-    const isoToRelative = (datetime: string): string => {
-        return DateTime.fromISO(datetime).toRelative();
+    const timestampToDateTime = (timestamp: string | number): DateTime => {
+        return DateTime.fromSeconds(Number(timestamp));
     }
 
-    const isoToTimestamp = (datetime: string): number => {
-        return DateTime.fromISO(datetime).toUnixInteger();
+    const timestampToRelative = (timestamp: string | number): string => {
+        return DateTime.fromSeconds(Number(timestamp)).toRelative();
     }
 
     return {
         DateTime,
         Duration,
-        isoToRelative,
-        isoToTimestamp,
+        timestampToDateTime,
+        timestampToRelative
     }
 }
