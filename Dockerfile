@@ -51,6 +51,8 @@ COPY ./build/dev/launch.sh /var/app/launch.sh
 
 RUN chmod a+rx /var/app/launch.sh
 
+ENV APPLICATION_ENV="development"
+
 WORKDIR /var/app/www
 
 #
@@ -82,5 +84,7 @@ RUN npm ci --include=dev \
     && npm run build
 
 WORKDIR /var/app/www
+
+ENV APPLICATION_ENV="production"
 
 USER root

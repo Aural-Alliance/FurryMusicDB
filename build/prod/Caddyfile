@@ -10,6 +10,8 @@
         }
     }
 
+    file_server
+
     log {
         output stdout
     }
