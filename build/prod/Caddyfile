@@ -1,6 +1,6 @@
 {
     servers {
-        trusted proxies static 172.16.0.0/16
+        trusted_proxies static 172.16.0.0/16
     }
 }
 
