@@ -23,8 +23,7 @@
         </div>
 
         <p class="card-text">
-            Please make sure you put "For the Furry Music Database" into your donation message so we can assign the
-            funds accordingly!
+            Much love to you!
         </p>
     </section>
 </template>
