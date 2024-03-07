@@ -17,7 +17,7 @@ const props = withDefaults(
 
 const imgSrc = computed<string>(() => {
     if (props.artUpdatedAt === null) {
-        return '/public/avatar.jpg';
+        return '/avatar.jpg';
     }
 
     return `/api/${props.type}/${props.id}/art-${props.artUpdatedAt}.jpg`;
