@@ -8,7 +8,7 @@
                 <h1>{{ state.name }}</h1>
                 <h6>Submitted {{ formatTimestamp(state.created_at) }} &bull; Updated
                     {{ formatTimestamp(state.updated_at) }}</h6>
-                <h4>{{ state.description }}</h4>
+                <p class="h4" style="white-space: pre-wrap">{{ state.description }}</p>
 
                 <social-links :socials="state.socials"/>
             </div>
