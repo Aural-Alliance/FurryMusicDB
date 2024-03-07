@@ -28,8 +28,7 @@
         </p>
 
         <p class="card-text">
-            The Furry Music Database is meant to be more than just yet another spreadsheet; it's a community hub for
-            artists, music enthusiasts, and labels within or around the furry fandom. Our mission is to provide a space
+            The Furry Music Database is meant to be a new community hub for artists, music enthusiasts, and labels within or around the furry fandom. Our mission is to provide a space
             where musicians and labels alike can showcase their presence, get discovered by a new audience, and connect with
             each other.
         </p>
