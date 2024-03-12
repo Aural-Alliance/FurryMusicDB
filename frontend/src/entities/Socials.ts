@@ -17,6 +17,7 @@ export enum SocialType {
     Twitch = 'twitch',
     Twitter = 'twitter',
     Tumblr = 'tumblr',
+    Newgrounds = 'newgrounds',
     YouTube = 'youtube',
 
     Custom = 'custom'
@@ -50,6 +51,9 @@ export function getSocialName(type: SocialType, customLabel?: string): string {
 
         case SocialType.Tumblr:
             return 'Tumblr';
+
+        case SocialType.Newgrounds:
+            return 'Newgrounds';
 
         case SocialType.YouTube:
             return 'YouTube';

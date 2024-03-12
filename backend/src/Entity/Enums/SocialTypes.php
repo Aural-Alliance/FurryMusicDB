@@ -16,6 +16,7 @@ enum SocialTypes: string
     case Twitter = 'twitter';
     case Tumblr = 'tumblr';
     case YouTube = 'youtube';
+    case Newgrounds = 'newgrounds';
 
     case Custom = 'custom';
 }
