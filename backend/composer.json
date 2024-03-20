@@ -40,6 +40,16 @@
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/var-dumper": "^7"
   },
+  "replace": {
+    "symfony/polyfill-php71": "1.99",
+    "symfony/polyfill-php72": "1.99",
+    "symfony/polyfill-php73": "1.99",
+    "symfony/polyfill-php74": "1.99",
+    "symfony/polyfill-php80": "1.99",
+    "symfony/polyfill-php81": "1.99",
+    "symfony/polyfill-php82": "1.99",
+    "symfony/polyfill-php83": "1.99"
+  },
   "scripts": {
     "cleanup-and-test": [
       "@phpcbf",
