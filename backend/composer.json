@@ -7,6 +7,7 @@
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
     "auth0/auth0-php": "^8.11",
+    "azuracast/doctrine-entity-normalizer": "^3.0",
     "doctrine/dbal": "^4",
     "doctrine/migrations": "^3",
     "doctrine/orm": "^3",

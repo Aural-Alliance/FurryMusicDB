@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Normalizer\Attributes\DeepNormalize;
+use Azura\Normalizer\Attributes\DeepNormalize;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
