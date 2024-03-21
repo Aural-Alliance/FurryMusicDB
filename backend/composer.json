@@ -7,6 +7,7 @@
     "ext-json": "*",
     "akrabat/ip-address-middleware": "^2.1",
     "auth0/auth0-php": "^8.11",
+    "azuracast/doctrine-entity-normalizer": "^3.0",
     "doctrine/dbal": "^4",
     "doctrine/migrations": "^3",
     "doctrine/orm": "^3",
@@ -38,6 +39,16 @@
     "slevomat/coding-standard": "^8",
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/var-dumper": "^7"
+  },
+  "replace": {
+    "symfony/polyfill-php71": "1.99",
+    "symfony/polyfill-php72": "1.99",
+    "symfony/polyfill-php73": "1.99",
+    "symfony/polyfill-php74": "1.99",
+    "symfony/polyfill-php80": "1.99",
+    "symfony/polyfill-php81": "1.99",
+    "symfony/polyfill-php82": "1.99",
+    "symfony/polyfill-php83": "1.99"
   },
   "scripts": {
     "cleanup-and-test": [

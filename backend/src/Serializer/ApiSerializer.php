@@ -2,7 +2,7 @@
 
 namespace App\Serializer;
 
-use App\Normalizer\DoctrineEntityNormalizer;
+use Azura\Normalizer\DoctrineEntityNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Stringable;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
