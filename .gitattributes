@@ -1,5 +1,5 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
-* text=auto
+* text eol=lf
 
 # Force LF line ending on shell scripts
 bin/* text eol=lf
