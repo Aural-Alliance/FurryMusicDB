@@ -20,7 +20,6 @@ COPY ./build/supervisord.conf /etc/supervisor/supervisord.conf
 COPY ./build/services/ /etc/supervisor.d/
 COPY ./build/phpfpmpool.conf /usr/local/etc/php-fpm.d/www.conf
 COPY ./build/php.ini /usr/local/etc/php/php.ini
-COPY ./build/crontab /var/app/crontab
 COPY ./build/scripts/ /usr/local/bin
 
 RUN chmod a+rx /usr/local/bin/*
@@ -58,34 +57,41 @@ ENV APPLICATION_ENV="development"
 WORKDIR /var/app/www
 
 #
+# Testing Image
+#
+FROM base AS testing
+
+ENV APPLICATION_ENV="testing"
+
+WORKDIR /var/app/www
+
+COPY --chown=app:app . .
+
+#
 # Production Image
 #
 FROM base AS production
 
 COPY ./build/prod/Caddyfile /etc/Caddyfile
+COPY ./build/prod/services/ /etc/supervisor.d/
+COPY ./build/prod/crontab /etc/cron.d/app
 COPY ./build/prod/launch.sh /var/app/launch.sh
 
 RUN chmod a+rx /var/app/launch.sh
 
 USER app
 
-COPY --chown=app:app ./backend /var/app/www/backend
+WORKDIR /var/app/www
 
-WORKDIR /var/app/www/backend
+COPY --chown=app:app . .
 
 RUN composer install --no-dev --no-ansi --no-autoloader --no-interaction \
     && composer dump-autoload --optimize --classmap-authoritative \
     && composer clear-cache
 
-COPY --chown=app:app ./frontend /var/app/www/frontend
-
-WORKDIR /var/app/www/frontend
-
 RUN npm ci --include=dev \
     && npm cache clean --force \
     && npm run build
-
-WORKDIR /var/app/www
 
 ENV APPLICATION_ENV="production"
 

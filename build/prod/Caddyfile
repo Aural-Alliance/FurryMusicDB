@@ -4,7 +4,7 @@
     }
 }
 
-:8000 {
+:8080 {
     root * /var/app/www/frontend/dist
 
     redir /api /api/
