@@ -38,9 +38,6 @@ EXPOSE 8000
 
 VOLUME ["/var/app/uploads"]
 
-ENTRYPOINT ["/var/app/launch.sh"]
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-
 #
 # Development Image
 #
@@ -56,6 +53,9 @@ ENV APPLICATION_ENV="development"
 
 WORKDIR /var/app/www
 
+ENTRYPOINT ["/var/app/launch.sh"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+
 #
 # Testing Image
 #
@@ -66,6 +66,10 @@ ENV APPLICATION_ENV="testing"
 WORKDIR /var/app/www
 
 COPY --chown=app:app . .
+
+RUN composer install
+
+RUN npm ci --include=dev
 
 #
 # Production Image
@@ -96,3 +100,6 @@ RUN npm ci --include=dev \
 ENV APPLICATION_ENV="production"
 
 USER root
+
+ENTRYPOINT ["/var/app/launch.sh"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
