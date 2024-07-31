@@ -14,7 +14,7 @@ restart: down up
 
 build: # Rebuild all containers and restart
 	docker-compose build --no-cache
-	$(MAKE) restart
+	"$(MAKE)" restart
 
 bash:
 	docker-compose exec --user=app web bash
